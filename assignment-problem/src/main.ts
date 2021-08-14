@@ -57,6 +57,6 @@ connection.onDisconnect = () => {
         return;
     }
     window.webContents.send("greeting", response);
-    console.log(response); // will print "Hello John!"
-    //connection.close();
+    console.log(response); 
+    connection.close();
 });

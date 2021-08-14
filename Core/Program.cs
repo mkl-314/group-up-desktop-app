@@ -12,7 +12,7 @@ namespace Core
                 .Build();
             
             connection.On<string, string>("greeting", name => "Hello " + name);
-            
+            //connection.OnAsync<string>("greeting", name => "Hello " + name);
             connection.Listen();    
         }
     }

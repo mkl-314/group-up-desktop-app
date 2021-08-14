@@ -2,9 +2,11 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import {Dashboard} from "./components/Dashboard";
+import Import from "./components/Import";
 
 const { ConnectionBuilder } = require("electron-cgi");
 ReactDOM.render(<Dashboard />, document.getElementById('renderer'));
+ReactDOM.render(<Import />, document.getElementById('import'));
 
 // let connection = new ConnectionBuilder()
 // .connectTo("dotnet", "run", "--project", "../Core/")

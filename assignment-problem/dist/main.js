@@ -523,26 +523,22 @@ electron__WEBPACK_IMPORTED_MODULE_0__.app.on("activate", function () {
   if (window === null) {
     createWindow();
   }
-});
-var connection = new ConnectionBuilder().connectTo("dotnet", "run", "--project", "../Core/").build();
-
-connection.onDisconnect = function () {
-  console.log("lost");
-  connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
-};
-
-connection.send('greeting', 'John', function (error, response) {
-  if (error) {
-    console.log(error); //serialized exception from the .NET handler
-
-    return;
-  }
-
-  console.log("This is not the response");
-  window.webContents.send("greeting", response);
-  console.log(response); // will print "Hello John!"
-  //connection.close();
-});
+}); // let connection = new ConnectionBuilder()
+//   .connectTo("dotnet", "run", "--project", "../../AssignmentProblem/AssignmentProblem/")
+//   .build();
+// connection.onDisconnect = () => {
+//     console.log("lost");
+//     connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
+// };
+//  connection.send('greeting', 'John', (error: any, response: any) => {
+//     if (error) {
+//         console.log(error); //serialized exception from the .NET handler
+//         return;
+//     }
+//     window.webContents.send("greeting", response);
+//     console.log(response); 
+//     connection.close();
+// });
 })();
 
 /******/ })()

@@ -28,3 +28,38 @@ ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for 
    at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
    at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
    at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-13 22:56:47.519 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-13 22:59:27.860 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-13 23:02:42.682 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-13 23:17:50.064 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-14 10:39:37.741 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-14 10:47:31.601 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)
+2021-08-14 10:50:49.081 +10:00 [ERR] 
+ElectronCgi.DotNet.NoRequestHandlerFoundException: No request handler found for request type: REQUEST
+   at ElectronCgi.DotNet.Connection.FindHandler(String requestType)
+   at ElectronCgi.DotNet.Connection.HandleRequestAsync(Request request)
+   at ElectronCgi.DotNet.Connection.StartAsync(Stream inputStream, TextWriter writer)

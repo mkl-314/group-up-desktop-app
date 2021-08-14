@@ -496,7 +496,12 @@ var window;
 var createWindow = function createWindow() {
   window = new electron__WEBPACK_IMPORTED_MODULE_0__.BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+    }
   });
   window.loadURL(url.format({
     pathname: path.join(__dirname, "index.html"),
@@ -519,17 +524,24 @@ electron__WEBPACK_IMPORTED_MODULE_0__.app.on("activate", function () {
     createWindow();
   }
 });
-var connection = new ConnectionBuilder().connectTo("dotnet", "run", "--project", "./core/Core").build();
+var connection = new ConnectionBuilder().connectTo("dotnet", "run", "--project", "../Core/").build();
 
 connection.onDisconnect = function () {
   console.log("lost");
-  alert('Connection lost, restarting...');
-  connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', 'DotNetCalculator').build();
+  connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
 };
 
-connection.send("greeting", "Mom", function (response) {
-  console.log(response);
-  connection.close();
+connection.send('greeting', 'John', function (error, response) {
+  if (error) {
+    console.log(error); //serialized exception from the .NET handler
+
+    return;
+  }
+
+  console.log("This is not the response");
+  window.webContents.send("greeting", response);
+  console.log(response); // will print "Hello John!"
+  //connection.close();
 });
 })();
 

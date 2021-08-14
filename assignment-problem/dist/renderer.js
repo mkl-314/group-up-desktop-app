@@ -1,5 +1,4 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/app/components/Dashboard.tsx":
@@ -8,15 +7,335 @@
   \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Dashboard": () => (/* binding */ Dashboard)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! electron */ "electron");
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_1__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var Dashboard = function Dashboard() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, " Hello Kristie!"));
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var Dashboard = /*#__PURE__*/function (_React$Component) {
+  _inherits(Dashboard, _React$Component);
+
+  var _super = _createSuper(Dashboard);
+
+  function Dashboard() {
+    var _this;
+
+    _classCallCheck(this, Dashboard);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      message: ""
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "onMessage", function (event, message) {
+      console.log("This message:" + message);
+
+      _this.setState({
+        message: message
+      });
+    });
+
+    return _this;
+  }
+
+  _createClass(Dashboard, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      electron__WEBPACK_IMPORTED_MODULE_1__.ipcRenderer.on("greeting", this.onMessage);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      electron__WEBPACK_IMPORTED_MODULE_1__.ipcRenderer.removeAllListeners("greeting");
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, this.state.message);
+    }
+  }]);
+
+  return Dashboard;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component); // export default Dashboard;
+
+/***/ }),
+
+/***/ "./node_modules/electron-cgi/connection-builder.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/electron-cgi/connection-builder.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+const { spawn } = __webpack_require__(/*! child_process */ "child_process");
+const { Connection } = __webpack_require__(/*! ./connection */ "./node_modules/electron-cgi/connection.js");
+
+exports.ConnectionBuilder = function ConnectionBuilder() {
+    var spawnArguments = null;
+    this.connectTo = (command, ...args) => {
+        spawnArguments = {
+            command,
+            args
+        };
+        return this;
+    };
+    this.build = () => {
+        if (!spawnArguments) {
+            throw new Error('Use connectTo(pathToExecutable, [arguments]) to specify to which executable to connect');
+        }
+        const executable = spawn(spawnArguments.command, spawnArguments.args);
+ 
+        if (!executable.pid)
+            throw new Error(`Could not start ${spawnArguments.command}. Are you sure you have the right path?`);
+ 
+        executable.on('exit', (code) => {
+            if(this.handleOnExit){
+                this.handleOnExit(code);
+            }
+            console.log(`Connection to ${spawnArguments.command} was terminated (code: ${code})`)
+        });
+        executable.stderr.on('data', data => {
+            if(this.handleOnStderr)
+            {
+                this.handleOnStderr(data);
+            }
+            process.stdout.write('\x1b[7m'); //invert terminal colors
+            process.stdout.write(data);
+            process.stdout.write('\x1b[0m'); //reset colors
+        });
+        return new Connection(executable.stdin, executable.stdout);
+    };
+        
+    this.handleOnStderr = null;
+    this.handleOnExit = null;
+    this.onStderr = function(handler) {
+        this.handleOnStderr = handler
+        return this;
+    }
+    this.onExit = function (handler) {
+        this.handleOnExit = handler;
+        return this;
+    }         
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/electron-cgi/connection.js":
+/*!*************************************************!*\
+  !*** ./node_modules/electron-cgi/connection.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+const Request = __webpack_require__(/*! ./request */ "./node_modules/electron-cgi/request.js");
+const TabSeparatedInputStreamParser = __webpack_require__(/*! ./tab-separated-input-stream-parser */ "./node_modules/electron-cgi/tab-separated-input-stream-parser.js");
+
+/** @param {import('stream').Writable} outStream */
+exports.Connection = function Connection(outStream, inStream) {
+    const responseHandlersQueue = [];
+    const requestHandlersQueue = [];
+
+    const inputStreamParser = new TabSeparatedInputStreamParser();
+
+    inStream.setEncoding('utf8');
+    inStream.on('data', (chunk) => {
+        inputStreamParser.addPartial(chunk);
+    });
+
+    inStream.on('close', () => {
+        if (this.onDisconnect) {
+            this.onDisconnect();
+        }
+    });
+
+    inputStreamParser.onResponse(response => {
+        const responseIds = responseHandlersQueue.map(r => r.id);
+        if (responseIds.indexOf(response.id) !== -1) {
+            responseHandlersQueue.splice(responseIds.indexOf(response.id), 1)[0].onResponse(null, response.result);
+        }
+    });
+
+    inputStreamParser.onError(errorResponse => {
+        const responseIds = responseHandlersQueue.map(r => r.id);
+        if (responseIds.indexOf(errorResponse.requestId) !== -1) {
+            responseHandlersQueue.splice(responseIds.indexOf(errorResponse.requestId), 1)[0].onResponse(JSON.parse(errorResponse.error));
+        }
+    })
+
+    inputStreamParser.onRequest(request => {
+        const requestType = request.type;
+        requestHandlersQueue.filter(rh => rh.type === requestType).forEach(handlerContainer => {
+            const requestHandler = handlerContainer.onRequest;
+            const resultArgs = requestHandler(request.args)
+            sendResponse(request.id, resultArgs);
+        });
+    });
+
+    const sendResponse = (requestId, resultArgs) => {
+        if (!outStream.writable) return; //stream was closed    
+        outStream.write(`{"type": "RESPONSE", "response": ${JSON.stringify({
+            id: requestId,
+            result: JSON.stringify(resultArgs === undefined ? null : resultArgs)
+        })}}\t`);
+    }
+
+    const sendRequest = (request, onResponse) => {
+        if (!outStream.writable) return;
+        outStream.write(`{"type": "REQUEST", "request": ${JSON.stringify(request)}}\t`);
+        if (onResponse) {
+            responseHandlersQueue.push({
+                id: request.id,
+                onResponse
+            });
+        }
+    };
+
+    this.onDisconnect = null;
+
+    this.send = (type, args = {}, onResponse = null) => {
+        if (typeof args === 'function' && onResponse === null) { //if there's only one argument and it's a function assume it's the callback
+            onResponse = args;
+            args = {}
+        }
+        if (onResponse === null) {
+            return new Promise((resolve, reject) => {
+                sendRequest(new Request(type, args), (err, result) => {
+                    if (err)
+                        reject(err)
+                    else
+                        resolve(result)
+                });
+            });
+        } else {
+            sendRequest(new Request(type, args), onResponse);
+        }
+    };
+
+    this.on = (type, onRequest) => {
+        requestHandlersQueue.push({ type, onRequest })
+    }
+
+    this.close = () => {
+        outStream.end();
+    };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/electron-cgi/index.js":
+/*!********************************************!*\
+  !*** ./node_modules/electron-cgi/index.js ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const { ConnectionBuilder } = __webpack_require__(/*! ./connection-builder */ "./node_modules/electron-cgi/connection-builder.js");
+
+module.exports = {
+    ConnectionBuilder
 };
+
+/***/ }),
+
+/***/ "./node_modules/electron-cgi/request.js":
+/*!**********************************************!*\
+  !*** ./node_modules/electron-cgi/request.js ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const uuidv4 = __webpack_require__(/*! uuid/v4 */ "./node_modules/uuid/v4.js");
+
+function Request(type, args) {
+    this.type = type;
+    this.id = uuidv4();
+    this.args = JSON.stringify(args);
+}
+
+module.exports = Request;
+
+/***/ }),
+
+/***/ "./node_modules/electron-cgi/tab-separated-input-stream-parser.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/electron-cgi/tab-separated-input-stream-parser.js ***!
+  \************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const { EventEmitter } = __webpack_require__(/*! events */ "events");
+
+function TabSeparatedInputStreamParser() {
+    const messageEmitter = new EventEmitter();
+    let streamInput = '';
+
+    this.addPartial = streamContent => {        
+        streamInput += streamContent;
+        while (streamInput.indexOf('\t') !== -1) {
+            const messageStr = streamInput.substring(0, streamInput.indexOf('\t'));
+            streamInput = streamInput.substring(streamInput.indexOf('\t') + 1);
+            let message = null;
+            try {
+                message = JSON.parse(messageStr);
+            } catch (e) {
+                throw new Error(`Invalid incoming JSON: ${messageStr}`);
+            }
+            if (message.type === 'RESPONSE') {
+                messageEmitter.emit('response',message.response);
+            }else if (message.type === 'REQUEST') {
+                messageEmitter.emit('request', message.request);
+            }else if (message.type === 'ERROR'){
+                messageEmitter.emit('error', message)
+            }
+        }
+    };
+
+    this.onResponse = handleResponseCallback => {
+        messageEmitter.on('response', handleResponseCallback);
+    };
+
+    this.onError = handleErrorCallback => {
+        messageEmitter.on('error', handleErrorCallback);
+    };
+
+
+    this.onRequest = handleRequestCallback => {
+        messageEmitter.on('request', handleRequestCallback);
+    };
+}
+
+module.exports = TabSeparatedInputStreamParser;
 
 /***/ }),
 
@@ -26,6 +345,7 @@ var Dashboard = function Dashboard() {
   \*********************************************/
 /***/ ((module) => {
 
+"use strict";
 /*
 object-assign
 (c) Sindre Sorhus
@@ -126,6 +446,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
   \*************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
+"use strict";
 /** @license React v17.0.2
  * react-dom.development.js
  *
@@ -26393,6 +26714,7 @@ exports.version = ReactVersion;
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+"use strict";
 
 
 function checkDCE() {
@@ -26436,6 +26758,7 @@ if (false) {} else {
   \*****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
+"use strict";
 /** @license React v17.0.2
  * react.development.js
  *
@@ -28779,6 +29102,7 @@ exports.version = ReactVersion;
   \*************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+"use strict";
 
 
 if (false) {} else {
@@ -28794,6 +29118,7 @@ if (false) {} else {
   \*********************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 /** @license React v0.20.2
  * scheduler-tracing.development.js
  *
@@ -29151,6 +29476,7 @@ exports.unstable_wrap = unstable_wrap;
   \*************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 /** @license React v0.20.2
  * scheduler.development.js
  *
@@ -29807,6 +30133,7 @@ exports.unstable_wrapCallback = unstable_wrapCallback;
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+"use strict";
 
 
 if (false) {} else {
@@ -29822,12 +30149,165 @@ if (false) {} else {
   \*******************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+"use strict";
 
 
 if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/scheduler-tracing.development.js */ "./node_modules/scheduler/cjs/scheduler-tracing.development.js");
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/uuid/lib/bytesToUuid.js":
+/*!**********************************************!*\
+  !*** ./node_modules/uuid/lib/bytesToUuid.js ***!
+  \**********************************************/
+/***/ ((module) => {
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function bytesToUuid(buf, offset) {
+  var i = offset || 0;
+  var bth = byteToHex;
+  // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
+  return ([
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]]
+  ]).join('');
+}
+
+module.exports = bytesToUuid;
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/lib/rng-browser.js":
+/*!**********************************************!*\
+  !*** ./node_modules/uuid/lib/rng-browser.js ***!
+  \**********************************************/
+/***/ ((module) => {
+
+// Unique ID creation requires a high quality random # generator.  In the
+// browser this is a little complicated due to unknown quality of Math.random()
+// and inconsistent support for the `crypto` API.  We do the best we can via
+// feature-detection
+
+// getRandomValues needs to be invoked in a context where "this" is a Crypto
+// implementation. Also, find the complete implementation of crypto on IE11.
+var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto)) ||
+                      (typeof(msCrypto) != 'undefined' && typeof window.msCrypto.getRandomValues == 'function' && msCrypto.getRandomValues.bind(msCrypto));
+
+if (getRandomValues) {
+  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+  var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
+
+  module.exports = function whatwgRNG() {
+    getRandomValues(rnds8);
+    return rnds8;
+  };
+} else {
+  // Math.random()-based (RNG)
+  //
+  // If all else fails, use Math.random().  It's fast, but is of unspecified
+  // quality.
+  var rnds = new Array(16);
+
+  module.exports = function mathRNG() {
+    for (var i = 0, r; i < 16; i++) {
+      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+    }
+
+    return rnds;
+  };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/v4.js":
+/*!*********************************!*\
+  !*** ./node_modules/uuid/v4.js ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var rng = __webpack_require__(/*! ./lib/rng */ "./node_modules/uuid/lib/rng-browser.js");
+var bytesToUuid = __webpack_require__(/*! ./lib/bytesToUuid */ "./node_modules/uuid/lib/bytesToUuid.js");
+
+function v4(options, buf, offset) {
+  var i = buf && offset || 0;
+
+  if (typeof(options) == 'string') {
+    buf = options === 'binary' ? new Array(16) : null;
+    options = null;
+  }
+  options = options || {};
+
+  var rnds = options.random || (options.rng || rng)();
+
+  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+  // Copy bytes to buffer, if provided
+  if (buf) {
+    for (var ii = 0; ii < 16; ++ii) {
+      buf[i + ii] = rnds[ii];
+    }
+  }
+
+  return buf || bytesToUuid(rnds);
+}
+
+module.exports = v4;
+
+
+/***/ }),
+
+/***/ "child_process":
+/*!********************************!*\
+  !*** external "child_process" ***!
+  \********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
+/***/ "electron":
+/*!***************************!*\
+  !*** external "electron" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("electron");
+
+/***/ }),
+
+/***/ "events":
+/*!*************************!*\
+  !*** external "events" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
 
 /***/ })
 
@@ -29858,6 +30338,18 @@ if (false) {} else {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -29888,8 +30380,9 @@ if (false) {} else {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
+"use strict";
 /*!******************************!*\
   !*** ./src/app/renderer.tsx ***!
   \******************************/
@@ -29900,7 +30393,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+var _require = __webpack_require__(/*! electron-cgi */ "./node_modules/electron-cgi/index.js"),
+    ConnectionBuilder = _require.ConnectionBuilder;
+
 react_dom__WEBPACK_IMPORTED_MODULE_0__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_components_Dashboard__WEBPACK_IMPORTED_MODULE_2__.Dashboard, null), document.getElementById('renderer'));
+var connection = new ConnectionBuilder().connectTo("dotnet", "run", "--project", "../Core/").build();
+
+connection.onDisconnect = function () {
+  console.log("lost");
+  connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
+};
+
+connection.send('greeting', 'John', function (error, response) {
+  if (error) {
+    console.log(error); //serialized exception from the .NET handler
+
+    return;
+  }
+
+  console.log("This is not the response");
+  document.getElementById('title').innerText = response;
+});
 })();
 
 /******/ })()

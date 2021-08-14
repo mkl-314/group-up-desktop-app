@@ -7,7 +7,12 @@ import { app, BrowserWindow } from "electron";
 let window: BrowserWindow | null;
 
 const createWindow = () => {
-  window = new BrowserWindow({ width: 800, height: 600 });
+  window = new BrowserWindow({ width: 800, height: 600, 
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true, }
+    });
 
   window.loadURL(
     url.format({
@@ -38,16 +43,20 @@ app.on("activate", () => {
 
 
 let connection = new ConnectionBuilder()
-  .connectTo("dotnet", "run", "--project", "./core/Core")
+  .connectTo("dotnet", "run", "--project", "../Core/")
   .build();
 
 connection.onDisconnect = () => {
     console.log("lost");
-    alert('Connection lost, restarting...');
-    connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "./core/Core").build();
+    connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
 };
 
-connection.send("greeting", "Mom", (response: any) => {
-    console.log(response);
-    connection.close();
-  });
+ connection.send('greeting', 'John', (error: any, response: any) => {
+    if (error) {
+        console.log(error); //serialized exception from the .NET handler
+        return;
+    }
+    window.webContents.send("greeting", response);
+    console.log(response); // will print "Hello John!"
+    //connection.close();
+});

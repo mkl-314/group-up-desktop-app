@@ -22,11 +22,15 @@ const config = {
         use: {
           loader: "babel-loader"
         }
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: ["style-loader", "css-loader", "sass-loader",]
       }
     ]
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js", ".scss"]
   },
   plugins: [htmlPlugin]
 };

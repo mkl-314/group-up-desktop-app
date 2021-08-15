@@ -1,4 +1,6 @@
 const path = require("path");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const isDevelopment = process.env.NODE_ENV === 'development'
 
 const config = {
   target: "electron-main",
@@ -17,6 +19,39 @@ const config = {
           loader: "babel-loader"
         }
       }
+      // {
+      //   test: /\.module\.s(a|c)ss$/,
+      //   loader: [
+      //     isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+      //     {
+      //       loader: 'css-loader',
+      //       options: {
+      //         modules: true,
+      //         sourceMap: isDevelopment
+      //       }
+      //     },
+      //     {
+      //       loader: 'sass-loader',
+      //       options: {
+      //         sourceMap: isDevelopment
+      //       }
+      //     }
+      //   ]
+      // },
+      // {
+      //   test: /\.s(a|c)ss$/,
+      //   exclude: /\.module.(s(a|c)ss)$/,
+      //   loader: [
+      //     isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+      //     'css-loader',
+      //     {
+      //       loader: 'sass-loader',
+      //       options: {
+      //         sourceMap: isDevelopment
+      //       }
+      //     }
+      //   ]
+      // }
     ]
   },
   resolve: {

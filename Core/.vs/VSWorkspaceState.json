@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\bin",
+    "\\bin\\Debug",
+    "\\bin\\Release",
+    "\\bin\\Release\\net5.0",
+    "\\obj"
   ],
-  "SelectedNode": "\\Program.cs",
+  "SelectedNode": "\\Core.csproj",
   "PreviewInSolutionExplorer": false
 }

@@ -1,0 +1,23 @@
+// Formatting buttons
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  
+    // @include media-breakpoint-up(lg) {
+    //   margin-right: 2.5%;
+    // }
+    .import-button {
+      font-weight: bold;
+      background-color: #C711D7;
+      display: inline-block;
+      border: 1px solid transparent;
+      border-radius: 0.2rem;
+      width: fit-content;
+      margin-top: 1rem;
+      padding: 0 2rem;
+      &:hover {
+        border: 1px solid black;
+      }
+    }
+  }

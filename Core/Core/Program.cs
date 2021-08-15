@@ -15,16 +15,17 @@ namespace AssignmentProblem
 
             controller = new APIController();
             controller.APICalls();
-            //var connection = new ConnectionBuilder()
-            //    .WithLogging()
-            //    .Build();
 
-            //connection.On<string, string>("greeting", name => "Hello " + name);
+            var connection = new ConnectionBuilder()
+                .WithLogging()
+                .Build();
+
+            connection.On<string, string>("greeting", name => "Hello " + name);
             //connection.On<string, Group>("GetGroups", name =>
             //{
             //    return null;
             //});
-            //connection.Listen();
+            connection.Listen();
             controller.Listen();
         }
 

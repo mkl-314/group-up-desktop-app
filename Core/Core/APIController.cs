@@ -21,16 +21,18 @@ namespace AssignmentProblem
         {
             _context = new GroupUpContext();
             _assignmentService = new AssignmentService(_context);
-
-            connection = new ConnectionBuilder()
-            .WithLogging()
-            .Build();
         }
 
         public void APICalls()
         {
+            connection = new ConnectionBuilder()
+                .WithLogging()
+                .Build();
+
             GetGroups();
-            connection.On<string, string>("greeting", name => "Hello " + name);
+            connection.On<string, string>("greeting", name => "TEST PLZ WORK " + name);
+
+            connection.Listen();
         }
         public void GetGroups()
         {
@@ -38,7 +40,6 @@ namespace AssignmentProblem
             {
                 return null;
             });
-            connection.Listen();
 
         }
 

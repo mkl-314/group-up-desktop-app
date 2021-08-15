@@ -116,10 +116,10 @@ namespace AssignmentProblem
             while (solver.NextSolution() && sol<=0)
             {
 
-                Console.Write("x " + sol + ": ");
+                //Console.Write("x " + sol + ": ");
                 for (int i = 0; i < num_students; i++)
                 {
-                    Console.Write("{0} ", student_groups[i].Value());
+                    //Console.Write("{0} ", student_groups[i].Value());
                     if (sol == 0)
                     {
                         Group group = groups[(int)student_groups[i].Value()];
@@ -128,14 +128,14 @@ namespace AssignmentProblem
                     }
                 }
   
-                Console.WriteLine();
+                //Console.WriteLine();
                 sol++;
             }
 
             //Console.WriteLine("\nSolutions: {0}", solver.Solutions());
-            Console.WriteLine("WallTime: {0}ms", solver.WallTime());
-            Console.WriteLine("Failures: {0}", solver.Failures());
-            Console.WriteLine("Branches: {0} ", solver.Branches());
+            //Console.WriteLine("WallTime: {0}ms", solver.WallTime());
+            //Console.WriteLine("Failures: {0}", solver.Failures());
+            //Console.WriteLine("Branches: {0} ", solver.Branches());
 
             solver.EndSearch();
             return groups;

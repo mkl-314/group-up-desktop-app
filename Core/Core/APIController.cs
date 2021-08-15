@@ -1,11 +1,7 @@
 using AssignmentProblem.Models;
 using ElectronCgi.DotNet;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 namespace AssignmentProblem
 {
@@ -36,9 +32,9 @@ namespace AssignmentProblem
         }
         public void GetGroups()
         {
-            connection.On<string, Group>("GetGroups", groupSize =>
+            connection.On<int, List<Group>>("GetGroups", groupSize =>
             {
-                return null;
+                return _assignmentService.AssignGroups(1, groupSize);
             });
 
         }

@@ -29,12 +29,15 @@ namespace AssignmentProblem.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "appsettings.json"))
-                .Build();
+            // If running swagger, change directory to Enviornment.CurrentDirectory
+            //var config = new ConfigurationBuilder()
+            //    .AddJsonFile(Path.Combine(Environment.CurrentDirectory, "appsettings.json"))
+            //    .Build();
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(config.GetSection("ConnectionStrings")["GroupUpConnection"]);
+                //TODO Use appsettings
+                /*config.GetSection("ConnectionStrings")["GroupUpConnection"]*/
+                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=GroupUp;Trusted_Connection=True;MultiSubnetFailover=False");
             }
         }
 

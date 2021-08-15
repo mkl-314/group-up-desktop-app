@@ -1,15 +1,22 @@
 import { ConnectionBuilder } from "electron-cgi";
 import { GroupData } from "./types/Groups";
 
-export const SayHello = async (): Promise<string> => {
-    let connection = new ConnectionBuilder()
-    .connectTo("dotnet", "run", "--project", "../Core/")
+let connection: any = null;
+
+setUpConnection();
+
+function setUpConnection() {
+    connection = new ConnectionBuilder()
+    .connectTo("dotnet", "run", "--project", "../Core/Core")
     .build();
-    console.log("from greeting page 1");
-    connection.onDisconnect = () => {
-        console.log("lost");
-        connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
-    };
+  console.log("from greeting page 1");
+  connection.onDisconnect = () => {
+      console.log("lost");
+      setUpConnection();
+  };
+}
+
+export const SayHello = async (): Promise<string> => {
 
     const result = await connection.send('greeting', 'MK');
     console.log(result);
@@ -17,8 +24,18 @@ export const SayHello = async (): Promise<string> => {
     return result;
 }
 
+export const GetGroups = async (    
+    project: string,
+    groupSize: number
+    ): Promise<[GroupData]> => {
 
-export const GetGroups = async (
+  const result = await connection.send('GetGroups', groupSize);
+  console.log(result);
+  
+  return result;
+}
+
+export const GetGroupsAPI = async (
     project: string,
     groupSize: number
   ): Promise<[GroupData]> => {

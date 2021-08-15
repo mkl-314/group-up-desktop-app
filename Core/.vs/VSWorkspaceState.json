@@ -1,12 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\bin",
-    "\\bin\\Debug",
-    "\\bin\\Release",
-    "\\bin\\Release\\net5.0",
-    "\\obj"
+    ""
   ],
-  "SelectedNode": "\\Core.csproj",
+  "SelectedNode": "\\GroupUp.mdf",
   "PreviewInSolutionExplorer": false
 }

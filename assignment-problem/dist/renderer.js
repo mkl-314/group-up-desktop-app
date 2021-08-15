@@ -620,7 +620,7 @@ var Import = function Import() {
     //   setEventName(data);
     // } )
   }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(react__WEBPACK_IMPORTED_MODULE_3__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("h1", null, "New Event"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("hr", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(react__WEBPACK_IMPORTED_MODULE_3__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("h1", null, "Group Up"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("hr", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", {
     className: "form-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", {
     className: "button-container"
@@ -636,15 +636,15 @@ var Import = function Import() {
     className: "event-col"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", {
     className: "event-row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("label", null, "Event Name:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("input", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("label", null, "Student Names:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("input", {
     className: "",
     type: "text",
     value: eventName,
-    placeholder: "Enter event name"
+    placeholder: "Enter students"
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", null, eventName), groups && groups.map(function (d, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", {
       key: i
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("h2", null, "Event: " + d.student_id), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("h3", null, "Organiser: " + d.students_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("hr", null));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("h2", null, "Group : " + d.student_id), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("h3", null, "Students: " + d.students_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("hr", null));
   }))));
 };
 
@@ -662,7 +662,8 @@ var Import = function Import() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SayHello": () => (/* binding */ SayHello),
-/* harmony export */   "GetGroups": () => (/* binding */ GetGroups)
+/* harmony export */   "GetGroups": () => (/* binding */ GetGroups),
+/* harmony export */   "GetGroupsAPI": () => (/* binding */ GetGroupsAPI)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js");
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__);
@@ -673,30 +674,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var connection = null;
+setUpConnection();
+
+function setUpConnection() {
+  connection = new electron_cgi__WEBPACK_IMPORTED_MODULE_2__.ConnectionBuilder().connectTo("dotnet", "run", "--project", "../Core/Core").build();
+  console.log("from greeting page 1");
+
+  connection.onDisconnect = function () {
+    console.log("lost");
+    setUpConnection();
+  };
+}
+
 var SayHello = /*#__PURE__*/function () {
   var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
-    var connection, result;
+    var result;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            connection = new electron_cgi__WEBPACK_IMPORTED_MODULE_2__.ConnectionBuilder().connectTo("dotnet", "run", "--project", "../Core/").build();
-            console.log("from greeting page 1");
-
-            connection.onDisconnect = function () {
-              console.log("lost");
-              connection = new electron_cgi__WEBPACK_IMPORTED_MODULE_2__.ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
-            };
-
-            _context.next = 5;
+            _context.next = 2;
             return connection.send('greeting', 'MK');
 
-          case 5:
+          case 2:
             result = _context.sent;
             console.log(result);
             return _context.abrupt("return", result);
 
-          case 8:
+          case 5:
           case "end":
             return _context.stop();
         }
@@ -710,42 +716,20 @@ var SayHello = /*#__PURE__*/function () {
 }();
 var GetGroups = /*#__PURE__*/function () {
   var _ref2 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee2(project, groupSize) {
-    var requestData, response, jsonData;
+    var result;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            requestData = {
-              project: project,
-              groupSize: groupSize
-            };
-            _context2.next = 3;
-            return fetch("https://localhost:44308/Assignment", {
-              method: "get",
-              headers: {
-                "Content-Type": "text/plain"
-              }
-            });
+            _context2.next = 2;
+            return connection.send('GetGroups', groupSize);
 
-          case 3:
-            response = _context2.sent;
+          case 2:
+            result = _context2.sent;
+            console.log(result);
+            return _context2.abrupt("return", result);
 
-            if (response.ok) {
-              _context2.next = 6;
-              break;
-            }
-
-            throw new Error("Event creation failed!");
-
-          case 6:
-            _context2.next = 8;
-            return response.json();
-
-          case 8:
-            jsonData = _context2.sent;
-            return _context2.abrupt("return", jsonData);
-
-          case 10:
+          case 5:
           case "end":
             return _context2.stop();
         }
@@ -755,6 +739,55 @@ var GetGroups = /*#__PURE__*/function () {
 
   return function GetGroups(_x, _x2) {
     return _ref2.apply(this, arguments);
+  };
+}();
+var GetGroupsAPI = /*#__PURE__*/function () {
+  var _ref3 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee3(project, groupSize) {
+    var requestData, response, jsonData;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            requestData = {
+              project: project,
+              groupSize: groupSize
+            };
+            _context3.next = 3;
+            return fetch("https://localhost:44308/Assignment", {
+              method: "get",
+              headers: {
+                "Content-Type": "text/plain"
+              }
+            });
+
+          case 3:
+            response = _context3.sent;
+
+            if (response.ok) {
+              _context3.next = 6;
+              break;
+            }
+
+            throw new Error("Event creation failed!");
+
+          case 6:
+            _context3.next = 8;
+            return response.json();
+
+          case 8:
+            jsonData = _context3.sent;
+            return _context3.abrupt("return", jsonData);
+
+          case 10:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+
+  return function GetGroupsAPI(_x3, _x4) {
+    return _ref3.apply(this, arguments);
   };
 }();
 
@@ -780,7 +813,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".button-container {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-end;\n}\n.button-container .import-button {\n  height: 1rem;\n  font-weight: bold;\n  background-color: #C711D7;\n  display: inline-block;\n  border: 1px solid transparent;\n  border-radius: 0.2rem;\n  width: fit-content;\n  margin-top: 1rem;\n  padding: 0 2rem;\n}\n.button-container .import-button:hover {\n  border: 1px solid black;\n}", "",{"version":3,"sources":["webpack://./src/app/components/Import.scss"],"names":[],"mappings":"AACA;EACI,aAAA;EACA,sBAAA;EACA,qBAAA;AAAJ;AAKI;EACE,YAAA;EACA,iBAAA;EACA,yBAAA;EACA,qBAAA;EACA,6BAAA;EACA,qBAAA;EACA,kBAAA;EACA,gBAAA;EACA,eAAA;AAHN;AAIM;EACE,uBAAA;AAFR","sourcesContent":["// Formatting buttons\r\n.button-container {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-end;\r\n  \r\n    // @include media-breakpoint-up(lg) {\r\n    //   margin-right: 2.5%;\r\n    // }\r\n    .import-button {\r\n      height: 1rem;\r\n      font-weight: bold;\r\n      background-color: #C711D7;\r\n      display: inline-block;\r\n      border: 1px solid transparent;\r\n      border-radius: 0.2rem;\r\n      width: fit-content;\r\n      margin-top: 1rem;\r\n      padding: 0 2rem;\r\n      &:hover {\r\n        border: 1px solid black;\r\n      }\r\n    }\r\n  }"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".button-container {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-end;\n}\n.button-container .import-button {\n  font-weight: bold;\n  background-color: #C711D7;\n  display: inline-block;\n  border: 1px solid transparent;\n  border-radius: 0.2rem;\n  width: fit-content;\n  margin-top: 1rem;\n  padding: 0 2rem;\n}\n.button-container .import-button:hover {\n  border: 1px solid black;\n}", "",{"version":3,"sources":["webpack://./src/app/components/Import.scss"],"names":[],"mappings":"AACA;EACI,aAAA;EACA,sBAAA;EACA,qBAAA;AAAJ;AAKI;EACE,iBAAA;EACA,yBAAA;EACA,qBAAA;EACA,6BAAA;EACA,qBAAA;EACA,kBAAA;EACA,gBAAA;EACA,eAAA;AAHN;AAIM;EACE,uBAAA;AAFR","sourcesContent":["// Formatting buttons\r\n.button-container {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-end;\r\n  \r\n    // @include media-breakpoint-up(lg) {\r\n    //   margin-right: 2.5%;\r\n    // }\r\n    .import-button {\r\n      font-weight: bold;\r\n      background-color: #C711D7;\r\n      display: inline-block;\r\n      border: 1px solid transparent;\r\n      border-radius: 0.2rem;\r\n      width: fit-content;\r\n      margin-top: 1rem;\r\n      padding: 0 2rem;\r\n      &:hover {\r\n        border: 1px solid black;\r\n      }\r\n    }\r\n  }"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

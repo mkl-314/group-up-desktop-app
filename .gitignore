@@ -1,7 +1,7 @@
 assignment-problem/node_modules/
 assignment-problem/package-lock.json
 assignment-problem/.idea/
-Core/bin/
-Core/obj/
+Core/Core/bin/
+Core/Core/obj/
 assignment-problem/dist/
 assignment-problem/release-builds/

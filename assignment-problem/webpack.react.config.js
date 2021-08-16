@@ -26,11 +26,15 @@ const config = {
       {
         test: /\.s[ac]ss$/,
         use: ["style-loader", "css-loader", "sass-loader",]
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
       }
     ]
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".scss"]
+    extensions: [".ts", ".tsx", ".js", ".scss", ".css"]
   },
   plugins: [htmlPlugin]
 };

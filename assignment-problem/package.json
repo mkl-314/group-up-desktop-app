@@ -53,9 +53,13 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.6.3",
+    "antd": "^4.16.11",
     "honeycomb-web-toolkit": "git+https://github.com/red-gate/honeycomb-web-toolkit.git",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-excel-renderer": "^1.1.0",
+    "xlsx": "^0.17.0"
   },
   "proxy": "https://localhost:44308"
 }

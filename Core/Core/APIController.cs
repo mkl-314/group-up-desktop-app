@@ -27,7 +27,7 @@ namespace AssignmentProblem
 
             GetGroups();
             connection.On<string, string>("greeting", name => "TEST PLZ WORK " + name);
-
+            InsertStudents();
             connection.Listen();
         }
         public void GetGroups()
@@ -39,6 +39,13 @@ namespace AssignmentProblem
 
         }
 
+        public void InsertStudents()
+        {
+            connection.On<List<JsonSerialiser>, int>("InsertStudents", studentData =>
+            {
+                return 1;
+            });
+        }
         public void Listen()
         {
             connection.Listen();

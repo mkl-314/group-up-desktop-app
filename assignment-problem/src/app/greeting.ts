@@ -39,18 +39,25 @@ export const GetGroupsAPI = async (
     project: string,
     groupSize: number
   ): Promise<[GroupData]> => {
-    const requestData = {
-        project: project,
-      groupSize: groupSize
-    };
-    const response = await fetch("https://localhost:44308/Assignment", {
-      method: "get",
-      headers: {
-        "Content-Type": "text/plain",
-      }
-    });
-    if (!response.ok) throw new Error("Event creation failed!");
-    const jsonData = await response.json();
-    return jsonData;
+  const requestData = {
+      project: project,
+    groupSize: groupSize
   };
+  const response = await fetch("https://localhost:44308/Assignment", {
+    method: "get",
+    headers: {
+      "Content-Type": "text/plain",
+    }
+  });
+  if (!response.ok) throw new Error("Event creation failed!");
+  const jsonData = await response.json();
+  return jsonData;
+};
   
+export const InsertStudents = async (
+  studentData: JSON[]
+): Promise<number> => {
+  const result = await connection.send('InsertStudents', studentData);
+  console.log(result);
+  return result;
+}

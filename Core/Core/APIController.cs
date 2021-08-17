@@ -41,7 +41,7 @@ namespace AssignmentProblem
 
         public void InsertStudents()
         {
-            connection.On<List<JsonSerialiser>, int>("InsertStudents", studentData =>
+            connection.On<List<Student>, int>("InsertStudents", studentData =>
             {
                 return 1;
             });

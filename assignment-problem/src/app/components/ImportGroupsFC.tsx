@@ -7,53 +7,22 @@ import { BugTwoTone, FileProtectOutlined, PlusOutlined, UploadOutlined } from '@
 import {read, WorkBook, utils, readFile} from 'xlsx';
 //import { EditableFormRow, EditableCell } from "../utils/editable";
 import { GetGroups, InsertStudents } from "../apiController";
-import { StudentData, StudentFileData } from "../types/Student";
+import { StudentChoiceData, StudentData, StudentExcludeData, StudentFileData } from "../types/Student";
 import { GroupData } from "../types/Groups";
-
-const columns = [
-  {
-    title: "First Name",
-    dataIndex: "FirstName",
-    key: "FirstName",
-  },
-  {
-    title: "Last Name",
-    dataIndex: "LastName",
-    key: "LastName",
-  },
-  {
-    title: "Choice 1",
-    dataIndex: "Choice1",
-    key: "Choice1",
-  },
-  {
-    title: "Choice 2",
-    dataIndex: "Choice2",
-    key: "Choice2",
-  },
-  {
-    title: "Choice 3",
-    dataIndex: "Choice3",
-    key: "Choice3",
-  },
-  {
-    title: "Choice 4",
-    dataIndex: "Choice4",
-    key: "Choice4",
-  },
-
-]
+import { columns, studentColumns } from "../types/studentColumns";
 
 const Import: FC = () => {
   const [groupSize, setGroupSize] = useState<number>();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [studentFileData, setStudentFileData] = useState<[StudentFileData]>();
+  const [studentData, setStudentData] = useState<[StudentData]>();
+  const [studentChoices, setStudentChoices] = useState<[StudentChoiceData]>();
+  const [studentExcludes, setStudentExcludes] = useState<[StudentExcludeData]>();
   const [groups, setGroups] = useState<[GroupData]>();
 
   const fileHandler = async (e: File) => {
     if (isValidFile(e)) {
       handleFile(e);
-
     }
   };
 
@@ -67,18 +36,46 @@ const Import: FC = () => {
           var worksheet = wb.Sheets[sheet];
 
           var jsonData = utils.sheet_to_json<JSON>(worksheet);
-          const studentFileData: [StudentFileData] = JSON.parse(JSON.stringify(jsonData));
-          // Use list of choices
-          // jsonData.map((d, i) => {
-          // })
-          console.log(studentFileData);
-          setStudentFileData(studentFileData);
+          convertJsonToStudents(jsonData);
       };
-      const fileName = e.name;
-
       reader.readAsArrayBuffer(e);
-      return;
   }
+
+  const convertJsonToStudents = (jsonData: JSON[]) => {
+    const studentFileData: [StudentFileData] = JSON.parse(JSON.stringify(jsonData));
+    let students: [StudentData];
+    let choices: [StudentChoiceData];
+    let exclusions: [StudentExcludeData];
+    
+    jsonData.map((d, i) => {
+      let json = JSON.parse(JSON.stringify(d));
+      let student: StudentData = {
+        key: i,
+        firstName: json.firstName,
+        lastName: json.lastName,
+      }
+      students.push(student);
+      for (const key in json) {
+        if (key.match(/^choice/i)) {
+          choices.push({
+            chooserStudent: json.firstName + ' ' + json.lastName,
+            chosenStudent: json[key],
+          })
+        } else if (key.match(/^exclude/i)) {
+          exclusions.push({
+            firstStudent: json.firstName + ' ' + json.lastName,
+            secondStudent: json[key],
+          })
+        }
+      }
+
+    })
+    setStudentData(students);
+    setStudentChoices(choices);
+    setStudentExcludes(exclusions);
+    setStudentFileData(studentFileData);
+  }
+
   const isValidFile = (e: File) => {
     console.log("fileList", e);
     let fileObj = e;
@@ -131,7 +128,12 @@ const Import: FC = () => {
                 <Table 
                   dataSource={studentFileData} 
                   columns={columns} 
-                  rowKey={record => record.FirstName + record.LastName} 
+                  rowKey={record => record.firstName + record.lastName} 
+                />
+                <Table 
+                  dataSource={studentData} 
+                  columns={studentColumns} 
+                  rowKey={record => record.id} 
                 />
               {/* {studentFileData &&
                 studentFileData.map((d, i) => (

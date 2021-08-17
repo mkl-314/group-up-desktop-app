@@ -15,12 +15,12 @@ namespace AssignmentProblem
             _context = context;
         }
 
-        public List<Student> GetStudents(int groupProjectID)
+        public List<Student1> GetStudents(int groupProjectID)
         {
-            DbSet<Student> dbStudent = _context.Students;
+            DbSet<Student1> dbStudent = _context.Students;
 
             // Note: cannot return student.ToList() as a circular reference occurs so the program never stops loading
-            IQueryable<Student> studentsQ = dbStudent.Where(x => groupProjectID == x.GroupProjectId)
+            IQueryable<Student1> studentsQ = dbStudent.Where(x => groupProjectID == x.GroupProjectId)
                 .Include(x => x.StudentChoiceChooserStudents)
                 .Include(x => x.StudentExcludeFirstStudents)
                 .OrderBy(x => x.StudentId);
@@ -29,7 +29,7 @@ namespace AssignmentProblem
         } 
         public List<Group> AssignGroups(int groupProjectID, int group_size)
         {
-            List<Student> students = GetStudents(groupProjectID);
+            List<Student1> students = GetStudents(groupProjectID);
 
             Solver solver = new Solver("GroupAssignment");
 
@@ -46,10 +46,10 @@ namespace AssignmentProblem
             // Students must be given at least one of their preferences
             for (int i=0; i< num_students; i++)
             {
-                ICollection<StudentChoice> preferences = students[i].StudentChoiceChooserStudents;
+                ICollection<StudentChoice1> preferences = students[i].StudentChoiceChooserStudents;
                 int[] preferenceIndexes = new int[preferences.Count()];
                 int count = 0;
-                foreach (StudentChoice preference in preferences)
+                foreach (StudentChoice1 preference in preferences)
                 {
                     preferenceIndexes[count] = students.FindIndex(x => x.StudentId == preference.ChosenStudentId); 
                     count++;
@@ -76,10 +76,10 @@ namespace AssignmentProblem
             IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
 
             // Certain students cannot be in the same group
-            foreach (Student student in students)
+            foreach (Student1 student in students)
             {
-                ICollection<StudentExclude> exclusions = student.StudentExcludeFirstStudents;
-                foreach (StudentExclude exclusion in exclusions)
+                ICollection<StudentExclude1> exclusions = student.StudentExcludeFirstStudents;
+                foreach (StudentExclude1 exclusion in exclusions)
                 {
                     int firstIndex = students.FindIndex(x => x.StudentId == exclusion.FirstStudentId);
                     int secondIndex = students.FindIndex(x => x.StudentId == exclusion.SecondStudentId);

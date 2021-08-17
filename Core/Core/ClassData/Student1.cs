@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace AssignmentProblem.Models
 {
-    public partial class Student
+    public partial class Student1
     {
-        public Student()
+        public Student1()
         {
             GroupSolutionStudents = new HashSet<GroupSolutionStudent>();
             StudentChoiceChooserStudents = new HashSet<StudentChoice1>();

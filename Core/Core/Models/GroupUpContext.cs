@@ -23,9 +23,9 @@ namespace AssignmentProblem.Models
         public virtual DbSet<GroupProject> GroupProjects { get; set; }
         public virtual DbSet<GroupSolution> GroupSolutions { get; set; }
         public virtual DbSet<GroupSolutionStudent> GroupSolutionStudents { get; set; }
-        public virtual DbSet<Student> Students { get; set; }
-        public virtual DbSet<StudentChoice> StudentChoices { get; set; }
-        public virtual DbSet<StudentExclude> StudentExcludes { get; set; }
+        public virtual DbSet<Student1> Students { get; set; }
+        public virtual DbSet<StudentChoice1> StudentChoices { get; set; }
+        public virtual DbSet<StudentExclude1> StudentExcludes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -109,7 +109,7 @@ namespace AssignmentProblem.Models
                     .HasConstraintName("FK__GroupSolu__Stude__35BCFE0A");
             });
 
-            modelBuilder.Entity<Student>(entity =>
+            modelBuilder.Entity<Student1>(entity =>
             {
                 entity.Property(e => e.StudentId).HasColumnName("StudentID");
 
@@ -130,7 +130,7 @@ namespace AssignmentProblem.Models
                     .HasConstraintName("FK__Students__GroupP__286302EC");
             });
 
-            modelBuilder.Entity<StudentChoice>(entity =>
+            modelBuilder.Entity<StudentChoice1>(entity =>
             {
                 entity.ToTable("StudentChoice");
 
@@ -153,7 +153,7 @@ namespace AssignmentProblem.Models
                     .HasConstraintName("FK__StudentCh__Chose__300424B4");
             });
 
-            modelBuilder.Entity<StudentExclude>(entity =>
+            modelBuilder.Entity<StudentExclude1>(entity =>
             {
                 entity.ToTable("StudentExclude");
 

@@ -1,8 +1,9 @@
 import  { FC, useEffect, useState } from "react";
 import * as React from "react";
-import { GetGroups, SayHello } from "../greeting";
+import { GetGroups, SayHello } from "../apiController";
 import {GroupData} from "../types/Groups";
 import './Import.scss';
+import { StudentFileData } from "../types/Student";
 
 const Import: FC = () => {
   const [eventName, setEventName] = useState<string>("");
@@ -19,9 +20,9 @@ const Import: FC = () => {
 
   const cancelEvent = async () => {
     //alert("Are you sure you wish to cancel this event?");
-    const result = await GetGroups("test", 4);
-    console.log(result);
-    setGroups(result);
+    //const result = await GetGroups("test", 4);
+    //console.log(result);
+    //setGroups(result);
     // result.then((data: React.SetStateAction<[GroupData]>) => {
     //     setGroups(data);
     // })

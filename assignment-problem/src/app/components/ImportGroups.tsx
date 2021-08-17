@@ -6,11 +6,12 @@ import { FileProtectOutlined, PlusOutlined, UploadOutlined } from '@ant-design/i
 // import { ExcelRenderer } from "react-excel-renderer";
 import {read, WorkBook, utils, readFile} from 'xlsx';
 //import { EditableFormRow, EditableCell } from "../utils/editable";
-import { InsertStudents } from "../greeting";
+import { InsertStudents } from "../apiController";
+import { StudentData } from "../types/Student";
 
 interface MyState {
     cols: any[],
-      rows: any[],
+      rows: { firstName: any; lastName: any;}[],
       errorMessage: string,
       columns: [
         {
@@ -23,23 +24,6 @@ interface MyState {
             dataIndex: string,
             editable: boolean
           }
-        // {
-        //   title: "Action",
-        //   dataIndex: "action",
-        //   render: (text: any, record: { key: any; }) =>
-        //     this.state.rows.length >= 1 ? (
-        //       <Popconfirm
-        //         title="Sure to delete?"
-        //         onConfirm={() => this.handleDelete(record.key)}
-        //       >
-        //         <Icon
-        //           type="delete"
-        //           theme="filled"
-        //           style={{ color: "red", fontSize: "20px" }}
-        //         />
-        //       </Popconfirm>
-        //     ) : null
-        // }
       ]
 }
 export default class ExcelPage extends Component<{}, MyState> {
@@ -60,35 +44,19 @@ export default class ExcelPage extends Component<{}, MyState> {
           dataIndex: "lastname",
           editable: true
         }
-        // {
-        //   title: "Action",
-        //   dataIndex: "action",
-        //   render: (text: any, record: { key: any; }) =>
-        //     this.state.rows.length >= 1 ? (
-        //       <Popconfirm
-        //         title="Sure to delete?"
-        //         onConfirm={() => this.handleDelete(record.key)}
-        //       >
-        //         <Icon
-        //           type="delete"
-        //           theme="filled"
-        //           style={{ color: "red", fontSize: "20px" }}
-        //         />
-        //       </Popconfirm>
-        //     ) : null
-        // }
+
       ]
     };
   }
 
   handleSave = (row: { key: any; }) => {
     const newData = [...this.state.rows];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row
-    });
+    // const index = newData.findIndex(item => row.key === item.key);
+    // const item = newData[index];
+    // newData.splice(index, 1, {
+    //   ...item,
+    //   ...row
+    // });
     this.setState({ rows: newData });
   };
 
@@ -135,50 +103,56 @@ export default class ExcelPage extends Component<{}, MyState> {
       });
       return false;
     }
+    const newRows: { firstName: any; lastName: any;}[] = ReadFile(UpdateData);
+    function ReadFile(callback: (arg0: JSON[]) =>  {
+          firstName: any;
+          lastName: any;
+      }[]) {
+      var reader = new FileReader();
+      reader.onload = function(fileObj) {
+          const arrayBuffer: ArrayBuffer = fileObj.target.result as ArrayBuffer;
+          var data = new Uint8Array(arrayBuffer);
+          var wb = read(data, {type: 'array', WTF: true});
+          console.log(JSON.stringify(wb));
+          var sheet = wb.SheetNames[0];
+          var worksheet = wb.Sheets[sheet];
 
-    // try {
-        var reader = new FileReader();
-        reader.onload = function(fileObj) {
-            const arrayBuffer: ArrayBuffer = fileObj.target.result as ArrayBuffer;
-            var data = new Uint8Array(arrayBuffer);
-            var wb = read(data, {type: 'array', WTF: true});
-            console.log(JSON.stringify(wb));
-            var sheet = wb.SheetNames[0];
-            console.log(sheet);
-            var worksheet = wb.Sheets[sheet];
-            console.log(worksheet);
+          var jsonData = utils.sheet_to_json<JSON>(worksheet);
+          //var studentData: StudentData = jsonData;
+          var groupProjectID = InsertStudents(jsonData);
+          console.log(jsonData);
+          return callback(jsonData);
+          //callback(reader.result as ArrayBuffer);
+      };
+      const fileName = fileObj.name;
+      console.log(fileName);
 
-            var jsonData = utils.sheet_to_json<JSON>(worksheet);
-            
-            var groupProjectID = InsertStudents(jsonData);
-            console.log(groupProjectID);
+      reader.readAsArrayBuffer(fileObj);
+      return callback(null);
+    };
+    
+    function UpdateData(result: JSON[] ) {
+      const studentData1: StudentData = JSON.parse(JSON.stringify(result[0]));
+      const studentData2: StudentData = JSON.parse(JSON.stringify(result[1]));
+      const data: StudentData[] = [studentData1, studentData2];
+      let newRows: { firstName: any; lastName: any;}[] = [];
+      data.map((d: StudentData, i: any) => {
+        newRows.push({
+          firstName: d.FirstName,
+          lastName: d.LastName,
+        })
+      });
+      console.log(newRows);
+      return newRows;
+    }
 
-        };
-        const fileName = fileObj.name;
-        console.log(fileName);
-        reader.readAsArrayBuffer(fileObj);
+    this.setState({
+      cols: this.state.cols,
+      rows: newRows,
+      errorMessage: null
+    });
 
-        let newRows: { firstName: any; lastName: any;}[] = [];
-        this.state.rows.slice(1).map((row: string | any[], index: any) => {
-          if (row && row !== "undefined") {
-            newRows.push({
-              firstName: row[0],
-              lastName: row[1],
-            });
-          }
-        });
-        if (newRows.length === 0) {
-          this.setState({
-            errorMessage: "No data found in file!"
-          });
-          return false;
-        } else {
-          this.setState({
-            cols: this.state.cols,
-            rows: newRows,
-            errorMessage: null
-          });
-        }
+        
         //just pass the fileObj as parameter
         // ExcelRenderer(fileObj, (err: any, resp: { rows: any[]; cols: any; }) => {
         //   if (err) {
@@ -209,13 +183,7 @@ export default class ExcelPage extends Component<{}, MyState> {
         //     }
         //   }
         // });
-        return false;
-    // } catch (error) {
-    //     this.setState({
-    //         errorMessage: error
-    //       });  
-    //       console.log(error);
-    // }
+    return false;
   };
 
   handleSubmit = async () => {
@@ -227,13 +195,13 @@ export default class ExcelPage extends Component<{}, MyState> {
 
   handleDelete = (key: any) => {
     const rows = [...this.state.rows];
-    this.setState({ rows: rows.filter(item => item.key !== key) });
+    this.setState({ rows: rows/*rows.filter(item => item.key !== key) */});
   };
   handleAdd = () => {
     const { rows } = this.state;
     const newData = {
-      firstname: "-",
-      lastname: "-"
+      firstName: "-",
+      lastName: "-"
     };
     this.setState({
       rows: [newData, ...rows],
@@ -333,6 +301,13 @@ export default class ExcelPage extends Component<{}, MyState> {
           </Upload>
         </div>
         <div style={{ marginTop: 20 }}>
+          {this.state.rows && 
+            this.state.rows.map((d, i) => (
+              <div key={i}>
+              <h1>{d.firstName}</h1>
+              </div>
+            ))
+          }
           <Table
             //components={components}
             rowClassName={() => "editable-row"}
@@ -344,3 +319,5 @@ export default class ExcelPage extends Component<{}, MyState> {
     );
   }
 }
+
+

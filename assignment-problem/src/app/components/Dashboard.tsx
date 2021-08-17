@@ -1,7 +1,7 @@
 import {FC, useState, useEffect} from "react";
 import * as React from "react";
 import { ipcRenderer } from "electron";
-import { SayHello } from "../greeting";
+import { SayHello } from "../apiController";
 
 // export const Dashboard: FC = () => {
 //   const [greeting, setGreeting] = useState<string>();

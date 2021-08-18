@@ -15,3 +15,27 @@ export const groupColumns = [
     key: "student_id",
   },
 ];
+
+export interface GroupData1 {
+  groupNumber: number,
+  studentNames: string[],
+  studentIds: string
+}
+
+export const groupColumns1 = [
+  {
+    title: "Group Number",
+    dataIndex: "groupNumber",
+    key: "groupNumber",
+  },
+  {
+    title: "Students",
+    dataIndex: "studentNames",
+    key: "studentNames",
+  },
+  {
+    title: "IDs",
+    dataIndex: "studentIds",
+    key: "studentIds",
+  }
+];

@@ -8,11 +8,11 @@ namespace AssignmentProblem
 {
     public class Group
     {
-        //public List<Student> students { get; set; }
+        public int groupNumber { get; set; }
 
-        public List<String> students_name { get; set; }
+        public List<string> studentNames { get; set; }
 
-        public List<int> student_id { get; set; }
+        public List<int> studentIds { get; set; }
         public Group()
         {
 

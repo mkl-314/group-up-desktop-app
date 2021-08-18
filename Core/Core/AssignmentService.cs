@@ -13,6 +13,7 @@ namespace AssignmentProblem
         private List<Student1> students;
         private List<StudentChoice1> studentChoices;
         private List<StudentExclude1> studentExclusions;
+        public long time;
         public AssignmentService(GroupUpContext context)
         {
             _context = context;
@@ -126,12 +127,13 @@ namespace AssignmentProblem
             //solver.NewSearch(db);
             int sol = 0;
             List<Group> groups = new List<Group>();
-            for (int i = 0; i < num_groups; i++)
+            for (int i = 1; i <= num_groups; i++)
             {
                 groups.Add(new Group
                 {
-                    students_name = new List<String>(),
-                    student_id = new List<int>()
+                    groupNumber = i,
+                    studentNames = new List<string>(),
+                    studentIds = new List<int>()
                 }); ;
             }
 
@@ -145,8 +147,8 @@ namespace AssignmentProblem
                     if (sol == 0)
                     {
                         Group group = groups[(int)student_groups[i].Value()];
-                        group.students_name.Add(students[i].firstName + " " + students[i].lastName);
-                        group.student_id.Add(students[i].id);
+                        group.studentNames.Add(students[i].firstName + " " + students[i].lastName);
+                        group.studentIds.Add(students[i].id);
                     }
                 }
 
@@ -160,6 +162,8 @@ namespace AssignmentProblem
             //Console.WriteLine("Branches: {0} ", solver.Branches());
 
             solver.EndSearch();
+
+
             return groups;
         }
 
@@ -244,8 +248,8 @@ namespace AssignmentProblem
             {
                 groups.Add(new Group
                 {
-                    students_name = new List<String>(),
-                    student_id = new List<int>()
+                    studentNames = new List<String>(),
+                    studentIds = new List<int>()
                 }); ;
             }
 
@@ -259,8 +263,8 @@ namespace AssignmentProblem
                     if (sol == 0)
                     {
                         Group group = groups[(int)student_groups[i].Value()];
-                        group.students_name.Add(students[i].FirstName + " " + students[i].LastName);
-                        group.student_id.Add(students[i].StudentId);
+                        group.studentNames.Add(students[i].FirstName + " " + students[i].LastName);
+                        group.studentIds.Add(students[i].StudentId);
                     }
                 }
   
@@ -272,8 +276,9 @@ namespace AssignmentProblem
             //Console.WriteLine("WallTime: {0}ms", solver.WallTime());
             //Console.WriteLine("Failures: {0}", solver.Failures());
             //Console.WriteLine("Branches: {0} ", solver.Branches());
-
+            time = solver.WallTime();
             solver.EndSearch();
+
             return groups;
         }
 
@@ -296,12 +301,12 @@ namespace AssignmentProblem
             {
                 Group group = groups[i];
 
-                for (int j = 0; j < group.student_id.Count; j++)
+                for (int j = 0; j < group.studentIds.Count; j++)
                 {
                     GroupSolutionStudent gss = new GroupSolutionStudent()
                     {
                         GroupSolutionId = groupSolution.GroupSolutionId,
-                        StudentId = group.student_id[j],
+                        StudentId = group.studentIds[j],
                         GroupNumber = i
                     };
                     

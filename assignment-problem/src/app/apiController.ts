@@ -1,12 +1,7 @@
 import { Connection, ConnectionBuilder } from "electron-cgi";
-import { GroupData } from "./types/Groups";
-import {
-  StudentChoiceData,
-  StudentData,
-  StudentExcludeData
-} from "./types/Student";
+import { GroupData, GroupData1 } from "./types/Groups";
+import { StudentChoiceData, StudentData, StudentExcludeData } from "./types/Student";
 //const connection = require('./connection').connection;
-
 
 let connection: Connection = null;
 
@@ -22,13 +17,16 @@ export function setUpConnection() {
   };
 }
 
-export const GetGroups = async (groupSize: number): Promise<[GroupData]> => {
+export const GetGroups = async (groupSize: number): Promise<[GroupData1]> => {
   try {
-  const response = await connection.send("GetGroups", groupSize);
-  console.log(response);
-  if (response.status === 200) return response.value;
+    console.log("here");
+    const response = await connection.send("GetGroups", groupSize);
+    return response;
+    // console.log(response);
+    // if (response.statusCode === 200) return response.value;
   } catch (err) {
-    throw new Error("Inserting student choices failed: " + err.Message);
+    console.log(err.Message);
+    throw new Error("Could not generate groups: " + err.Message);
   }
 };
 
@@ -50,7 +48,6 @@ export const InsertStudentChoices = async (studentData: StudentChoiceData[]): Pr
     if (response.statusCode === 200) return true;
     //throw new Error("Inserting student choices failed:");
   } catch (err) {
-    console.log(err.Message);
     throw new Error("Inserting student choices failed: " + err.Message);
   }
 };
@@ -64,7 +61,6 @@ export const InsertStudentExclusions = async (
     if (response.statusCode === 200) return true;
     //throw new Error("Inserting student exclusions failed:");
   } catch (err) {
-    console.log(err.Message);
     throw new Error("Inserting student exclusions failed: " + err.Message);
   }
 };

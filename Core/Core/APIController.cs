@@ -35,16 +35,24 @@ namespace AssignmentProblem
         }
         public void GetGroups()
         {
-            connection.On<int, IActionResult>("GetGroups", groupSize =>
+            connection.On<int, List<Group>>("GetGroups", groupSize =>
             {
                 try
                 {
-                    return new OkObjectResult(_assignmentService.AssignGroups1(groupSize));
-                    //return _assignmentService.AssignGroups1(groupSize);
+                    //List<Group> groups = _assignmentService.AssignGroups1(groupSize);
+                    //if (groups.Count > 0)
+                    //{
+                    //    return new OkObjectResult(groups);
+                    //} else
+                    //{
+                    //    return new OkObjectResult(_assignmentService.time);
+                    //}
+                    return _assignmentService.AssignGroups1(groupSize);
                 }
                 catch (Exception ex)
                 {
-                    return new BadRequestObjectResult(ex.Message);
+                    return null;
+                    //return new BadRequestObjectResult(ex.Message);
                 }
             });
 

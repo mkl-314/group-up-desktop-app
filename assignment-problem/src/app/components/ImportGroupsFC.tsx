@@ -9,7 +9,7 @@ import {
   GetGroups,
   InsertStudentChoices,
   InsertStudentExclusions,
-  InsertStudents
+  InsertStudents,
 } from "../apiController";
 import {
   StudentChoiceData,
@@ -17,20 +17,17 @@ import {
   StudentExcludeData,
   StudentFileData,
 } from "../types/Student";
-import { GroupData, groupColumns } from "../types/Groups";
+import { GroupData, groupColumns, GroupData1, groupColumns1 } from "../types/Groups";
 import { columns, studentColumns } from "../types/studentColumns";
 
 const Import: FC = () => {
   const [groupSize, setGroupSize] = useState<number>();
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [studentFileData, setStudentFileData] = useState<StudentFileData[]>();
   const [studentData, setStudentData] = useState<StudentData[]>();
   const [studentChoices, setStudentChoices] = useState<StudentChoiceData[]>();
   const [studentExcludes, setStudentExcludes] = useState<StudentExcludeData[]>();
-  const [groups, setGroups] = useState<[GroupData]>();
+  const [groups, setGroups] = useState<GroupData1[]>();
   const [studentJSONData, setStudentJSONData] = useState<JSON[]>();
-
-  React.useEffect
 
   const handleErrorMessage = (e: string) => {
     message.error({
@@ -42,9 +39,21 @@ const Import: FC = () => {
     });
   };
 
-  const handleLoadingMessage = (e: string) => {
-    message.loading("Action in progress", 0);
+  const handleLoadingMessage = (content: string, key: string) => {
+    message.loading({
+      content: content,
+      key: key,
+      duration: 0
+    });
   };
+
+  const handleSuccessMessage = (content: string, key: string) => {
+    message.success({
+      content: content,
+      key: key,
+      duration: 5
+    });
+  }
 
   const fileHandler = async (e: File) => {
     try {
@@ -175,23 +184,25 @@ const Import: FC = () => {
 
   const generateGroups = async () => {
     try {
+      handleLoadingMessage("Generating Groups", "group");
       await InsertStudents(studentData);
       await InsertStudentChoices(studentChoices);
       await InsertStudentExclusions(studentExcludes);
 
+      console.log("hi");
       setGroupSize(4);
-      const result = await GetGroups(groupSize);
-      setGroups(result);
-      console.log(result);
+      await GetGroups(groupSize).then((result) => setGroups(result));
+      handleSuccessMessage("Groups have been generated!", "group");
+      
     } catch (err) {
       handleErrorMessage("Could not generate groups: " + err.Message);
     }
   };
+
   return (
     <>
       <h1>Import Excel File</h1>
       <hr />
-      <h4>{errorMessage}</h4>
       <Upload
         name="file"
         beforeUpload={fileHandler}
@@ -219,8 +230,8 @@ const Import: FC = () => {
           <h2>Groups</h2>
           <Table
             dataSource={groups}
-            columns={groupColumns}
-            rowKey={(record) => record.student_id}
+            columns={groupColumns1}
+            rowKey={(record) => record.groupNumber}
           />
         </div>
       </div>

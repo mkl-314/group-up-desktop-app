@@ -5,7 +5,6 @@ import Import from "./components/Import";
 import ImportGroups from "./components/ImportGroups";
 import ImportGroupsFC from "./components/ImportGroupsFC";
 
-ReactDOM.render(<Dashboard />, document.getElementById("renderer"));
+//ReactDOM.render(<Dashboard />, document.getElementById("renderer"));
 ReactDOM.render(<ImportGroupsFC />, document.getElementById("importGroups"));
-ReactDOM.render(<Import />, document.getElementById("import"));
-
+//ReactDOM.render(<Import />, document.getElementById("import"));

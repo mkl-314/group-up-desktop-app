@@ -7,7 +7,13 @@
     "build:react": "webpack --mode development --config webpack.react.config.js",
     "build": "webpack --mode development",
     "start": "electron ./dist/main.js",
+    "format": "prettier --config .prettierrc --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md}",
     "package-win": "electron-packager . electron-demo --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron-demo\""
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",
@@ -38,6 +44,7 @@
     "electron": "^13.1.9",
     "electron-cgi": "^1.0.6",
     "electron-packager": "^15.3.0",
+    "eslint": "^7.32.0",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.2.0",
     "node-sass": "^6.0.1",
@@ -60,6 +67,5 @@
     "react-dom": "^17.0.2",
     "react-excel-renderer": "^1.1.0",
     "xlsx": "^0.17.0"
-  },
-  "proxy": "https://localhost:44308"
+  }
 }

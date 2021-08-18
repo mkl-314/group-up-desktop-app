@@ -9,13 +9,13 @@ namespace AssignmentProblem.Models
     {
         public GroupProject()
         {
-            Students = new HashSet<Student1>();
+            Students = new HashSet<Student>();
         }
 
         public int GroupProjectId { get; set; }
         public string GroupProjectName { get; set; }
         public DateTime? DateCreated { get; set; }
 
-        public virtual ICollection<Student1> Students { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

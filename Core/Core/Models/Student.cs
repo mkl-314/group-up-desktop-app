@@ -10,10 +10,10 @@ namespace AssignmentProblem.Models
         public Student()
         {
             GroupSolutionStudents = new HashSet<GroupSolutionStudent>();
-            StudentChoiceChooserStudents = new HashSet<StudentChoice1>();
-            StudentChoiceChosenStudents = new HashSet<StudentChoice1>();
-            StudentExcludeFirstStudents = new HashSet<StudentExclude1>();
-            StudentExcludeSecondStudents = new HashSet<StudentExclude1>();
+            StudentChoiceChooserStudents = new HashSet<StudentChoice>();
+            StudentChoiceChosenStudents = new HashSet<StudentChoice>();
+            StudentExcludeFirstStudents = new HashSet<StudentExclude>();
+            StudentExcludeSecondStudents = new HashSet<StudentExclude>();
         }
 
         public int StudentId { get; set; }
@@ -23,9 +23,9 @@ namespace AssignmentProblem.Models
 
         public virtual GroupProject GroupProject { get; set; }
         public virtual ICollection<GroupSolutionStudent> GroupSolutionStudents { get; set; }
-        public virtual ICollection<StudentChoice1> StudentChoiceChooserStudents { get; set; }
-        public virtual ICollection<StudentChoice1> StudentChoiceChosenStudents { get; set; }
-        public virtual ICollection<StudentExclude1> StudentExcludeFirstStudents { get; set; }
-        public virtual ICollection<StudentExclude1> StudentExcludeSecondStudents { get; set; }
+        public virtual ICollection<StudentChoice> StudentChoiceChooserStudents { get; set; }
+        public virtual ICollection<StudentChoice> StudentChoiceChosenStudents { get; set; }
+        public virtual ICollection<StudentExclude> StudentExcludeFirstStudents { get; set; }
+        public virtual ICollection<StudentExclude> StudentExcludeSecondStudents { get; set; }
     }
 }

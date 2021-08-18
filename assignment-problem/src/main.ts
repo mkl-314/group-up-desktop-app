@@ -7,18 +7,21 @@ import { app, BrowserWindow } from "electron";
 let window: BrowserWindow | null;
 
 const createWindow = () => {
-  window = new BrowserWindow({ width: 800, height: 600, 
+  window = new BrowserWindow({
+    width: 800,
+    height: 600,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true, }
-    });
+      enableRemoteModule: true,
+    },
+  });
 
   window.loadURL(
     url.format({
       pathname: path.join(__dirname, "index.html"),
       protocol: "file:",
-      slashes: true
+      slashes: true,
     })
   );
 
@@ -41,7 +44,6 @@ app.on("activate", () => {
   }
 });
 
-
 // let connection = new ConnectionBuilder()
 //   .connectTo("dotnet", "run", "--project", "../../AssignmentProblem/AssignmentProblem/")
 //   .build();
@@ -57,6 +59,6 @@ app.on("activate", () => {
 //         return;
 //     }
 //     window.webContents.send("greeting", response);
-//     console.log(response); 
+//     console.log(response);
 //     connection.close();
 // });

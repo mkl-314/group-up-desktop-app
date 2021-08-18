@@ -8,10 +8,14 @@ namespace AssignmentProblem.Models
     public partial class StudentChoice1
     {
         public int StudentChoiceId { get; set; }
+
+        //public string ChooserStudent { get; set; }
+
+        //public string ChosenStudent { get; set; }
         public int ChooserStudentId { get; set; }
         public int ChosenStudentId { get; set; }
 
-        public virtual Student1 ChooserStudent { get; set; }
-        public virtual Student1 ChosenStudent { get; set; }
+        //public virtual Student1 ChooserStudent { get; set; }
+        //public virtual Student1 ChosenStudent { get; set; }
     }
 }

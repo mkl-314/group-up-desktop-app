@@ -1,36 +1,35 @@
 export const columns = [
   {
     title: "First Name",
-    dataIndex: "firstName",
-    key: "firstName",
+    dataIndex: "FirstName",
+    key: "FirstName",
   },
   {
     title: "Last Name",
-    dataIndex: "lastName",
-    key: "lastName",
+    dataIndex: "LastName",
+    key: "LastName",
   },
   {
     title: "Choice 1",
-    dataIndex: "choice1",
-    key: "choice1",
+    dataIndex: "Choice1",
+    key: "Choice1",
   },
   {
     title: "Choice 2",
-    dataIndex: "choice2",
-    key: "choice2",
+    dataIndex: "Choice2",
+    key: "Choice2",
   },
   {
     title: "Choice 3",
-    dataIndex: "choice3",
-    key: "choice3",
+    dataIndex: "Choice3",
+    key: "Choice3",
   },
   {
     title: "Choice 4",
-    dataIndex: "choice4",
-    key: "choice4",
+    dataIndex: "Choice4",
+    key: "Choice4",
   },
-
-]
+];
 
 export const studentColumns = [
   {
@@ -42,8 +41,8 @@ export const studentColumns = [
     title: "Last Name",
     dataIndex: "lastName",
     key: "lastName",
-  }
-]
+  },
+];
 
 export const studentChoiceColumns = [
   {
@@ -55,5 +54,5 @@ export const studentChoiceColumns = [
     title: "Last Name",
     dataIndex: "lastName",
     key: "lastName",
-  }
-]
+  },
+];

@@ -1,6 +1,6 @@
-import * as React from 'react'
-import {Form, Input} from 'antd'
-import { FormInstance } from 'rc-field-form';
+import * as React from "react";
+import { Form, Input } from "antd";
+import { FormInstance } from "rc-field-form";
 
 const EditableContext = React.createContext<boolean>(defaultValue);
 
@@ -13,18 +13,18 @@ const EditableRow = ({ form, index, ...props }) => (
 export const EditableFormRow = Form.create()(EditableRow);
 
 interface MyState {
-  editing: boolean
+  editing: boolean;
 }
 
 interface MyProps {
-  editable: any,
-  dataIndex: any,
-  title: any,
-  record: any,
-  index: any,
-  handleSave: any,
-  children: any,
-  restProps: any
+  editable: any;
+  dataIndex: any;
+  title: any;
+  record: any;
+  index: any;
+  handleSave: any;
+  children: any;
+  restProps: any;
 }
 
 export class EditableCell extends React.Component<MyProps, MyState, {}> {
@@ -41,9 +41,9 @@ export class EditableCell extends React.Component<MyProps, MyState, {}> {
     });
   };
 
-  save = (e: { currentTarget: { id: string | number; }; }) => {
+  save = (e: { currentTarget: { id: string | number } }) => {
     const { record, handleSave } = this.props;
-    this.form.validateFields((error: { [x: string]: any; }, values: any) => {
+    this.form.validateFields((error: { [x: string]: any }, values: any) => {
       if (error && error[e.currentTarget.id]) {
         return;
       }
@@ -52,7 +52,20 @@ export class EditableCell extends React.Component<MyProps, MyState, {}> {
     });
   };
 
-  renderCell = (form: { getFieldDecorator: (arg0: any, arg1: { rules: { required: boolean; message: string; }[]; initialValue: any; }) => { (arg0: JSX.Element): boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | ((form: FormInstance<any>) => React.ReactNode); new(): any; }; }) => {
+  renderCell = (form: {
+    getFieldDecorator: (
+      arg0: any,
+      arg1: { rules: { required: boolean; message: string }[]; initialValue: any }
+    ) => {
+      (arg0: JSX.Element):
+        | boolean
+        | React.ReactChild
+        | React.ReactFragment
+        | React.ReactPortal
+        | ((form: FormInstance<any>) => React.ReactNode);
+      new (): any;
+    };
+  }) => {
     this.form = form;
     const { children, dataIndex, record, title } = this.props;
     const { editing } = this.state;
@@ -66,7 +79,9 @@ export class EditableCell extends React.Component<MyProps, MyState, {}> {
             },
           ],
           initialValue: record[dataIndex],
-        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+        })(
+          <Input ref={(node) => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
+        )}
       </Form.Item>
     ) : (
       <div
@@ -80,16 +95,8 @@ export class EditableCell extends React.Component<MyProps, MyState, {}> {
   };
 
   render() {
-    const {
-      editable,
-      dataIndex,
-      title,
-      record,
-      index,
-      handleSave,
-      children,
-      ...restProps
-    } = this.props;
+    const { editable, dataIndex, title, record, index, handleSave, children, ...restProps } =
+      this.props;
     return (
       <td {...restProps}>
         {editable ? (

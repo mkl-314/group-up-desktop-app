@@ -10,26 +10,160 @@ namespace AssignmentProblem
     public class AssignmentService
     {
         private GroupUpContext _context;
+        private List<Student1> students;
+        private List<StudentChoice1> studentChoices;
+        private List<StudentExclude1> studentExclusions;
         public AssignmentService(GroupUpContext context)
         {
             _context = context;
         }
 
-        public List<Student1> GetStudents(int groupProjectID)
+        public void InsertStudents(List<Student1> students)
         {
-            DbSet<Student1> dbStudent = _context.Students;
+            this.students = students;
+        }
 
+        public void InsertStudentChoices(List<StudentChoice1> studentChoices)
+        {
+            this.studentChoices = studentChoices;
+        }
+
+        public void InsertStudentExclusions(List<StudentExclude1> studentExclusions)
+        {
+            this.studentExclusions = studentExclusions;
+        }
+
+        public List<Student> GetStudents(int groupProjectID)
+        {
+
+
+            DbSet<Student> dbStudent = _context.Students;
+   
             // Note: cannot return student.ToList() as a circular reference occurs so the program never stops loading
-            IQueryable<Student1> studentsQ = dbStudent.Where(x => groupProjectID == x.GroupProjectId)
+            IQueryable<Student> studentsQ = dbStudent.Where(x => groupProjectID == x.GroupProjectId)
                 .Include(x => x.StudentChoiceChooserStudents)
                 .Include(x => x.StudentExcludeFirstStudents)
                 .OrderBy(x => x.StudentId);
 
             return studentsQ.ToList();
-        } 
+        }
+
+        public List<Group> AssignGroups1(int group_size)
+        {
+
+            Solver solver = new Solver("GroupAssignment");
+
+            int num_students = students.Count();
+            int num_groups = num_students / group_size;
+
+            IntVar[] student_groups = solver.MakeIntVarArray(num_students, 0, num_groups, "students");
+
+            // group size must be group_size or group_size+1
+            IntVar[] gcc = solver.MakeIntVarArray(num_groups, group_size, group_size + 2, "gcc");
+            solver.Add(student_groups.Distribute(gcc));
+
+            IntVar[] num_preferences = new IntVar[num_students];
+            // Students must be given at least one of their preferences
+            for (int i = 0; i < num_students; i++)
+            {
+                ICollection<StudentChoice1> preferences = studentChoices.FindAll(x => x.ChosenStudentId == students[i].id );
+                int[] preferenceIndexes = new int[preferences.Count()];
+                int count = 0;
+                foreach (StudentChoice1 preference in preferences)
+                {
+                    preferenceIndexes[count] = students.FindIndex(x => x.id == preference.ChosenStudentId);
+                    count++;
+                }
+
+                num_preferences[i] = solver.MakeIntConst(0, "none");
+                // Let students have at least one preference
+                if (preferences.Count() > 0)
+                {
+                    IntExpr num_preference = (from j in preferenceIndexes
+                                                  //where i != j  // users cannot choose themselves. Can probably remove later
+                                              select (student_groups[i] == student_groups[j])
+                                            ).ToArray().Sum();
+                    if (num_preference >= 1)
+                    {
+                        num_preferences[i] = (num_preference.Var() + num_students * num_students).Var();
+                    }
+
+                    // Hard Constraint. Comment out if using soft constraint - not working yet
+                    solver.Add(num_preference >= 1);
+                }
+            }
+            //Soft Constraint. Students should have at least one preference.
+            IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
+
+            // Certain students cannot be in the same group
+            foreach (Student1 student in students)
+            {
+                ICollection<StudentExclude1> exclusions = studentExclusions; 
+                foreach (StudentExclude1 exclusion in exclusions)
+                {
+                    int firstIndex = students.FindIndex(x => x.id == exclusion.FirstStudentId);
+                    int secondIndex = students.FindIndex(x => x.id == exclusion.SecondStudentId);
+                    solver.Add(student_groups[firstIndex] != student_groups[secondIndex]);
+                }
+
+            }
+
+            // Symmetry breaking
+            for (int s = 0; s < group_size; s++)
+            {
+                solver.Add(student_groups[s] <= s);
+            }
+
+            OptimizeVar opt = solver.MakeMaximize(sum_preferences, 1);
+            // Search
+            DecisionBuilder db = solver.MakePhase(student_groups,
+                                                  Solver.CHOOSE_PATH,
+                                                  Solver.ASSIGN_MIN_VALUE);
+
+            solver.NewSearch(db, opt);
+            //solver.NewSearch(db);
+            int sol = 0;
+            List<Group> groups = new List<Group>();
+            for (int i = 0; i < num_groups; i++)
+            {
+                groups.Add(new Group
+                {
+                    students_name = new List<String>(),
+                    student_id = new List<int>()
+                }); ;
+            }
+
+            while (solver.NextSolution() && sol <= 0)
+            {
+
+                //Console.Write("x " + sol + ": ");
+                for (int i = 0; i < num_students; i++)
+                {
+                    //Console.Write("{0} ", student_groups[i].Value());
+                    if (sol == 0)
+                    {
+                        Group group = groups[(int)student_groups[i].Value()];
+                        group.students_name.Add(students[i].firstName + " " + students[i].lastName);
+                        group.student_id.Add(students[i].id);
+                    }
+                }
+
+                //Console.WriteLine();
+                sol++;
+            }
+
+            //Console.WriteLine("\nSolutions: {0}", solver.Solutions());
+            //Console.WriteLine("WallTime: {0}ms", solver.WallTime());
+            //Console.WriteLine("Failures: {0}", solver.Failures());
+            //Console.WriteLine("Branches: {0} ", solver.Branches());
+
+            solver.EndSearch();
+            return groups;
+        }
+
         public List<Group> AssignGroups(int groupProjectID, int group_size)
         {
-            List<Student1> students = GetStudents(groupProjectID);
+            List<Student> students = GetStudents(groupProjectID);
 
             Solver solver = new Solver("GroupAssignment");
 
@@ -46,10 +180,10 @@ namespace AssignmentProblem
             // Students must be given at least one of their preferences
             for (int i=0; i< num_students; i++)
             {
-                ICollection<StudentChoice1> preferences = students[i].StudentChoiceChooserStudents;
+                ICollection<StudentChoice> preferences = students[i].StudentChoiceChooserStudents;
                 int[] preferenceIndexes = new int[preferences.Count()];
                 int count = 0;
-                foreach (StudentChoice1 preference in preferences)
+                foreach (StudentChoice preference in preferences)
                 {
                     preferenceIndexes[count] = students.FindIndex(x => x.StudentId == preference.ChosenStudentId); 
                     count++;
@@ -76,10 +210,10 @@ namespace AssignmentProblem
             IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
 
             // Certain students cannot be in the same group
-            foreach (Student1 student in students)
+            foreach (Student student in students)
             {
-                ICollection<StudentExclude1> exclusions = student.StudentExcludeFirstStudents;
-                foreach (StudentExclude1 exclusion in exclusions)
+                ICollection<StudentExclude> exclusions = student.StudentExcludeFirstStudents;
+                foreach (StudentExclude exclusion in exclusions)
                 {
                     int firstIndex = students.FindIndex(x => x.StudentId == exclusion.FirstStudentId);
                     int secondIndex = students.FindIndex(x => x.StudentId == exclusion.SecondStudentId);

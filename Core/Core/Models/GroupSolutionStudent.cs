@@ -13,6 +13,6 @@ namespace AssignmentProblem.Models
         public int GroupNumber { get; set; }
 
         public virtual GroupSolution GroupSolution { get; set; }
-        public virtual Student1 Student { get; set; }
+        public virtual Student Student { get; set; }
     }
 }

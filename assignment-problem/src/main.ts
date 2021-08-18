@@ -1,6 +1,5 @@
 const url = require("url");
 const path = require("path");
-const { ConnectionBuilder } = require("electron-cgi");
 
 import { app, BrowserWindow } from "electron";
 
@@ -43,22 +42,3 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-// let connection = new ConnectionBuilder()
-//   .connectTo("dotnet", "run", "--project", "../../AssignmentProblem/AssignmentProblem/")
-//   .build();
-
-// connection.onDisconnect = () => {
-//     console.log("lost");
-//     connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
-// };
-
-//  connection.send('greeting', 'John', (error: any, response: any) => {
-//     if (error) {
-//         console.log(error); //serialized exception from the .NET handler
-//         return;
-//     }
-//     window.webContents.send("greeting", response);
-//     console.log(response);
-//     connection.close();
-// });

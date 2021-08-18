@@ -5,12 +5,11 @@ import { Table, Button, Popconfirm, Row, Col, Upload, message } from "antd";
 import { BugTwoTone, FileProtectOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 // import { ExcelRenderer } from "react-excel-renderer";
 import { read, WorkBook, utils, readFile } from "xlsx";
-//import { EditableFormRow, EditableCell } from "../utils/editable";
 import {
   GetGroups,
   InsertStudentChoices,
   InsertStudentExclusions,
-  InsertStudents,
+  InsertStudents
 } from "../apiController";
 import {
   StudentChoiceData,
@@ -31,6 +30,8 @@ const Import: FC = () => {
   const [groups, setGroups] = useState<[GroupData]>();
   const [studentJSONData, setStudentJSONData] = useState<JSON[]>();
 
+  React.useEffect
+
   const handleErrorMessage = (e: string) => {
     message.error({
       content: e,
@@ -42,13 +43,12 @@ const Import: FC = () => {
   };
 
   const handleLoadingMessage = (e: string) => {
-    message.loading("Action in progress");
+    message.loading("Action in progress", 0);
   };
 
   const fileHandler = async (e: File) => {
     try {
       if (isValidFile(e)) {
-        console.log("test");
         var reader = new FileReader();
         reader.onload = function (fileObj) {
           const arrayBuffer: ArrayBuffer = fileObj.target.result as ArrayBuffer;
@@ -112,13 +112,7 @@ const Import: FC = () => {
               });
             } else {
               handleErrorMessage(
-                "In column: " +
-                  key +
-                  ", row: " +
-                  (i + 2) +
-                  ". " +
-                  json[key] +
-                  " is not recognised as a student."
+                `In column: ${key}, row: ${i + 2}. ${json[key]} is not recognised as a student.`
               );
             }
           } else if (key1.match(/^exclude/i)) {
@@ -126,24 +120,16 @@ const Import: FC = () => {
             if (studentId >= 0) {
               exclusions.push({
                 firstStudentId: i,
-                secondStudentId: json[key],
+                secondStudentId: studentId,
               });
             } else {
               handleErrorMessage(
-                "In column: " +
-                  key +
-                  ", row: " +
-                  (i + 2) +
-                  ", " +
-                  json[key] +
-                  " is not recognised as a student."
+                `In column: ${key}, row: ${i + 2}. ${json[key]} is not recognised as a student.`
               );
             }
           }
         }
       });
-      console.log(choices);
-      console.log(exclusions);
       setStudentData(students);
       setStudentChoices(choices);
       setStudentExcludes(exclusions);
@@ -168,13 +154,13 @@ const Import: FC = () => {
     return studentIndex;
   }
   const isValidFile = (e: File) => {
-    console.log("fileList", e);
+    //console.log("fileList", e);
     let fileObj = e;
     if (!fileObj) {
       handleErrorMessage("No file uploaded!");
       return false;
     }
-    console.log("fileObj.type:", fileObj.type);
+    //console.log("fileObj.type:", fileObj.type);
     if (
       !(
         fileObj.type === "application/vnd.ms-excel" ||
@@ -189,13 +175,11 @@ const Import: FC = () => {
 
   const generateGroups = async () => {
     try {
-      const response = await InsertStudents(studentData);
-      console.log(response);
+      await InsertStudents(studentData);
       await InsertStudentChoices(studentChoices);
       await InsertStudentExclusions(studentExcludes);
 
       setGroupSize(4);
-      console.log("get groups");
       const result = await GetGroups(groupSize);
       setGroups(result);
       console.log(result);

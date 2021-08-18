@@ -536,7 +536,7 @@ electron__WEBPACK_IMPORTED_MODULE_0__.app.on("activate", function () {
 //         return;
 //     }
 //     window.webContents.send("greeting", response);
-//     console.log(response); 
+//     console.log(response);
 //     connection.close();
 // });
 })();

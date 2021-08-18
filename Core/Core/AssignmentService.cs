@@ -35,8 +35,6 @@ namespace AssignmentProblem
 
         public List<Student> GetStudents(int groupProjectID)
         {
-
-
             DbSet<Student> dbStudent = _context.Students;
    
             // Note: cannot return student.ToList() as a circular reference occurs so the program never stops loading
@@ -113,6 +111,10 @@ namespace AssignmentProblem
             {
                 solver.Add(student_groups[s] <= s);
             }
+
+            // Time limit
+            int THIRTY_S_IN_MS = 30000;
+            solver.MakeTimeLimit(THIRTY_S_IN_MS);
 
             OptimizeVar opt = solver.MakeMaximize(sum_preferences, 1);
             // Search

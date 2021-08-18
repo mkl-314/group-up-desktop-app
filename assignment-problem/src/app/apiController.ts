@@ -5,12 +5,14 @@ import {
   StudentData,
   StudentExcludeData
 } from "./types/Student";
+//const connection = require('./connection').connection;
+
 
 let connection: Connection = null;
 
 setUpConnection();
 
-function setUpConnection() {
+export function setUpConnection() {
   connection = new ConnectionBuilder()
     .connectTo("dotnet", "run", "--project", "../Core/Core")
     .build();
@@ -21,15 +23,20 @@ function setUpConnection() {
 }
 
 export const GetGroups = async (groupSize: number): Promise<[GroupData]> => {
-  const result = await connection.send("GetGroups", groupSize);
-  return result;
+  try {
+  const response = await connection.send("GetGroups", groupSize);
+  console.log(response);
+  if (response.status === 200) return response.value;
+  } catch (err) {
+    throw new Error("Inserting student choices failed: " + err.Message);
+  }
 };
 
 export const InsertStudents = async (studentData: StudentData[]): Promise<boolean> => {
   try {
     const response = await connection.send("InsertStudents", studentData);
     if (response.statusCode === 200) return true;
-    throw new Error("Inserting students failed:");
+    //throw new Error("Inserting students failed:");
   } catch (err) {
     console.log(err.Message);
     throw new Error("Inserting students failed: " + err.Message);
@@ -39,8 +46,9 @@ export const InsertStudents = async (studentData: StudentData[]): Promise<boolea
 export const InsertStudentChoices = async (studentData: StudentChoiceData[]): Promise<boolean> => {
   try {
     const response = await connection.send("InsertStudentChoices", studentData);
+    console.log(response);
     if (response.statusCode === 200) return true;
-    throw new Error("Inserting student choices failed:");
+    //throw new Error("Inserting student choices failed:");
   } catch (err) {
     console.log(err.Message);
     throw new Error("Inserting student choices failed: " + err.Message);
@@ -52,8 +60,9 @@ export const InsertStudentExclusions = async (
 ): Promise<boolean> => {
   try {
     const response = await connection.send("InsertStudentExclusions", studentData);
+    console.log(response);
     if (response.statusCode === 200) return true;
-    throw new Error("Inserting student exclusions failed:");
+    //throw new Error("Inserting student exclusions failed:");
   } catch (err) {
     console.log(err.Message);
     throw new Error("Inserting student exclusions failed: " + err.Message);

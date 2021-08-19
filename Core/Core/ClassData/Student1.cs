@@ -13,8 +13,8 @@ namespace AssignmentProblem.Models
         }
 
         public int id { get; set; }
-        public string lastName { get; set; }
         public string firstName { get; set; }
+        public string lastName { get; set; }
 
         //public virtual GroupProject GroupProject { get; set; }
         //public virtual ICollection<GroupSolutionStudent> GroupSolutionStudents { get; set; }

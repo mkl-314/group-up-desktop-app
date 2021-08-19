@@ -1,6 +1,7 @@
 using AssignmentProblem.Models;
 using ElectronCgi.DotNet;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -23,7 +24,7 @@ namespace AssignmentProblem
         public void APICalls()
         {
             connection = new ConnectionBuilder()
-                .WithLogging()
+                .WithLogging( "log.txt", LogLevel.Information)
                 .Build();
 
             GetGroups();
@@ -31,28 +32,28 @@ namespace AssignmentProblem
             InsertStudents();
             InsertStudentChoices();
             InsertStudentExclusions();
+            
             connection.Listen();
         }
         public void GetGroups()
         {
-            connection.On<int, List<Group>>("GetGroups", groupSize =>
+            connection.On<int,IActionResult>("GetGroups", groupSize =>
             {
                 try
                 {
-                    //List<Group> groups = _assignmentService.AssignGroups1(groupSize);
-                    //if (groups.Count > 0)
-                    //{
-                    //    return new OkObjectResult(groups);
-                    //} else
-                    //{
-                    //    return new OkObjectResult(_assignmentService.time);
-                    //}
-                    return _assignmentService.AssignGroups1(groupSize);
+                    List<Group> groups = _assignmentService.AssignGroups1(groupSize);
+                    if (groups.Count > 0)
+                    {
+                        return new OkObjectResult(groups);
+                    }
+                    else
+                    {
+                        return new BadRequestObjectResult("request timed out. Potentially no solutions.");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    return null;
-                    //return new BadRequestObjectResult(ex.Message);
+                    return new BadRequestObjectResult(ex.Message);
                 }
             });
 

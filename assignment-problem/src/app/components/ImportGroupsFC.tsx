@@ -1,10 +1,10 @@
 import { Component, FC, useState } from "react";
 import * as React from "react";
 import "antd/dist/antd.css";
-import { Table, Button, Popconfirm, Row, Col, Upload, message } from "antd";
-import { BugTwoTone, FileProtectOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
-// import { ExcelRenderer } from "react-excel-renderer";
-import { read, WorkBook, utils, readFile } from "xlsx";
+import { Table, Button, Upload, Input } from "antd";
+import { BugTwoTone, PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import "./ImportGroups";
+import { read, utils } from "xlsx";
 import {
   GetGroups,
   InsertStudentChoices,
@@ -17,8 +17,30 @@ import {
   StudentExcludeData,
   StudentFileData,
 } from "../types/Student";
-import { GroupData, groupColumns, GroupData1, groupColumns1 } from "../types/Groups";
+import { GroupData1, groupColumns1 } from "../types/Groups";
 import { columns, studentColumns } from "../types/studentColumns";
+import {
+  handleWarningMessage,
+  handleErrorMessage,
+  handleLoadingMessage,
+  handleSuccessMessage,
+} from "../utils/messages";
+
+export const groupColumns2 = [
+  {
+    title: "Group Number",
+    dataIndex: "groupNumber",
+    key: "groupNumber",
+  },
+  {
+    title: "Students",
+    dataIndex: "studentNames",
+    key: "studentNames",
+    render: (text: string[], row: any, index: any) => {
+      return <>{text && text.map((d: string, i: any) => <div>{d}</div>)}</>;
+    },
+  },
+];
 
 const Import: FC = () => {
   const [groupSize, setGroupSize] = useState<number>();
@@ -27,34 +49,24 @@ const Import: FC = () => {
   const [studentChoices, setStudentChoices] = useState<StudentChoiceData[]>();
   const [studentExcludes, setStudentExcludes] = useState<StudentExcludeData[]>();
   const [groups, setGroups] = useState<GroupData1[]>();
-  const [studentJSONData, setStudentJSONData] = useState<JSON[]>();
+  const [studentDisplay, setStudentDisplay] = useState<string>("block");
 
-  const handleErrorMessage = (e: string) => {
-    message.error({
-      content: e,
-      duration: 30,
-      onClick: () => {
-        message.destroy();
-      },
-    });
+  const handleGroupSize = (e: any) => {
+    if (!isNaN(+e.target.value)) {
+      setGroupSize(e.target.value);
+    } else {
+      handleWarningMessage("Please input a number.");
+    }
+    console.log(groups);
   };
 
-  const handleLoadingMessage = (content: string, key: string) => {
-    message.loading({
-      content: content,
-      key: key,
-      duration: 0
-    });
-  };
-
-  const handleSuccessMessage = (content: string, key: string) => {
-    message.success({
-      content: content,
-      key: key,
-      duration: 5
-    });
+  function toggleStudentDisplay() {
+    if (studentDisplay === "block") {
+      setStudentDisplay("none");
+    } else {
+      setStudentDisplay("block");
+    }
   }
-
   const fileHandler = async (e: File) => {
     try {
       if (isValidFile(e)) {
@@ -68,7 +80,6 @@ const Import: FC = () => {
 
           var jsonData = utils.sheet_to_json<JSON>(worksheet);
           convertJsonToStudents(jsonData);
-          setStudentJSONData(jsonData);
         };
         reader.readAsArrayBuffer(e);
       }
@@ -184,57 +195,85 @@ const Import: FC = () => {
 
   const generateGroups = async () => {
     try {
+      if (isNaN(+groupSize)) {
+        handleWarningMessage("Group size must be a number!");
+      }
       handleLoadingMessage("Generating Groups", "group");
       await InsertStudents(studentData);
       await InsertStudentChoices(studentChoices);
       await InsertStudentExclusions(studentExcludes);
 
-      console.log("hi");
-      setGroupSize(4);
-      await GetGroups(groupSize).then((result) => setGroups(result));
+      await GetGroups(groupSize).then((result) => {
+        if (result !== null) {
+          setGroups(result);
+        } else {
+          handleErrorMessage("Could not generate groups", "group");
+        }
+      });
       handleSuccessMessage("Groups have been generated!", "group");
-      
     } catch (err) {
-      handleErrorMessage("Could not generate groups: " + err.Message);
+      console.log(err);
+      handleErrorMessage("Could not generate groups: " + err.message, "group");
     }
   };
 
   return (
     <>
-      <h1>Import Excel File</h1>
-      <hr />
-      <Upload
-        name="file"
-        beforeUpload={fileHandler}
-        //onRemove={}
-        multiple={false}
-      >
-        <Button type="primary">
-          <UploadOutlined /> Click to Upload Excel File
-        </Button>
-      </Upload>
-      <Button type="ghost" onClick={generateGroups}>
-        <BugTwoTone /> Generate Groups
-      </Button>
-      <div className="form-container">
-        <div className="event-col">
-          <div className="event-row"></div>
+      <body>
+        <h1>Import Excel File</h1>
+        <hr />
+        <div className="container">
+          <Upload
+            name="file"
+            beforeUpload={fileHandler}
+            //onRemove={}
+            multiple={false}
+          >
+            <Button type="primary">
+              <UploadOutlined /> Click to Upload Excel File
+            </Button>
+          </Upload>
         </div>
-        <div>
+        <div className="container">
+          <Input
+            style={{ width: 60 }}
+            onChange={handleGroupSize}
+            maxLength={3}
+            placeholder="Input group size"
+          ></Input>
+          <Button type="ghost" onClick={generateGroups}>
+            <BugTwoTone /> Generate Groups
+          </Button>
+        </div>
+        <div className="container">
+          <Button type="ghost" onClick={toggleStudentDisplay}>
+            <BugTwoTone /> Show/hide student data
+          </Button>
+        </div>
+        <div style={{ display: studentDisplay }} className="container">
           <Table
+            title={() => "Student Data"}
             dataSource={studentFileData}
             columns={columns}
             rowKey={(record) => record.FirstName + record.LastName}
-          />
-          <Table dataSource={studentData} columns={studentColumns} rowKey={(record) => record.id} />
-          <h2>Groups</h2>
-          <Table
-            dataSource={groups}
-            columns={groupColumns1}
-            rowKey={(record) => record.groupNumber}
+            pagination={false}
           />
         </div>
-      </div>
+        {/* <Table
+              dataSource={studentData}
+              columns={studentColumns}
+              rowKey={(record) => record.id}
+            /> */}
+        <div className="container">
+          <Table
+            title={() => "Groups"}
+            dataSource={groups}
+            columns={groupColumns2}
+            rowKey={(record) => record.groupNumber}
+            pagination={false}
+          />
+        </div>
+      </body>
     </>
   );
 };

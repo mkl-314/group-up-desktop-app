@@ -49,10 +49,9 @@ namespace AssignmentProblem
 
         public List<Group> AssignGroups1(int group_size)
         {
-
             Solver solver = new Solver("GroupAssignment");
 
-            int num_students = students.Count();
+            int num_students = students.Count;
             int num_groups = num_students / group_size;
 
             IntVar[] student_groups = solver.MakeIntVarArray(num_students, 0, num_groups, "students");
@@ -60,12 +59,12 @@ namespace AssignmentProblem
             // group size must be group_size or group_size+1
             IntVar[] gcc = solver.MakeIntVarArray(num_groups, group_size, group_size + 2, "gcc");
             solver.Add(student_groups.Distribute(gcc));
-
+            
             IntVar[] num_preferences = new IntVar[num_students];
             // Students must be given at least one of their preferences
             for (int i = 0; i < num_students; i++)
             {
-                ICollection<StudentChoice1> preferences = studentChoices.FindAll(x => x.ChosenStudentId == students[i].id );
+                ICollection<StudentChoice1> preferences = studentChoices.FindAll(x => x.ChooserStudentId == students[i].id );
                 int[] preferenceIndexes = new int[preferences.Count()];
                 int count = 0;
                 foreach (StudentChoice1 preference in preferences)
@@ -79,7 +78,6 @@ namespace AssignmentProblem
                 if (preferences.Count() > 0)
                 {
                     IntExpr num_preference = (from j in preferenceIndexes
-                                                  //where i != j  // users cannot choose themselves. Can probably remove later
                                               select (student_groups[i] == student_groups[j])
                                             ).ToArray().Sum();
                     if (num_preference >= 1)
@@ -93,7 +91,7 @@ namespace AssignmentProblem
             }
             //Soft Constraint. Students should have at least one preference.
             IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
-
+            
             // Certain students cannot be in the same group
             foreach (Student1 student in students)
             {
@@ -113,162 +111,43 @@ namespace AssignmentProblem
                 solver.Add(student_groups[s] <= s);
             }
 
-            // Time limit
-            int THIRTY_S_IN_MS = 30000;
-            solver.MakeTimeLimit(THIRTY_S_IN_MS);
-
             OptimizeVar opt = solver.MakeMaximize(sum_preferences, 1);
             // Search
             DecisionBuilder db = solver.MakePhase(student_groups,
                                                   Solver.CHOOSE_PATH,
                                                   Solver.ASSIGN_MIN_VALUE);
 
-            solver.NewSearch(db, opt);
-            //solver.NewSearch(db);
+            //solver.NewSearch(db, opt);
+            // Time limit
+            int THIRTY_S_IN_MS = 30000;
+            solver.NewSearch(db, solver.MakeTimeLimit(THIRTY_S_IN_MS));
             int sol = 0;
             List<Group> groups = new List<Group>();
-            for (int i = 1; i <= num_groups; i++)
-            {
-                groups.Add(new Group
-                {
-                    groupNumber = i,
-                    studentNames = new List<string>(),
-                    studentIds = new List<int>()
-                }); ;
-            }
 
+            Console.Error.WriteLine("Solving:");
             while (solver.NextSolution() && sol <= 0)
             {
+                for (int i = 1; i <= num_groups; i++)
+                {
+                    groups.Add(new Group
+                    {
+                        groupNumber = i,
+                        studentNames = new List<string>(),
+                        studentIds = new List<int>()
+                    }); ;
+                }
 
-                //Console.Write("x " + sol + ": ");
+                Console.Error.Write("x " + sol + ": ");
                 for (int i = 0; i < num_students; i++)
                 {
-                    //Console.Write("{0} ", student_groups[i].Value());
-                    if (sol == 0)
-                    {
-                        Group group = groups[(int)student_groups[i].Value()];
-                        group.studentNames.Add(students[i].firstName + " " + students[i].lastName);
-                        group.studentIds.Add(students[i].id);
-                    }
-                }
-
-                //Console.WriteLine();
-                sol++;
-            }
-
-            //Console.WriteLine("\nSolutions: {0}", solver.Solutions());
-            //Console.WriteLine("WallTime: {0}ms", solver.WallTime());
-            //Console.WriteLine("Failures: {0}", solver.Failures());
-            //Console.WriteLine("Branches: {0} ", solver.Branches());
-
-            solver.EndSearch();
-
-
-            return groups;
-        }
-
-        public List<Group> AssignGroups(int groupProjectID, int group_size)
-        {
-            List<Student> students = GetStudents(groupProjectID);
-
-            Solver solver = new Solver("GroupAssignment");
-
-            int num_students = students.Count();
-            int num_groups = num_students / group_size;
-
-            IntVar[] student_groups = solver.MakeIntVarArray(num_students, 0, num_groups, "students");
-
-            // group size must be group_size or group_size+1
-            IntVar[] gcc = solver.MakeIntVarArray(num_groups, group_size, group_size + 2, "gcc");
-            solver.Add(student_groups.Distribute(gcc));
-
-            IntVar[] num_preferences = new IntVar[num_students];
-            // Students must be given at least one of their preferences
-            for (int i=0; i< num_students; i++)
-            {
-                ICollection<StudentChoice> preferences = students[i].StudentChoiceChooserStudents;
-                int[] preferenceIndexes = new int[preferences.Count()];
-                int count = 0;
-                foreach (StudentChoice preference in preferences)
-                {
-                    preferenceIndexes[count] = students.FindIndex(x => x.StudentId == preference.ChosenStudentId); 
-                    count++;
-                }
-
-                num_preferences[i] = solver.MakeIntConst(0, "none");
-                // Let students have at least one preference
-                if (preferences.Count() > 0)
-                {
-                    IntExpr num_preference = (from j in preferenceIndexes
-                                                      //where i != j  // users cannot choose themselves. Can probably remove later
-                                                      select (student_groups[i] == student_groups[j])
-                                            ).ToArray().Sum();
-                    if (num_preference >= 1)
-                    {
-                        num_preferences[i] = (num_preference.Var() + num_students * num_students).Var();
-                    } 
-
-                    // Hard Constraint. Comment out if using soft constraint - not working yet
-                    solver.Add(num_preference >= 1);
-                }
-            }
-            //Soft Constraint. Students should have at least one preference.
-            IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
-
-            // Certain students cannot be in the same group
-            foreach (Student student in students)
-            {
-                ICollection<StudentExclude> exclusions = student.StudentExcludeFirstStudents;
-                foreach (StudentExclude exclusion in exclusions)
-                {
-                    int firstIndex = students.FindIndex(x => x.StudentId == exclusion.FirstStudentId);
-                    int secondIndex = students.FindIndex(x => x.StudentId == exclusion.SecondStudentId);
-                    solver.Add(student_groups[firstIndex] != student_groups[secondIndex]);
-                }
-
-            }
-
-            // Symmetry breaking
-            for (int s = 0; s < group_size; s++)
-            {
-                solver.Add(student_groups[s] <= s);
-            }
-
-            OptimizeVar opt = solver.MakeMaximize(sum_preferences,1);
-            // Search
-            DecisionBuilder db = solver.MakePhase(student_groups,
-                                                  Solver.CHOOSE_PATH,
-                                                  Solver.ASSIGN_MIN_VALUE);
-
-            solver.NewSearch(db, opt);
-            //solver.NewSearch(db);
-            int sol = 0;
-            List<Group> groups = new List<Group>();
-            for (int i=0; i<num_groups; i++)
-            {
-                groups.Add(new Group
-                {
-                    studentNames = new List<String>(),
-                    studentIds = new List<int>()
-                }); ;
-            }
-
-            while (solver.NextSolution() && sol<=0)
-            {
-
-                //Console.Write("x " + sol + ": ");
-                for (int i = 0; i < num_students; i++)
-                {
-                    //Console.Write("{0} ", student_groups[i].Value());
-                    if (sol == 0)
-                    {
-                        Group group = groups[(int)student_groups[i].Value()];
-                        group.studentNames.Add(students[i].FirstName + " " + students[i].LastName);
-                        group.studentIds.Add(students[i].StudentId);
-                    }
-                }
+                    Console.Error.Write("{0} ", student_groups[i].Value());
   
-                //Console.WriteLine();
+                    Group group = groups[(int)student_groups[i].Value()];
+                    group.studentNames.Add(students[i].firstName + " " + students[i].lastName);
+                    group.studentIds.Add(students[i].id);
+                }
+
+                Console.Error.WriteLine();
                 sol++;
             }
 
@@ -277,6 +156,7 @@ namespace AssignmentProblem
             //Console.WriteLine("Failures: {0}", solver.Failures());
             //Console.WriteLine("Branches: {0} ", solver.Branches());
             time = solver.WallTime();
+            Console.Error.Write(time);
             solver.EndSearch();
 
             return groups;

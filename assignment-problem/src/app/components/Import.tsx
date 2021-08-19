@@ -1,14 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import * as React from "react";
 import { GetGroups } from "../apiController";
-import { GroupData } from "../types/Groups";
 import "./Import.scss";
 import { StudentFileData } from "../types/Student";
 
 const Import: FC = () => {
   const [eventName, setEventName] = useState<string>("");
-  const [details, setDetails] = useState<string>("");
-  const [groups, setGroups] = useState<[GroupData]>();
 
   const handleEventName = (e: any) => {
     setEventName(e.target.value);
@@ -43,14 +40,6 @@ const Import: FC = () => {
         </div>
         <div>
           <div>{eventName}</div>
-          {groups &&
-            groups.map((d, i) => (
-              <div key={i}>
-                <h2>{"Group : " + d.student_id}</h2>
-                <h3>{"Students: " + d.students_name}</h3>
-                <hr />
-              </div>
-            ))}
         </div>
       </div>
     </>

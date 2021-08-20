@@ -57,7 +57,6 @@ const Import: FC = () => {
     } else {
       handleWarningMessage("Please input a number.");
     }
-    console.log(groups);
   };
 
   function toggleStudentDisplay() {
@@ -197,20 +196,21 @@ const Import: FC = () => {
     try {
       if (isNaN(+groupSize)) {
         handleWarningMessage("Group size must be a number!");
-      }
-      handleLoadingMessage("Generating Groups", "group");
-      await InsertStudents(studentData);
-      await InsertStudentChoices(studentChoices);
-      await InsertStudentExclusions(studentExcludes);
+      } else {
+        handleLoadingMessage("Generating Groups", "group");
+        await InsertStudents(studentData);
+        await InsertStudentChoices(studentChoices);
+        await InsertStudentExclusions(studentExcludes);
 
-      await GetGroups(groupSize).then((result) => {
-        if (result !== null) {
-          setGroups(result);
-        } else {
-          handleErrorMessage("Could not generate groups", "group");
-        }
-      });
-      handleSuccessMessage("Groups have been generated!", "group");
+        await GetGroups(groupSize).then((result) => {
+          if (result !== null) {
+            setGroups(result);
+          } else {
+            handleErrorMessage("Could not generate groups", "group");
+          }
+        });
+        handleSuccessMessage("Groups have been generated!", "group");
+      }
     } catch (err) {
       console.log(err);
       handleErrorMessage("Could not generate groups: " + err.message, "group");

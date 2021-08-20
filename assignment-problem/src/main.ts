@@ -1,24 +1,45 @@
 const url = require("url");
 const path = require("path");
-const { ConnectionBuilder } = require("electron-cgi");
-
-import { app, BrowserWindow } from "electron";
+const contextMenu = require("electron-context-menu");
+import { app, BrowserWindow, shell } from "electron";
 
 let window: BrowserWindow | null;
 
+contextMenu({
+  prepend: (defaultActions: any, parameters: any, browserWindow: any) => [
+    {
+      label: "Rainbow",
+      // Only show it when right-clicking images
+      visible: parameters.mediaType === "image",
+    },
+    {
+      label: "Search Google for “{selection}”",
+      // Only show it when right-clicking text
+      visible: parameters.selectionText.trim().length > 0,
+      click: () => {
+        shell.openExternal(
+          `https://google.com/search?q=${encodeURIComponent(parameters.selectionText)}`
+        );
+      },
+    },
+  ],
+});
+
 const createWindow = () => {
-  window = new BrowserWindow({ width: 800, height: 600, 
+  window = new BrowserWindow({
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true, }
-    });
+      enableRemoteModule: true,
+    },
+  });
 
   window.loadURL(
     url.format({
       pathname: path.join(__dirname, "index.html"),
       protocol: "file:",
-      slashes: true
+      slashes: true,
     })
   );
 
@@ -40,23 +61,3 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-
-// let connection = new ConnectionBuilder()
-//   .connectTo("dotnet", "run", "--project", "../../AssignmentProblem/AssignmentProblem/")
-//   .build();
-
-// connection.onDisconnect = () => {
-//     console.log("lost");
-//     connection = new ConnectionBuilder().connectTo('dotnet', 'run', '--project', "../Core/").build();
-// };
-
-//  connection.send('greeting', 'John', (error: any, response: any) => {
-//     if (error) {
-//         console.log(error); //serialized exception from the .NET handler
-//         return;
-//     }
-//     window.webContents.send("greeting", response);
-//     console.log(response); 
-//     connection.close();
-// });

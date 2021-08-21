@@ -10,7 +10,8 @@ https://abiodun.dev/import-spreadsheets-or-excel-in-your-react-component/
 https://itnext.io/create-desktop-with-electron-react-and-c-86f9765809b7
 
 https://www.npmjs.com/package/electron-cgi
-
+Excel Importer:   
+https://stackoverflow.com/questions/61464902/reading-excel-file-in-angular-with-header-at-row-number-n
 
 
 Deployment:   
@@ -20,5 +21,5 @@ or package-builer
 
 
 Back end:
-Run command in project directory (makes one exe file only):
+Run command in project directory (makes one exe file only):   
 dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true

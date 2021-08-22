@@ -26,7 +26,6 @@ namespace AssignmentProblem
             //    return null;
             //});
             connection.Listen();
-            controller.Listen();
         }
 
         //public static IHostBuilder CreateHostBuilder(string[] args) =>

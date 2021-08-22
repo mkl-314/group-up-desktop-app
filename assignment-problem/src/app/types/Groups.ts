@@ -1,4 +1,4 @@
-export interface GroupData1 {
+export interface Solution {
   groupNumber: number;
   studentNames: string[];
 }
@@ -15,3 +15,7 @@ export const groupColumns1 = [
     key: "studentNames",
   },
 ];
+
+export interface GroupSolution {
+  groups: Solution[];
+}

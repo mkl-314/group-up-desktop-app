@@ -7,7 +7,7 @@ message.config({
 export const handleErrorMessage = (e: string, key?: string) => {
   message.error({
     content: e,
-    duration: 30,
+    //duration: 30,
     key: key,
     onClick: () => {
       message.destroy();

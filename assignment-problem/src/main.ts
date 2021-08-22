@@ -5,29 +5,31 @@ import { app, BrowserWindow, shell } from "electron";
 
 let window: BrowserWindow | null;
 
-contextMenu({
-  prepend: (defaultActions: any, parameters: any, browserWindow: any) => [
-    {
-      label: "Rainbow",
-      // Only show it when right-clicking images
-      visible: parameters.mediaType === "image",
-    },
-    {
-      label: "Search Google for “{selection}”",
-      // Only show it when right-clicking text
-      visible: parameters.selectionText.trim().length > 0,
-      click: () => {
-        shell.openExternal(
-          `https://google.com/search?q=${encodeURIComponent(parameters.selectionText)}`
-        );
-      },
-    },
-  ],
-});
+// contextMenu({
+//   prepend: (defaultActions: any, parameters: any, browserWindow: any) => [
+//     {
+//       label: "Rainbow",
+//       // Only show it when right-clicking images
+//       visible: parameters.mediaType === "image",
+//     },
+//     {
+//       label: "Search Google for “{selection}”",
+//       // Only show it when right-clicking text
+//       visible: parameters.selectionText.trim().length > 0,
+//       click: () => {
+//         shell.openExternal(
+//           `https://google.com/search?q=${encodeURIComponent(parameters.selectionText)}`
+//         );
+//       },
+//     },
+//   ],
+// });
 
 const createWindow = () => {
   window = new BrowserWindow({
-    fullscreen: true,
+    //fullscreen: true,
+    width: 800,
+    height: 600,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

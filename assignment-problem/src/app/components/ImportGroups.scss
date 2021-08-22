@@ -1,4 +1,12 @@
-@import "~antd/dist/antd.dark.css";
+//@import "~antd/dist/antd.dark.css";
+@import "~antd/dist/antd.css";
+.dark {
+  @import "~antd/dist/antd.dark.css";
+}
+.light {
+  @import "~antd/dist/antd.css";
+}
+
 // Formatting buttons
 .button-container {
   display: flex;
@@ -27,6 +35,34 @@
   margin: 10px;
 }
 
-body {
+.page {
   padding: 10px;
+}
+
+.theme-button {
+  display: inline;
+}
+
+h1 {
+  display: inline;
+}
+
+.no-display {
+  display: none;
+}
+.hide {
+  visibility: hidden;
+}
+
+.solution-nav {
+  text-align: center;
+  position: static;
+}
+.solution-button-container {
+  display: initial;
+}
+
+.solution-number {
+  display: initial;
+  margin: 10px;
 }

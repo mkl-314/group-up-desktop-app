@@ -4,19 +4,20 @@ using Google.OrTools.ConstraintSolver;
 using System.Collections.Generic;
 using AssignmentProblem.Models;
 using Microsoft.EntityFrameworkCore;
+using Core;
 
 namespace AssignmentProblem
 {
     public class AssignmentService
     {
-        private GroupUpContext _context;
         private List<Student1> students;
         private List<StudentChoice1> studentChoices;
         private List<StudentExclude1> studentExclusions;
         public long time;
-        public AssignmentService(GroupUpContext context)
+
+        private int numSolutions = 0;
+        public AssignmentService()
         {
-            _context = context;
         }
 
         public void InsertStudents(List<Student1> students)
@@ -34,30 +35,38 @@ namespace AssignmentProblem
             this.studentExclusions = studentExclusions;
         }
 
-        public List<Student> GetStudents(int groupProjectID)
+        public void RandomiseStudents()
         {
-            DbSet<Student> dbStudent = _context.Students;
-   
-            // Note: cannot return student.ToList() as a circular reference occurs so the program never stops loading
-            IQueryable<Student> studentsQ = dbStudent.Where(x => groupProjectID == x.GroupProjectId)
-                .Include(x => x.StudentChoiceChooserStudents)
-                .Include(x => x.StudentExcludeFirstStudents)
-                .OrderBy(x => x.StudentId);
-
-            return studentsQ.ToList();
+            var rnd = new Random();
+            this.students = students.OrderBy(student => rnd.Next()).ToList();
         }
 
-        public List<Group> AssignGroups1(int group_size)
+        public List<GroupSolution> GetGroupSolutions(GroupConfig groupConfig)
+        {
+            List<GroupSolution> groupSolutions = new List<GroupSolution>();
+            for (int i=0; i<groupConfig.numSolutions; i++)
+            {
+                if (i != 0) { RandomiseStudents();}
+                var solution = AssignGroups1(groupConfig.groupSize);
+                if (solution.groups.Count > 0)
+                {
+                    groupSolutions.Add(solution);
+                }
+            }
+            return groupSolutions;
+        }
+
+        public GroupSolution AssignGroups1(int groupSize)
         {
             Solver solver = new Solver("GroupAssignment");
 
             int num_students = students.Count;
-            int num_groups = num_students / group_size;
+            int num_groups = num_students / groupSize;
 
             IntVar[] student_groups = solver.MakeIntVarArray(num_students, 0, num_groups, "students");
 
-            // group size must be group_size or group_size+1
-            IntVar[] gcc = solver.MakeIntVarArray(num_groups, group_size, group_size + 2, "gcc");
+            // group size must be groupConfig.groupSize or groupConfig.groupSize+1
+            IntVar[] gcc = solver.MakeIntVarArray(num_groups, groupSize, groupSize + 2, "gcc");
             solver.Add(student_groups.Distribute(gcc));
             
             IntVar[] num_preferences = new IntVar[num_students];
@@ -106,95 +115,63 @@ namespace AssignmentProblem
             }
 
             // Symmetry breaking
-            for (int s = 0; s < group_size; s++)
+            for (int s = 0; s < groupSize; s++)
             {
                 solver.Add(student_groups[s] <= s);
             }
 
             OptimizeVar opt = solver.MakeMaximize(sum_preferences, 1);
             // Search
+            int[] solutionOptions = new int[] { Solver.CHOOSE_PATH, /*Solver.CHOOSE_FIRST_UNBOUND*/ };
+
             DecisionBuilder db = solver.MakePhase(student_groups,
-                                                  Solver.CHOOSE_PATH,
-                                                  Solver.ASSIGN_MIN_VALUE);
+                                                    Solver.CHOOSE_PATH,
+                                                    Solver.ASSIGN_MIN_VALUE);
 
             //solver.NewSearch(db, opt);
             // Time limit
             int THIRTY_S_IN_MS = 30000;
             solver.NewSearch(db, solver.MakeTimeLimit(THIRTY_S_IN_MS));
             int sol = 0;
-            List<Group> groups = new List<Group>();
+            GroupSolution solution = new GroupSolution();
 
             Console.Error.WriteLine("Solving:");
             while (solver.NextSolution() && sol <= 0)
             {
                 for (int i = 1; i <= num_groups; i++)
                 {
-                    groups.Add(new Group
+                    solution.groups.Add(new Group
                     {
                         groupNumber = i,
                         studentNames = new List<string>(),
                         studentIds = new List<int>()
-                    }); ;
+                    });
                 }
 
                 Console.Error.Write("x " + sol + ": ");
                 for (int i = 0; i < num_students; i++)
                 {
                     Console.Error.Write("{0} ", student_groups[i].Value());
-  
-                    Group group = groups[(int)student_groups[i].Value()];
+                    
+                    Group group = solution.groups[(int)student_groups[i].Value()];
                     group.studentNames.Add(students[i].firstName + " " + students[i].lastName);
                     group.studentIds.Add(students[i].id);
                 }
 
                 Console.Error.WriteLine();
                 sol++;
+                numSolutions++;
             }
 
             //Console.WriteLine("\nSolutions: {0}", solver.Solutions());
             //Console.WriteLine("WallTime: {0}ms", solver.WallTime());
             //Console.WriteLine("Failures: {0}", solver.Failures());
             //Console.WriteLine("Branches: {0} ", solver.Branches());
-            time = solver.WallTime();
-            Console.Error.Write(time);
+
+            Console.Error.Write(solver.WallTime());
             solver.EndSearch();
 
-            return groups;
-        }
-
-        public int SaveGroupProject(string name)
-        {
-            return 1;
-        }
-        public void SaveGroups(List<Group> groups, int groupProjectID, int groupSize)
-        {
-            GroupSolution groupSolution = new GroupSolution()
-            {
-                GroupProjectId = groupProjectID,
-                GroupSize = groupSize
-            };
-
-            _context.GroupSolutions.Add(groupSolution);
-            _context.SaveChanges();
-
-            for (int i=0;i<groups.Count;i++)
-            {
-                Group group = groups[i];
-
-                for (int j = 0; j < group.studentIds.Count; j++)
-                {
-                    GroupSolutionStudent gss = new GroupSolutionStudent()
-                    {
-                        GroupSolutionId = groupSolution.GroupSolutionId,
-                        StudentId = group.studentIds[j],
-                        GroupNumber = i
-                    };
-                    
-                    _context.GroupSolutionStudents.Add(gss);
-                }  
-            }
-            _context.SaveChanges();
-
+            return solution;
         }
     }
 

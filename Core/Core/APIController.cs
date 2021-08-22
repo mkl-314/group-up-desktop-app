@@ -1,4 +1,5 @@
 using AssignmentProblem.Models;
+using Core;
 using ElectronCgi.DotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,15 +11,12 @@ namespace AssignmentProblem
     public class APIController
     {
 
-        private GroupUpContext _context;
-
         private readonly AssignmentService _assignmentService;
 
         private Connection connection;
         public APIController()
         {
-            _context = new GroupUpContext();
-            _assignmentService = new AssignmentService(_context);
+            _assignmentService = new AssignmentService();
         }
 
         public void APICalls()
@@ -28,7 +26,6 @@ namespace AssignmentProblem
                 .Build();
 
             GetGroups();
-            connection.On<string, string>("greeting", name => "TEST PLZ WORK " + name);
             InsertStudents();
             InsertStudentChoices();
             InsertStudentExclusions();
@@ -37,14 +34,22 @@ namespace AssignmentProblem
         }
         public void GetGroups()
         {
-            connection.On<int,IActionResult>("GetGroups", groupSize =>
+            connection.On<GroupConfig,IActionResult>("GetGroups", groupConfig =>
             {
                 try
                 {
-                    List<Group> groups = _assignmentService.AssignGroups1(groupSize);
-                    if (groups.Count > 0)
+
+                    List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig);
+                    if (solutions.Count > 0)
                     {
-                        return new OkObjectResult(groups);
+                        //foreach (Group group in solutions[0].groups)
+                        //{
+                        //    Console.Error.WriteLine(group.studentNames[0]);
+                        //    Console.Error.WriteLine(group.studentNames[1]);
+                        //    Console.Error.WriteLine(group.studentNames[2]);
+                        //    Console.Error.WriteLine(group.studentNames[3]);
+                        //}
+                        return new OkObjectResult(solutions);
                     }
                     else
                     {
@@ -105,10 +110,6 @@ namespace AssignmentProblem
                     return new BadRequestObjectResult(ex.Message);
                 }
             });
-        }
-        public void Listen()
-        {
-            connection.Listen();
         }
     }
 }

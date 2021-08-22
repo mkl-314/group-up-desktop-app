@@ -186,6 +186,8 @@ const Import: FC = () => {
         handleWarningMessage("Group size must be a number!");
       } else if (+groupSize < 1) {
         handleWarningMessage("Group size must not be zero!");
+      } else if (+groupSize > studentData.length / 2) {
+        handleWarningMessage("Group size will result in only one group!");
       } else {
         handleLoadingMessage("Generating Groups", "group");
         await InsertStudents(studentData);
@@ -265,88 +267,86 @@ const Import: FC = () => {
   });
   return (
     <>
-      <ThemeSwitcherProvider themeMap={themes1} defaultTheme="light">
-        <div className="page">
-          <h1>Import Excel File</h1>
-          <div className="theme-button container">
-            <Button onClick={changeTheme}>
-              <FireTwoTone />
+      <div className="page">
+        <h1>Group Up</h1>
+        <div className="theme-button container">
+          <Button onClick={changeTheme}>
+            <FireTwoTone />
+          </Button>
+        </div>
+        <hr />
+        <div className="container">
+          <Upload
+            name="file"
+            beforeUpload={fileHandler}
+            //onRemove={removeFile}
+            fileList={fileList}
+            multiple={false}
+          >
+            <Button type="primary">
+              <UploadOutlined /> Upload Excel File
+            </Button>
+          </Upload>
+        </div>
+        <div className="container">
+          <Input
+            style={{ width: 150 }}
+            onChange={handleGroupSize}
+            maxLength={3}
+            placeholder="Input group size"
+          ></Input>
+        </div>
+        <Button type="ghost" onClick={generateGroups}>
+          <BugTwoTone /> Generate Groups
+        </Button>
+        <div className="container">
+          <Checkbox type="ghost" onClick={toggleStudentDisplay} checked={isChecked}>
+            <BugTwoTone /> Show student data
+          </Checkbox>
+        </div>
+        <div id="studentData" className="container">
+          <Table
+            title={() => "Student Data"}
+            dataSource={studentFileData}
+            columns={studentDataColumns}
+            rowKey={(record) => record.firstName + record.lastName}
+            pagination={false}
+          />
+        </div>
+        <div id="solutionContainer">
+          <div className="container solution-nav">
+            <Button id="leftButton" type="ghost" onClick={getPrevSolution}>
+              <LeftOutlined />
+            </Button>
+            <div className="solution-button-container container">
+              <div className="solution-number">{`${solDisplayNum} of ${
+                groupSolutions ? groupSolutions.length : 0
+              }`}</div>
+            </div>
+            <Button id="rightButton" type="ghost" onClick={getNextSolution}>
+              <RightOutlined />
             </Button>
           </div>
-          <hr />
           <div className="container">
-            <Upload
-              name="file"
-              beforeUpload={fileHandler}
-              //onRemove={removeFile}
-              fileList={fileList}
-              multiple={false}
-            >
-              <Button type="primary">
-                <UploadOutlined /> Click to Upload Excel File
-              </Button>
-            </Upload>
-          </div>
-          <div className="container">
-            <Input
-              style={{ width: 150 }}
-              onChange={handleGroupSize}
-              maxLength={3}
-              placeholder="Input group size"
-            ></Input>
-            <Button type="ghost" onClick={generateGroups}>
-              <BugTwoTone /> Generate Groups
-            </Button>
-          </div>
-          <div className="container">
-            <Checkbox type="ghost" onClick={toggleStudentDisplay} checked={isChecked}>
-              <BugTwoTone /> Show student data
-            </Checkbox>
-          </div>
-          <div id="studentData" className="container">
-            <Table
-              title={() => "Student Data"}
-              dataSource={studentFileData}
-              columns={studentDataColumns}
-              rowKey={(record) => record.firstName + record.lastName}
-              pagination={false}
-            />
-          </div>
-          <div id="solutionContainer">
-            <div className="container solution-nav">
-              <Button id="leftButton" type="ghost" onClick={getPrevSolution}>
-                <LeftOutlined />
-              </Button>
-              <div className="solution-button-container container">
-                <div className="solution-number">{`${solDisplayNum} of ${
-                  groupSolutions ? groupSolutions.length : 0
-                }`}</div>
-              </div>
-              <Button id="rightButton" type="ghost" onClick={getNextSolution}>
-                <RightOutlined />
-              </Button>
-            </div>
-            <div className="container">
-              {groupSolutions &&
-                groupSolutions.map((d, i) => (
-                  <div
-                    id={`solution${i + 1}`}
-                    key={i}
-                    className={`container ${i ? "no-display" : ""}`}
-                  >
-                    <Table
-                      title={() => "Group " + (i + 1)}
-                      dataSource={d.groups}
-                      columns={groupColumns2}
-                      rowKey={(record: Solution) => record.groupNumber}
-                      pagination={false}
-                    />
-                  </div>
-                ))}
-            </div>
+            {groupSolutions &&
+              groupSolutions.map((d, i) => (
+                <div
+                  id={`solution${i + 1}`}
+                  key={i}
+                  className={`container ${i ? "no-display" : ""}`}
+                >
+                  <Table
+                    title={() => "Group " + (i + 1)}
+                    dataSource={d.groups}
+                    columns={groupColumns2}
+                    rowKey={(record: Solution) => record.groupNumber}
+                    pagination={false}
+                  />
+                </div>
+              ))}
           </div>
         </div>
-      </ThemeSwitcherProvider>
+      </div>
     </>
   );
 };

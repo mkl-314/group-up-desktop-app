@@ -42,18 +42,11 @@ namespace AssignmentProblem
                     List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig);
                     if (solutions.Count > 0)
                     {
-                        //foreach (Group group in solutions[0].groups)
-                        //{
-                        //    Console.Error.WriteLine(group.studentNames[0]);
-                        //    Console.Error.WriteLine(group.studentNames[1]);
-                        //    Console.Error.WriteLine(group.studentNames[2]);
-                        //    Console.Error.WriteLine(group.studentNames[3]);
-                        //}
                         return new OkObjectResult(solutions);
                     }
                     else
                     {
-                        return new BadRequestObjectResult("request timed out. Potentially no solutions.");
+                        return new BadRequestObjectResult("Request timed out. Potentially no solutions.");
                     }
                 }
                 catch (Exception ex)

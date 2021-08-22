@@ -37,41 +37,41 @@ export const generateStudentDataColumns = (headers: any) => {
   studentDataColumns = [...studentColumns, ...choiceColumns, ...excludeColumns];
   studentChoiceColumns = choiceColumns;
   studentExcludeColumns = excludeColumns;
-  console.log(columns);
+  console.log(studentDataColumns);
 };
 
-export var columns = [
-  {
-    title: "First Name",
-    dataIndex: "FirstName",
-    key: "FirstName",
-  },
-  {
-    title: "Last Name",
-    dataIndex: "LastName",
-    key: "LastName",
-  },
-  {
-    title: "Choice 1",
-    dataIndex: "Choice1",
-    key: "Choice1",
-  },
-  {
-    title: "Choice 2",
-    dataIndex: "Choice2",
-    key: "Choice2",
-  },
-  {
-    title: "Choice 3",
-    dataIndex: "Choice3",
-    key: "Choice3",
-  },
-  {
-    title: "Choice 4",
-    dataIndex: "Choice4",
-    key: "Choice4",
-  },
-];
+// export var columns = [
+//   {
+//     title: "First Name",
+//     dataIndex: "FirstName",
+//     key: "FirstName",
+//   },
+//   {
+//     title: "Last Name",
+//     dataIndex: "LastName",
+//     key: "LastName",
+//   },
+//   {
+//     title: "Choice 1",
+//     dataIndex: "Choice1",
+//     key: "Choice1",
+//   },
+//   {
+//     title: "Choice 2",
+//     dataIndex: "Choice2",
+//     key: "Choice2",
+//   },
+//   {
+//     title: "Choice 3",
+//     dataIndex: "Choice3",
+//     key: "Choice3",
+//   },
+//   {
+//     title: "Choice 4",
+//     dataIndex: "Choice4",
+//     key: "Choice4",
+//   },
+// ];
 export var studentDataColumns: any;
 
 export const studentColumns = [

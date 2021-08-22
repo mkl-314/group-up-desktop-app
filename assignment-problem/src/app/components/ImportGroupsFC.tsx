@@ -1,6 +1,6 @@
 import { Component, FC, useState } from "react";
 import * as React from "react";
-import { Table, Button, Upload, Input } from "antd";
+import { Table, Button, Upload, Input, Modal } from "antd";
 import {
   BugTwoTone,
   FireTwoTone,
@@ -25,7 +25,6 @@ import {
 } from "../types/Student";
 import { Solution, groupColumns1, GroupSolution } from "../types/Groups";
 import {
-  columns,
   generateStudentDataColumns,
   studentChoiceColumns,
   studentColumns,
@@ -42,6 +41,7 @@ import Checkbox from "antd/lib/checkbox/Checkbox";
 import { useEffect } from "react";
 import { useThemeSwitcher, ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { convertJsonToStudent, convertJsonToStudentData } from "../utils/dataConversion";
+import { isValidFile, uploadFileData } from "../utils/file";
 //import "~antd/dist/antd.css";
 const resolve = require("path").resolve;
 
@@ -68,13 +68,24 @@ const Import: FC = () => {
   const [studentData, setStudentData] = useState<StudentData[]>();
   const [studentChoices, setStudentChoices] = useState<StudentChoiceData[]>();
   const [studentExcludes, setStudentExcludes] = useState<StudentExcludeData[]>();
-  const [groups, setGroups] = useState<Solution[]>();
   const [groupSolutions, setGroupSolutions] = useState<GroupSolution[]>();
   const [solDisplayNum, setSolDisplayNum] = useState(1);
-  const [studentDisplay, setStudentDisplay] = useState<string>("block");
   const [isChecked, setIsChecked] = useState(true);
   const [theme, setTheme] = useState("light");
   const { switcher, currentTheme, status, themes } = useThemeSwitcher();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const themes1 = {
     dark: resolve("./src/app/dark-theme.scss"),
@@ -92,10 +103,13 @@ const Import: FC = () => {
 
   const handleGroupSize = (e: any) => {
     setGroupSize(e.target.value);
-    if (isNaN(+e.target.value)) {
-      handleWarningMessage("Please input a number.");
-    } else if (studentData && studentData.length <= +e.target.value)
-      handleWarningMessage("Group size cannot be greater than the number of students.");
+    // if (isNaN(+e.target.value)) {
+    //   handleWarningMessage("Please input a number.");
+    // } else if (studentData && studentData.length <= +e.target.value) {
+    //   handleWarningMessage("Group size cannot be greater than the number of students.");
+    // } else if (+e.target.value > studentData.length / 2) {
+    //   handleWarningMessage("Group size will result in only one group!");
+    // }
   };
 
   function toggleStudentDisplay() {
@@ -111,6 +125,21 @@ const Import: FC = () => {
   const fileHandler = async (e: File) => {
     try {
       console.log(e);
+      // const studentFile: StudentFileData[] = [];
+      // let students: StudentData[] = [];
+      // let choices: StudentChoiceData[] = [];
+      // let exclusions: StudentExcludeData[] = [];
+
+      // const fileList = uploadFileData(e, studentFile, students, choices, exclusions);
+      // fileList.then((file) => setFileList(file));
+      // console.log(students);
+      // console.log(studentFile);
+
+      // setStudentData(students);
+      // setStudentChoices(choices);
+      // setStudentExcludes(exclusions);
+      // setStudentFileData(studentFile);
+
       if (isValidFile(e)) {
         var reader = new FileReader();
         reader.onload = function (fileObj) {
@@ -127,8 +156,7 @@ const Import: FC = () => {
         };
         reader.readAsArrayBuffer(e);
         setFileList([e]);
-        //handleFileList(e);
-        //setGroupSolutions(null);
+        setGroupSolutions(null);
       }
     } catch (err) {
       handleErrorMessage("Could not handle file: " + err.Message);
@@ -141,44 +169,22 @@ const Import: FC = () => {
 
   const handleStudentConversion = async (jsonData: JSON[]) => {
     try {
-      const json = JSON.parse(JSON.stringify(jsonData));
-      const studentFileData: StudentFileData[] = []; // JSON.parse(JSON.stringify(jsonData));
+      const studentFile: StudentFileData[] = [];
       let students: StudentData[] = [];
       let choices: StudentChoiceData[] = [];
       let exclusions: StudentExcludeData[] = [];
 
-      convertJsonToStudentData(jsonData, studentFileData);
+      convertJsonToStudentData(jsonData, studentFile);
       convertJsonToStudent(jsonData, students, choices, exclusions);
-      console.log(studentFileData);
+
       setStudentData(students);
       setStudentChoices(choices);
       setStudentExcludes(exclusions);
-      setStudentFileData(studentFileData);
+      setStudentFileData(studentFile);
     } catch (err) {
       handleErrorMessage("Could not convert excel to table: " + err);
     }
   };
-
-  const isValidFile = (e: File) => {
-    //console.log("fileList", e);
-    let fileObj = e;
-    if (!fileObj) {
-      handleErrorMessage("No file uploaded!");
-      return false;
-    }
-    //console.log("fileObj.type:", fileObj.type);
-    if (
-      !(
-        fileObj.type === "application/vnd.ms-excel" ||
-        fileObj.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      )
-    ) {
-      handleErrorMessage("Unknown file format. Only Excel files are uploaded!");
-      return false;
-    }
-    return true;
-  };
-
   const generateGroups = async () => {
     try {
       console.log(groupSize);
@@ -186,13 +192,13 @@ const Import: FC = () => {
         handleWarningMessage("Group size must be a number!");
       } else if (+groupSize < 1) {
         handleWarningMessage("Group size must not be zero!");
-      } else if (+groupSize > studentData.length / 2) {
-        handleWarningMessage("Group size will result in only one group!");
       } else {
         handleLoadingMessage("Generating Groups", "group");
         await InsertStudents(studentData);
         await InsertStudentChoices(studentChoices);
         await InsertStudentExclusions(studentExcludes);
+        console.log(studentData);
+        console.log(studentChoices);
         let numSolution = 3;
         await GetGroups(+groupSize, numSolution).then((result) => {
           if (result !== null) {
@@ -212,14 +218,11 @@ const Import: FC = () => {
   };
 
   const getNextSolution = () => {
-    console.log();
     if (groupSolutions) {
       const solution = document.getElementById(`solution${solDisplayNum + 1}`);
       const hideSolution = document.getElementById(`solution${solDisplayNum}`);
       solution.classList.remove("no-display");
       hideSolution.classList.add("no-display");
-      console.log(solution);
-      console.log(hideSolution);
 
       if (solDisplayNum + 1 >= groupSolutions.length) {
         const rightButton = document.getElementById("rightButton");
@@ -237,8 +240,6 @@ const Import: FC = () => {
       const hideSolution = document.getElementById(`solution${solDisplayNum}`);
       solution.classList.remove("no-display");
       hideSolution.classList.add("no-display");
-      console.log(solution);
-      console.log(hideSolution);
 
       if (solDisplayNum <= 1) {
         const leftButton = document.getElementById("leftButton");
@@ -252,19 +253,48 @@ const Import: FC = () => {
   };
 
   useEffect(() => {
-    console.log(solDisplayNum);
     if (solDisplayNum <= 1) {
       const leftButton = document.getElementById("leftButton");
       leftButton.classList.add("hide");
     }
 
+    // hide group panel when there are no solutions
     const groupSolution = document.getElementById("solutionContainer");
     if (groupSolutions) {
       groupSolution.classList.remove("no-display");
     } else {
       groupSolution.classList.add("no-display");
     }
+
+    if (fileList) {
+      const inputGroupSize = document.getElementById("input-group-size");
+      inputGroupSize.classList.remove("hide");
+
+      const studentDataDisplayCheck = document.getElementById("student-data-display");
+      studentDataDisplayCheck.classList.remove("hide");
+    }
+
+    // Toggle display of generate groups button
+    const btnGenerateGroups = document.getElementById("btn-generate-groups");
+    if (fileList && validateGroupSize(groupSize)) {
+      btnGenerateGroups.classList.remove("hide");
+    } else {
+      btnGenerateGroups.classList.add("hide");
+    }
   });
+
+  const validateGroupSize = (groupSize: any) => {
+    if (isNaN(+groupSize)) {
+      handleWarningMessage("Please input a number.");
+    } else if (studentData && studentData.length <= +groupSize) {
+      handleWarningMessage("Group size cannot be greater than the number of students.");
+    } else if (studentData && +groupSize > studentData.length / 2) {
+      handleWarningMessage("Group size will result in only one group!");
+    } else if (groupSize) {
+      return true;
+    }
+    return false;
+  };
   return (
     <>
       <div className="page">
@@ -275,43 +305,55 @@ const Import: FC = () => {
           </Button>
         </div>
         <hr />
-        <div className="container">
-          <Upload
-            name="file"
-            beforeUpload={fileHandler}
-            //onRemove={removeFile}
-            fileList={fileList}
-            multiple={false}
-          >
-            <Button type="primary">
-              <UploadOutlined /> Upload Excel File
-            </Button>
-          </Upload>
-        </div>
-        <div className="container">
-          <Input
-            style={{ width: 150 }}
-            onChange={handleGroupSize}
-            maxLength={3}
-            placeholder="Input group size"
-          ></Input>
-        </div>
-        <Button type="ghost" onClick={generateGroups}>
+        <Button type="primary" onClick={showModal}>
+          See Instructions
+        </Button>
+        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+        <Upload
+          className="container"
+          name="file"
+          beforeUpload={fileHandler}
+          //onRemove={removeFile}
+          fileList={fileList}
+          multiple={false}
+        >
+          <Button type="primary">
+            <UploadOutlined /> Upload Excel File
+          </Button>
+        </Upload>
+        <Input
+          id="input-group-size"
+          className="container hide"
+          style={{ width: 150 }}
+          onChange={handleGroupSize}
+          maxLength={3}
+          placeholder="Input group size"
+        ></Input>
+        <Button
+          id="btn-generate-groups"
+          type="ghost"
+          onClick={generateGroups}
+          className="container"
+        >
           <BugTwoTone /> Generate Groups
         </Button>
-        <div className="container">
+        <div id="student-data-display" className="container hide">
           <Checkbox type="ghost" onClick={toggleStudentDisplay} checked={isChecked}>
             <BugTwoTone /> Show student data
           </Checkbox>
-        </div>
-        <div id="studentData" className="container">
-          <Table
-            title={() => "Student Data"}
-            dataSource={studentFileData}
-            columns={studentDataColumns}
-            rowKey={(record) => record.firstName + record.lastName}
-            pagination={false}
-          />
+          <div id="studentData" className="container">
+            <Table
+              title={() => "Student Data"}
+              dataSource={studentFileData}
+              columns={studentDataColumns}
+              rowKey={(record) => record.firstName + record.lastName}
+              pagination={false}
+            />
+          </div>
         </div>
         <div id="solutionContainer">
           <div className="container solution-nav">

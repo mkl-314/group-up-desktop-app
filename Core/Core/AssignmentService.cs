@@ -65,8 +65,8 @@ namespace AssignmentProblem
             int remainder = num_students % groupSize;
             IntVar[] student_groups = solver.MakeIntVarArray(num_students, 0, num_groups, "students");
 
-            // group size must be groupConfig.groupSize or groupConfig.groupSize+1
-            IntVar[] gcc = solver.MakeIntVarArray(num_groups, groupSize, groupSize + 1 + remainder, "gcc");
+            // group size must be as equal as possible
+            IntVar[] gcc = solver.MakeIntVarArray(num_groups, groupSize + (remainder / num_groups), groupSize + 1 + (remainder / num_groups), "gcc");
             solver.Add(student_groups.Distribute(gcc));
             
             IntVar[] num_preferences = new IntVar[num_students];

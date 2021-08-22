@@ -7,7 +7,7 @@ message.config({
 export const handleErrorMessage = (e: string, key?: string) => {
   message.error({
     content: e,
-    duration: 0,
+    duration: 30,
     key: key,
     onClick: () => {
       message.destroy();
@@ -19,7 +19,7 @@ export const handleLoadingMessage = (content: string, key: string) => {
   message.loading({
     content: content,
     key: key,
-    duration: 30,
+    duration: 0,
   });
 };
 

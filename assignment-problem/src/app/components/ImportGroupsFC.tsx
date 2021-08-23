@@ -1,8 +1,9 @@
 import { Component, FC, useState } from "react";
 import * as React from "react";
-import { Table, Button, Upload, Input, Modal } from "antd";
+import { Table, Button, Upload, Input, Modal, Divider, Row, Col } from "antd";
 import {
   BugTwoTone,
+  ContainerOutlined,
   FireTwoTone,
   LeftOutlined,
   PlusOutlined,
@@ -23,7 +24,7 @@ import {
   StudentExcludeData,
   StudentFileData,
 } from "../types/Student";
-import { Solution, groupColumns1, GroupSolution } from "../types/Groups";
+import { Group, GroupSolution } from "../types/Groups";
 import {
   generateStudentDataColumns,
   studentChoiceColumns,
@@ -42,6 +43,8 @@ import { useEffect } from "react";
 import { useThemeSwitcher, ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { convertJsonToStudent, convertJsonToStudentData } from "../utils/dataConversion";
 import { isValidFile, uploadFileData } from "../utils/file";
+import { ExportGroups } from "./ExportGroups";
+import { GroupDisplay } from "./GroupDisplay";
 //import "~antd/dist/antd.css";
 const resolve = require("path").resolve;
 
@@ -73,19 +76,8 @@ const Import: FC = () => {
   const [isChecked, setIsChecked] = useState(true);
   const [theme, setTheme] = useState("light");
   const { switcher, currentTheme, status, themes } = useThemeSwitcher();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  const [instructVisible, setInstructVisible] = useState(false);
+  const [studentDataVisible, setStudentDataVisible] = useState(false);
 
   const themes1 = {
     dark: resolve("./src/app/dark-theme.scss"),
@@ -103,13 +95,6 @@ const Import: FC = () => {
 
   const handleGroupSize = (e: any) => {
     setGroupSize(e.target.value);
-    // if (isNaN(+e.target.value)) {
-    //   handleWarningMessage("Please input a number.");
-    // } else if (studentData && studentData.length <= +e.target.value) {
-    //   handleWarningMessage("Group size cannot be greater than the number of students.");
-    // } else if (+e.target.value > studentData.length / 2) {
-    //   handleWarningMessage("Group size will result in only one group!");
-    // }
   };
 
   function toggleStudentDisplay() {
@@ -217,69 +202,22 @@ const Import: FC = () => {
     }
   };
 
-  const getNextSolution = () => {
-    if (groupSolutions) {
-      const solution = document.getElementById(`solution${solDisplayNum + 1}`);
-      const hideSolution = document.getElementById(`solution${solDisplayNum}`);
-      solution.classList.remove("no-display");
-      hideSolution.classList.add("no-display");
-
-      if (solDisplayNum + 1 >= groupSolutions.length) {
-        const rightButton = document.getElementById("rightButton");
-        rightButton.classList.add("hide");
-      }
-      const leftButton = document.getElementById("leftButton");
-      leftButton.classList.remove("hide");
-
-      setSolDisplayNum(solDisplayNum + 1);
-    }
-  };
-  const getPrevSolution = () => {
-    if (groupSolutions) {
-      const solution = document.getElementById(`solution${solDisplayNum - 1}`);
-      const hideSolution = document.getElementById(`solution${solDisplayNum}`);
-      solution.classList.remove("no-display");
-      hideSolution.classList.add("no-display");
-
-      if (solDisplayNum <= 1) {
-        const leftButton = document.getElementById("leftButton");
-        leftButton.classList.add("hide");
-      }
-      const rightButton = document.getElementById("rightButton");
-      rightButton.classList.remove("hide");
-
-      setSolDisplayNum(solDisplayNum - 1);
-    }
-  };
-
   useEffect(() => {
-    if (solDisplayNum <= 1) {
-      const leftButton = document.getElementById("leftButton");
-      leftButton.classList.add("hide");
-    }
-
-    // hide group panel when there are no solutions
-    const groupSolution = document.getElementById("solutionContainer");
-    if (groupSolutions) {
-      groupSolution.classList.remove("no-display");
-    } else {
-      groupSolution.classList.add("no-display");
-    }
-
     if (fileList) {
       const inputGroupSize = document.getElementById("input-group-size");
       inputGroupSize.classList.remove("hide");
 
       const studentDataDisplayCheck = document.getElementById("student-data-display");
-      studentDataDisplayCheck.classList.remove("hide");
+      studentDataDisplayCheck.classList.remove("no-display");
     }
 
+    const isValidGroup = validateGroupSize(groupSize);
     // Toggle display of generate groups button
     const btnGenerateGroups = document.getElementById("btn-generate-groups");
-    if (fileList && validateGroupSize(groupSize)) {
-      btnGenerateGroups.classList.remove("hide");
+    if (fileList && isValidGroup) {
+      btnGenerateGroups.classList.remove("no-display");
     } else {
-      btnGenerateGroups.classList.add("hide");
+      btnGenerateGroups.classList.add("no-display");
     }
   });
 
@@ -305,16 +243,61 @@ const Import: FC = () => {
           </Button>
         </div>
         <hr />
-        <Button type="primary" onClick={showModal}>
-          See Instructions
-        </Button>
-        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+        <Modal
+          title="Instructions"
+          visible={instructVisible}
+          closable={true}
+          maskClosable={true}
+          footer={null}
+          onCancel={null} // X button and mask Closable does not work if onCancel is removed
+          width="fit-content"
+        >
+          <p>The uploaded excel file must have the following headers:</p>
+          <Row gutter={9}>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">First Name</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">Last Name</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">Choice</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">...</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">Choice</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">Exclude</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">...</div>
+            </Col>
+            <Col className="gutter-row" span={1}>
+              <div className="col-excel">Exclude</div>
+            </Col>
+          </Row>
+        </Modal>
+        <Modal
+          title="StudentData"
+          visible={studentDataVisible}
+          closable={true}
+          maskClosable={true}
+          footer={null}
+          onCancel={null} // X button and mask Closable does not work if onCancel is removed
+          width="fit-content"
+        >
+          <Table
+            dataSource={studentFileData}
+            columns={studentDataColumns}
+            rowKey={(record) => record.firstName + record.lastName}
+            pagination={false}
+          />
         </Modal>
         <Upload
-          className="container"
+          className="container upload"
           name="file"
           beforeUpload={fileHandler}
           //onRemove={removeFile}
@@ -325,14 +308,26 @@ const Import: FC = () => {
             <UploadOutlined /> Upload Excel File
           </Button>
         </Upload>
+        <Button
+          type="primary"
+          onClick={() => setInstructVisible(true)}
+          className="button-instructions"
+        >
+          <ContainerOutlined /> See Instructions
+        </Button>
         <Input
           id="input-group-size"
-          className="container hide"
+          className="container input-group-size hide"
           style={{ width: 150 }}
           onChange={handleGroupSize}
           maxLength={3}
           placeholder="Input group size"
         ></Input>
+        <div id="student-data-display" className="container no-display">
+          <Button onClick={() => setStudentDataVisible(true)} className="button">
+            See Student Data
+          </Button>
+        </div>
         <Button
           id="btn-generate-groups"
           type="ghost"
@@ -341,53 +336,7 @@ const Import: FC = () => {
         >
           <BugTwoTone /> Generate Groups
         </Button>
-        <div id="student-data-display" className="container hide">
-          <Checkbox type="ghost" onClick={toggleStudentDisplay} checked={isChecked}>
-            <BugTwoTone /> Show student data
-          </Checkbox>
-          <div id="studentData" className="container">
-            <Table
-              title={() => "Student Data"}
-              dataSource={studentFileData}
-              columns={studentDataColumns}
-              rowKey={(record) => record.firstName + record.lastName}
-              pagination={false}
-            />
-          </div>
-        </div>
-        <div id="solutionContainer">
-          <div className="container solution-nav">
-            <Button id="leftButton" type="ghost" onClick={getPrevSolution}>
-              <LeftOutlined />
-            </Button>
-            <div className="solution-button-container container">
-              <div className="solution-number">{`${solDisplayNum} of ${
-                groupSolutions ? groupSolutions.length : 0
-              }`}</div>
-            </div>
-            <Button id="rightButton" type="ghost" onClick={getNextSolution}>
-              <RightOutlined />
-            </Button>
-          </div>
-          <div className="container">
-            {groupSolutions &&
-              groupSolutions.map((d, i) => (
-                <div
-                  id={`solution${i + 1}`}
-                  key={i}
-                  className={`container ${i ? "no-display" : ""}`}
-                >
-                  <Table
-                    title={() => "Group " + (i + 1)}
-                    dataSource={d.groups}
-                    columns={groupColumns2}
-                    rowKey={(record: Solution) => record.groupNumber}
-                    pagination={false}
-                  />
-                </div>
-              ))}
-          </div>
-        </div>
+        {groupSolutions && <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>}
       </div>
     </>
   );

@@ -1,21 +1,13 @@
-export interface Solution {
+export interface Group {
   groupNumber: number;
   studentNames: string[];
 }
 
-export const groupColumns1 = [
-  {
-    title: "Group Number",
-    dataIndex: "groupNumber",
-    key: "groupNumber",
-  },
-  {
-    title: "Students",
-    dataIndex: "studentNames",
-    key: "studentNames",
-  },
-];
-
 export interface GroupSolution {
-  groups: Solution[];
+  groups: Group[];
+}
+
+export interface ExportGroup {
+  "Group Number": number;
+  "Student Name": string;
 }

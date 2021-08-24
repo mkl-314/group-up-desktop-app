@@ -25,39 +25,39 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
   const [solDisplayNum, setSolDisplayNum] = useState(1);
 
   useEffect(() => {
-    console.log(groupSolutions);
+    console.log(solDisplayNum);
   });
 
   const getNextSolution = () => {
-    if (groupSolutions) {
+    if (groupSolutions && solDisplayNum < groupSolutions.length) {
       const solution = document.getElementById(`solution${solDisplayNum + 1}`);
       const hideSolution = document.getElementById(`solution${solDisplayNum}`);
       solution.classList.remove("no-display");
       hideSolution.classList.add("no-display");
 
-      if (solDisplayNum + 1 >= groupSolutions.length) {
-        const rightButton = document.getElementById("rightButton");
-        rightButton.classList.add("hide");
-      }
-      const leftButton = document.getElementById("leftButton");
-      leftButton.classList.remove("hide");
+      // if (solDisplayNum + 1 >= groupSolutions.length) {
+      //   const rightButton = document.getElementById("rightButton");
+      //   rightButton.classList.add("hide");
+      // }
+      // const leftButton = document.getElementById("leftButton");
+      // leftButton.classList.remove("hide");
 
       setSolDisplayNum(solDisplayNum + 1);
     }
   };
   const getPrevSolution = () => {
-    if (groupSolutions) {
+    if (groupSolutions && solDisplayNum > 1) {
       const solution = document.getElementById(`solution${solDisplayNum - 1}`);
       const hideSolution = document.getElementById(`solution${solDisplayNum}`);
       solution.classList.remove("no-display");
       hideSolution.classList.add("no-display");
 
-      if (solDisplayNum <= 1) {
-        const leftButton = document.getElementById("leftButton");
-        leftButton.classList.add("hide");
-      }
-      const rightButton = document.getElementById("rightButton");
-      rightButton.classList.remove("hide");
+      // if (solDisplayNum <= 1) {
+      //   const leftButton = document.getElementById("leftButton");
+      //   leftButton.classList.add("hide");
+      // }
+      // const rightButton = document.getElementById("rightButton");
+      // rightButton.classList.remove("hide");
 
       setSolDisplayNum(solDisplayNum - 1);
     }
@@ -69,7 +69,12 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
         <Divider orientation="left">Groups</Divider>
         <ExportGroups groupSolutions={groupSolutions}></ExportGroups>
         <div className="container solution-nav">
-          <Button id="leftButton" type="ghost" onClick={getPrevSolution}>
+          <Button
+            id="leftButton"
+            type="ghost"
+            onClick={getPrevSolution}
+            className={`${solDisplayNum <= 1 ? "hide" : ""}`}
+          >
             <LeftOutlined />
           </Button>
           <div className="solution-button-container container">
@@ -77,14 +82,23 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
               groupSolutions ? groupSolutions.length : 0
             }`}</div>
           </div>
-          <Button id="rightButton" type="ghost" onClick={getNextSolution}>
+          <Button
+            id="rightButton"
+            type="ghost"
+            onClick={getNextSolution}
+            className={`${groupSolutions && solDisplayNum >= groupSolutions.length ? "hide" : ""}`}
+          >
             <RightOutlined />
           </Button>
         </div>
         <div className="container">
           {groupSolutions &&
             groupSolutions.map((d: any, i: number) => (
-              <div id={`solution${i + 1}`} key={i} className={`container ${i ? "no-display" : ""}`}>
+              <div
+                id={`solution${i + 1}`}
+                key={i}
+                className={`container ${i + 1 !== solDisplayNum ? "no-display" : ""}`}
+              >
                 <Table
                   //title={() => "Group " + (i + 1)}
                   dataSource={d.groups}

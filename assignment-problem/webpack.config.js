@@ -1,6 +1,6 @@
 const path = require("path");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const isDevelopment = process.env.NODE_ENV === 'development'
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const isDevelopment = process.env.NODE_ENV === "development";
 
 const config = {
   target: "electron-main",
@@ -8,7 +8,7 @@ const config = {
   entry: "./src/main.ts",
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
   },
   module: {
     rules: [
@@ -16,18 +16,18 @@ const config = {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
-      }
-    ]
+          loader: "babel-loader",
+        },
+      },
+    ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js", ".jpg"],
   },
   node: {
     __dirname: false,
-    __filename: false
-  }
+    __filename: false,
+  },
 };
 
 module.exports = (env, argv) => {

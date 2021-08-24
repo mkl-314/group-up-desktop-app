@@ -1,10 +1,10 @@
 import { setUpConnection } from "./connection";
-import { Solution, GroupSolution } from "./types/Groups";
+import { Group, GroupSolution } from "./types/Groups";
 import { StudentChoiceData, StudentData, StudentExcludeData } from "./types/Student";
 //const connection = require("./connection").connection;
 const connection = setUpConnection();
 
-export const GetGroups1 = async (groupSize: number, numSolutions: number): Promise<Solution[]> => {
+export const GetGroups1 = async (groupSize: number, numSolutions: number): Promise<Group[]> => {
   try {
     const response = await connection.send("GetGroups", {
       groupSize: groupSize,

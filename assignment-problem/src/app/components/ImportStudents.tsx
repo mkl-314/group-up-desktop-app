@@ -99,8 +99,10 @@ const ImportStudents: FC = () => {
           handleStudentConversion(jsonData);
         };
         reader.readAsArrayBuffer(e);
+        // Reset values
         setFileList([e]);
         setGroupSolutions(null);
+        setGroupSize("");
       }
     } catch (err) {
       handleErrorMessage("Could not handle file: " + err.Message);
@@ -196,7 +198,7 @@ const ImportStudents: FC = () => {
     <>
       <div className="page">
         <h1>Group Up</h1>
-        <div className="theme-button container">
+        <div className="theme-button">
           <Button onClick={changeTheme}>
             <FireTwoTone />
           </Button>
@@ -218,7 +220,7 @@ const ImportStudents: FC = () => {
           multiple={false}
         >
           <Button type="primary">
-            <UploadOutlined /> Upload Excel File
+            <UploadOutlined /> Upload Group Data
           </Button>
         </Upload>
         <Button
@@ -226,7 +228,14 @@ const ImportStudents: FC = () => {
           onClick={() => setInstructVisible(true)}
           className="button-instructions"
         >
-          <ContainerOutlined /> See Instructions
+          <ContainerOutlined /> Instructions
+        </Button>
+        <Button
+          id="student-data-display"
+          onClick={() => setStudentDataVisible(true)}
+          className="button no-display"
+        >
+          See Student Data
         </Button>
         <Input
           id="input-group-size"
@@ -235,12 +244,8 @@ const ImportStudents: FC = () => {
           onChange={handleGroupSize}
           maxLength={3}
           placeholder="Input group size"
+          value={groupSize}
         ></Input>
-        <div id="student-data-display" className="container no-display">
-          <Button onClick={() => setStudentDataVisible(true)} className="button">
-            See Student Data
-          </Button>
-        </div>
         <Button
           id="btn-generate-groups"
           type="ghost"

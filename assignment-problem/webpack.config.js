@@ -22,7 +22,7 @@ const config = {
     ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jpg"],
+    extensions: [".ts", ".tsx", ".js", ".jpg", ".svg"],
   },
   node: {
     __dirname: false,

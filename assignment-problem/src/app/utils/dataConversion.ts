@@ -49,7 +49,7 @@ export const convertJsonToStudent = (
           });
         } else {
           handleErrorMessage(
-            `In column: ${key}, row: ${i + 2}. ${json[key]} is not recognised as a student.`
+            `Error in column ${key}, row ${i + 2}. ${json[key]} is not recognised as a student.`
           );
         }
       } else if (key1.match(/^exclude/i)) {

@@ -54,24 +54,6 @@ export const Modals = ({
             <figcaption>Fig 1. Example of a possible excel file format</figcaption>
             <img src={imgExcel} alt="Format image"></img>
           </figure>
-          <h2>Group Generation</h2>
-          <p>
-            In the case that the program was not able to generate any groups, please see below for
-            possible issues and resolutions:
-          </p>
-          <ul>
-            <li>
-              No solution found. Each person must be in a group with at least one chosen person and
-              must not be in a group with any of the excluded people. See the following for possible
-              reasons of no solutions:
-              <ul>
-                <li> Group Size of 2. People will not always get their preference.</li>
-              </ul>
-            </li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
         </div>
       </Modal>
       <Modal

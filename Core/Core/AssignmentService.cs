@@ -91,7 +91,7 @@ namespace AssignmentProblem
                                             ).ToArray().Sum();
                     if (num_preference >= 1)
                     {
-                        num_preferences[i] = (num_preference.Var() + num_students * num_students).Var();
+                        num_preferences[i] = (num_preference.Var() - 1 + 1000).Var();
                     }
 
                     // Hard Constraint. Comment out if using soft constraint - not working yet
@@ -147,7 +147,7 @@ namespace AssignmentProblem
                         studentIds = new List<int>()
                     });
                 }
-
+                Console.Error.WriteLine(sum_preferences.Value());
                 Console.Error.Write("x " + sol + ": ");
                 for (int i = 0; i < num_students; i++)
                 {

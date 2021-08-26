@@ -31,7 +31,6 @@ import { isValidFile, uploadFileData } from "../utils/file";
 import { ExportGroups } from "./ExportGroups";
 import { GroupDisplay } from "./GroupDisplay";
 import { Modals } from "./Modals";
-//import "~antd/dist/antd.css";
 const resolve = require("path").resolve;
 
 const ImportStudents: FC = () => {
@@ -233,7 +232,7 @@ const ImportStudents: FC = () => {
         <Button
           id="student-data-display"
           onClick={() => setStudentDataVisible(true)}
-          className="button no-display"
+          className="button-student-data container no-display"
         >
           See Student Data
         </Button>

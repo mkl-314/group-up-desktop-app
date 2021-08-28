@@ -195,14 +195,15 @@ const ImportStudents: FC = () => {
   };
   return (
     <>
-      <div className="page">
+      <div className="header-container">
         <h1>Group Up</h1>
-        <div className="theme-button">
+        {/* <div className="btn theme-button">
           <Button onClick={changeTheme}>
             <FireTwoTone />
           </Button>
-        </div>
-        <hr />
+        </div> */}
+      </div>
+      <div className="page">
         <Modals
           instructVisible={instructVisible}
           setInstructVisible={setInstructVisible}
@@ -218,28 +219,27 @@ const ImportStudents: FC = () => {
           fileList={fileList}
           multiple={false}
         >
-          <Button type="primary">
+          <Button type="default" className="btn constant-width">
             <UploadOutlined /> Upload Group Data
           </Button>
         </Upload>
         <Button
-          type="primary"
+          type="default"
           onClick={() => setInstructVisible(true)}
-          className="button-instructions"
+          className="btn constant-width container button-instructions"
         >
           <ContainerOutlined /> Instructions
         </Button>
         <Button
           id="student-data-display"
           onClick={() => setStudentDataVisible(true)}
-          className="button-student-data container no-display"
+          className="btn constant-width button-student-data container no-display"
         >
           See Student Data
         </Button>
         <Input
           id="input-group-size"
-          className="container input-group-size no-display"
-          style={{ width: 150 }}
+          className="container constant-width input input-group-size no-display"
           onChange={handleGroupSize}
           maxLength={3}
           placeholder="Input group size"
@@ -247,12 +247,13 @@ const ImportStudents: FC = () => {
         ></Input>
         <Button
           id="btn-generate-groups"
-          type="ghost"
+          type="primary"
           onClick={generateGroups}
-          className="container"
+          className="btn-primary constant-width container"
         >
           <BugTwoTone /> Generate Groups
         </Button>
+        {groupSolutions && <ExportGroups groupSolutions={groupSolutions}></ExportGroups>}
         {groupSolutions && <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>}
       </div>
     </>

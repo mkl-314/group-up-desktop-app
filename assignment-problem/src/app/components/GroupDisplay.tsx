@@ -35,13 +35,6 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
       solution.classList.remove("no-display");
       hideSolution.classList.add("no-display");
 
-      // if (solDisplayNum + 1 >= groupSolutions.length) {
-      //   const rightButton = document.getElementById("rightButton");
-      //   rightButton.classList.add("hide");
-      // }
-      // const leftButton = document.getElementById("leftButton");
-      // leftButton.classList.remove("hide");
-
       setSolDisplayNum(solDisplayNum + 1);
     }
   };
@@ -52,13 +45,6 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
       solution.classList.remove("no-display");
       hideSolution.classList.add("no-display");
 
-      // if (solDisplayNum <= 1) {
-      //   const leftButton = document.getElementById("leftButton");
-      //   leftButton.classList.add("hide");
-      // }
-      // const rightButton = document.getElementById("rightButton");
-      // rightButton.classList.remove("hide");
-
       setSolDisplayNum(solDisplayNum - 1);
     }
   };
@@ -66,14 +52,12 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
   return (
     <>
       <div>
-        <Divider orientation="left">Groups</Divider>
-        <ExportGroups groupSolutions={groupSolutions}></ExportGroups>
         <div className="container solution-nav">
           <Button
             id="leftButton"
-            type="ghost"
+            type="default"
             onClick={getPrevSolution}
-            className={`${solDisplayNum <= 1 ? "hide" : ""}`}
+            className={`btn ${solDisplayNum <= 1 ? "hide" : ""}`}
           >
             <LeftOutlined />
           </Button>
@@ -84,9 +68,11 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
           </div>
           <Button
             id="rightButton"
-            type="ghost"
+            type="default"
             onClick={getNextSolution}
-            className={`${groupSolutions && solDisplayNum >= groupSolutions.length ? "hide" : ""}`}
+            className={`btn ${
+              groupSolutions && solDisplayNum >= groupSolutions.length ? "hide" : ""
+            }`}
           >
             <RightOutlined />
           </Button>

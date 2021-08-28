@@ -1,4 +1,6 @@
+@import "../styles/variables.sass";
 @import "~antd/dist/antd.dark.css";
+@import "antdModify.scss";
 //@import "~antd/dist/antd.css";
 .dark {
   @import "~antd/dist/antd.dark.css";
@@ -7,8 +9,17 @@
   @import "~antd/dist/antd.css";
 }
 
-// @primary-color: red;
+body {
+  background-color: $form-background;
+}
 
+.header-container {
+  background-color: $secondary;
+
+  h1 {
+    padding: 20px;
+  }
+}
 .container {
   margin: 10px;
 }
@@ -57,6 +68,6 @@ h1 {
 }
 
 .button-student-data {
-  background-color: #eb2f96;
+  //background-color: $primary;
   display: block;
 }

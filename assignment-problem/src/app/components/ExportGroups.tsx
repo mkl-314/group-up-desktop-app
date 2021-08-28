@@ -43,5 +43,9 @@ export const ExportGroups = ({ groupSolutions: groupSolutions }: any) => {
     return exportSolutions;
   }
 
-  return <Button onClick={(e) => exportToXLSX(groupSolutions)}>Export Groups</Button>;
+  return (
+    <Button className="btn constant-width container" onClick={(e) => exportToXLSX(groupSolutions)}>
+      Export Groups
+    </Button>
+  );
 };

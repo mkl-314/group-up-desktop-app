@@ -1,28 +1,22 @@
-import { Component, FC, useState } from "react";
+import { FC, useState } from "react";
 import * as React from "react";
-import { Table, Button, Upload, Input, Modal, Divider, Row, Col } from "antd";
-import {
-  BugTwoTone,
-  ContainerOutlined,
-  ExperimentTwoTone,
-  FireTwoTone,
-  UploadOutlined,
-} from "@ant-design/icons";
-import "./ImportGroups.scss";
+import { Button, Upload, Input } from "antd";
+import { ContainerOutlined, ExperimentTwoTone, UploadOutlined } from "@ant-design/icons";
+import "./ComponentStyles.scss";
 import { read, utils } from "xlsx";
 import {
   GetGroups,
   InsertStudentChoices,
   InsertStudentExclusions,
   InsertStudents,
-} from "../apiController";
+} from "../api/apiController";
 import {
   StudentChoiceData,
   StudentData,
   StudentExcludeData,
   StudentFileData,
 } from "../types/Student";
-import { Group, GroupSolution } from "../types/Groups";
+import { GroupSolution } from "../types/Groups";
 import { generateStudentDataColumns } from "../types/studentColumns";
 import {
   handleWarningMessage,
@@ -31,7 +25,6 @@ import {
   handleSuccessMessage,
 } from "../utils/messages";
 import { useEffect } from "react";
-import { useThemeSwitcher, ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { convertJsonToStudent, convertJsonToStudentData } from "../utils/dataConversion";
 import { isValidFile, uploadFileData } from "../utils/file";
 import { ExportGroups } from "./ExportGroups";
@@ -49,6 +42,7 @@ const ImportStudents: FC = () => {
   const [groupSolutions, setGroupSolutions] = useState<GroupSolution[]>();
   const [instructVisible, setInstructVisible] = useState(false);
   const [studentDataVisible, setStudentDataVisible] = useState(false);
+  const numSolution = 3;
 
   const handleGroupSize = (e: any) => {
     setGroupSize(e.target.value);
@@ -108,6 +102,7 @@ const ImportStudents: FC = () => {
       handleErrorMessage("Could not convert excel to table: " + err);
     }
   };
+
   const generateGroups = async () => {
     try {
       console.log(groupSize);
@@ -120,9 +115,7 @@ const ImportStudents: FC = () => {
         await InsertStudents(studentData);
         await InsertStudentChoices(studentChoices);
         await InsertStudentExclusions(studentExcludes);
-        console.log(studentData);
-        console.log(studentChoices);
-        let numSolution = 3;
+
         await GetGroups(+groupSize, numSolution).then((result) => {
           if (result !== null) {
             setGroupSolutions(result);
@@ -133,7 +126,6 @@ const ImportStudents: FC = () => {
         handleSuccessMessage("Groups have been generated!", "group");
       }
     } catch (err) {
-      console.log(err);
       handleErrorMessage("Could not generate groups: " + err.message, "group");
     }
   };
@@ -175,6 +167,7 @@ const ImportStudents: FC = () => {
     }
     return false;
   };
+
   return (
     <>
       <div className="header-container">

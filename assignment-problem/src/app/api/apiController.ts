@@ -1,7 +1,7 @@
 import { setUpConnection } from "./connection";
-import { Group, GroupSolution } from "./types/Groups";
-import { StudentChoiceData, StudentData, StudentExcludeData } from "./types/Student";
-//const connection = require("./connection").connection;
+import { Group, GroupSolution } from "../types/Groups";
+import { StudentChoiceData, StudentData, StudentExcludeData } from "../types/Student";
+
 const connection = setUpConnection();
 
 export const GetGroups1 = async (groupSize: number, numSolutions: number): Promise<Group[]> => {
@@ -63,7 +63,6 @@ export const InsertStudentExclusions = async (
   try {
     const response = await connection.send("InsertStudentExclusions", studentData);
     if (response.statusCode === 200) return true;
-    //throw new Error("Inserting student exclusions failed:");
   } catch (err) {
     throw new Error("Inserting student exclusions failed: " + err.message);
   }

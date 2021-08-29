@@ -2,7 +2,7 @@ import { Col, Modal, Row, Table } from "antd";
 import * as React from "react";
 import { studentDataColumns } from "../types/studentColumns";
 import "./Modals.scss";
-import imgExcel from "../../images/excel-format.jpg";
+import imgExcel from "../assets/excel-format.jpg";
 
 export const Modals = ({
   instructVisible,

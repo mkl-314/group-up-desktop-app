@@ -3,7 +3,7 @@ import * as React from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { groupColumns } from "../types/Groups";
-import "./ImportGroups.scss";
+import "./ComponentStyles.scss";
 
 export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
   const [solDisplayNum, setSolDisplayNum] = useState(1);
@@ -64,7 +64,6 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
                 className={`container ${i + 1 !== solDisplayNum ? "no-display" : ""}`}
               >
                 <Table
-                  //title={() => "Group " + (i + 1)}
                   dataSource={d.groups}
                   columns={groupColumns}
                   rowKey={(record) => record.groupNumber}

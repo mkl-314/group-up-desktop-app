@@ -1,14 +1,38 @@
-import { GroupData1 } from "./types/Groups";
+import { setUpConnection } from "./connection";
+import { Group, GroupSolution } from "./types/Groups";
 import { StudentChoiceData, StudentData, StudentExcludeData } from "./types/Student";
-const connection = require("./connection").connection;
+//const connection = require("./connection").connection;
+const connection = setUpConnection();
 
-export const GetGroups = async (groupSize: number): Promise<GroupData1[]> => {
+export const GetGroups1 = async (groupSize: number, numSolutions: number): Promise<Group[]> => {
   try {
-    const response = await connection.send("GetGroups", groupSize);
+    const response = await connection.send("GetGroups", {
+      groupSize: groupSize,
+      numSolutions: numSolutions,
+    });
     console.log(response);
     if (response.statusCode === 200) return response.value;
     throw new Error(response.value);
   } catch (err) {
+    throw new Error(err.message);
+  }
+};
+
+export const GetGroups = async (
+  groupSize: number,
+  numSolutions: number
+): Promise<GroupSolution[]> => {
+  try {
+    const response = await connection.send("GetGroups", {
+      groupSize: groupSize,
+      numSolutions: numSolutions,
+    });
+    console.log(response);
+    if (response.statusCode === 200) return response.value;
+    console.log(response.value);
+    throw new Error(response.value);
+  } catch (err) {
+    console.log(err);
     throw new Error(err.message);
   }
 };

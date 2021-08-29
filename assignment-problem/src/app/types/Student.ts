@@ -5,12 +5,13 @@ export interface StudentData {
 }
 
 export interface StudentFileData {
-  FirstName: string;
-  LastName: string;
-  Choice1: string;
-  Choice2: string;
-  Choice3: string;
-  Choice4: string;
+  firstName: string;
+  lastName: string;
+  [key: string]: string;
+  // Choice1: string;
+  // Choice2: string;
+  // Choice3: string;
+  // Choice4: string;
   //Choices: string[];
 }
 

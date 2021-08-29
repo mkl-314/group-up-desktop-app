@@ -3,7 +3,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
-  filename: "./index.html"
+  filename: "./index.html",
 });
 
 const config = {
@@ -12,7 +12,7 @@ const config = {
   entry: "./src/app/renderer.tsx",
   output: {
     filename: "renderer.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
   },
   module: {
     rules: [
@@ -20,23 +20,30 @@ const config = {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.s[ac]ss$/,
-        use: ["style-loader", "css-loader", "sass-loader",]
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      }
-    ]
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif|jp2|webp)$/,
+        loader: "file-loader",
+        options: {
+          name: "images/[name].[ext]",
+        },
+      },
+    ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".scss", ".css"]
+    extensions: [".ts", ".tsx", ".js", ".scss", ".css", ".jpg", ".svg"],
   },
-  plugins: [htmlPlugin]
+  plugins: [htmlPlugin],
 };
 
 module.exports = (env, argv) => {

@@ -1,32 +1,88 @@
+@import "../styles/variables.sass";
 @import "~antd/dist/antd.dark.css";
-// Formatting buttons
-.button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+@import "antdModify.scss";
 
-  // @include media-breakpoint-up(lg) {
-  //   margin-right: 2.5%;
-  // }
-  .import-button {
-    font-weight: bold;
-    background-color: #c711d7;
-    display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 0.2rem;
-    width: fit-content;
-    margin-top: 1rem;
-    padding: 0 2rem;
-    &:hover {
-      border: 1px solid black;
-    }
-  }
+.dark {
+  @import "~antd/dist/antd.dark.css";
+}
+.light {
+  @import "~antd/dist/antd.css";
 }
 
+body {
+  background-color: $form-background;
+}
+
+.header-container {
+  background-color: $secondary;
+  text-align: center;
+  padding: 10px;
+  h1 {
+    //font-family: "Staatliches";
+    font: 3rem "Staatliches";
+    color: #ffffff;
+    margin: 0;
+  }
+}
 .container {
   margin: 10px;
 }
 
-body {
+.page {
   padding: 10px;
+}
+
+.theme-button {
+  display: inline;
+}
+
+.no-display {
+  display: none !important;
+}
+.hide {
+  visibility: hidden;
+}
+
+.solution-nav {
+  text-align: center;
+  position: static;
+}
+.solution-button-container {
+  display: initial;
+}
+
+.solution-number {
+  display: initial;
+  margin: 10px;
+}
+.button-instructions {
+  float: right;
+}
+
+.upload {
+  display: inline-block;
+}
+
+.input-group-size {
+  display: block;
+}
+
+.button-student-data {
+  //background-color: $primary;
+  display: block;
+}
+
+.group-container {
+  max-width: fit-content;
+  min-width: 70%;
+  margin: auto;
+}
+
+// Groups
+.name-column {
+  background: $form-background-secondary;
+}
+
+.nowrap {
+  white-space: nowrap;
 }

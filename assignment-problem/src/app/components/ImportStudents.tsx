@@ -1,7 +1,13 @@
 import { Component, FC, useState } from "react";
 import * as React from "react";
 import { Table, Button, Upload, Input, Modal, Divider, Row, Col } from "antd";
-import { BugTwoTone, ContainerOutlined, FireTwoTone, UploadOutlined } from "@ant-design/icons";
+import {
+  BugTwoTone,
+  ContainerOutlined,
+  ExperimentTwoTone,
+  FireTwoTone,
+  UploadOutlined,
+} from "@ant-design/icons";
 import "./ImportGroups.scss";
 import { read, utils } from "xlsx";
 import {
@@ -41,25 +47,8 @@ const ImportStudents: FC = () => {
   const [studentChoices, setStudentChoices] = useState<StudentChoiceData[]>();
   const [studentExcludes, setStudentExcludes] = useState<StudentExcludeData[]>();
   const [groupSolutions, setGroupSolutions] = useState<GroupSolution[]>();
-  const [solDisplayNum, setSolDisplayNum] = useState(1);
-  const [isChecked, setIsChecked] = useState(true);
-  const [theme, setTheme] = useState("light");
-  const { switcher, currentTheme, status, themes } = useThemeSwitcher();
   const [instructVisible, setInstructVisible] = useState(false);
   const [studentDataVisible, setStudentDataVisible] = useState(false);
-
-  const themes1 = {
-    dark: resolve("./src/app/dark-theme.scss"),
-    light: resolve("./src/app/light-theme.scss"),
-  };
-
-  const changeTheme = () => {
-    console.log(themes);
-    console.log(themes.dark);
-    switcher({ theme: theme === "light" ? themes.dark : themes.light });
-
-    setTheme(theme === "light" ? "dark" : "light");
-  };
 
   const handleGroupSize = (e: any) => {
     setGroupSize(e.target.value);
@@ -67,22 +56,6 @@ const ImportStudents: FC = () => {
 
   const fileHandler = async (e: File) => {
     try {
-      console.log(e);
-      // const studentFile: StudentFileData[] = [];
-      // let students: StudentData[] = [];
-      // let choices: StudentChoiceData[] = [];
-      // let exclusions: StudentExcludeData[] = [];
-
-      // const fileList = uploadFileData(e, studentFile, students, choices, exclusions);
-      // fileList.then((file) => setFileList(file));
-      // console.log(students);
-      // console.log(studentFile);
-
-      // setStudentData(students);
-      // setStudentChoices(choices);
-      // setStudentExcludes(exclusions);
-      // setStudentFileData(studentFile);
-
       if (isValidFile(e)) {
         var reader = new FileReader();
         reader.onload = function (fileObj) {
@@ -108,8 +81,13 @@ const ImportStudents: FC = () => {
     }
   };
 
-  const removeFile = (e: any) => {
-    setStudentData(null);
+  const uploadChange = (info: any) => {
+    if (info.file.status === "removed") {
+      console.log("heelel");
+      setFileList(null);
+      setGroupSolutions(null);
+      setGroupSize("");
+    }
   };
 
   const handleStudentConversion = async (jsonData: JSON[]) => {
@@ -147,8 +125,6 @@ const ImportStudents: FC = () => {
         let numSolution = 3;
         await GetGroups(+groupSize, numSolution).then((result) => {
           if (result !== null) {
-            //setGroups(result);
-            console.log(result);
             setGroupSolutions(result);
           } else {
             handleErrorMessage("Could not generate groups", "group");
@@ -169,6 +145,12 @@ const ImportStudents: FC = () => {
 
       const studentDataDisplayCheck = document.getElementById("student-data-display");
       studentDataDisplayCheck.classList.remove("no-display");
+    } else {
+      const inputGroupSize = document.getElementById("input-group-size");
+      inputGroupSize.classList.add("no-display");
+
+      const studentDataDisplayCheck = document.getElementById("student-data-display");
+      studentDataDisplayCheck.classList.add("no-display");
     }
 
     const isValidGroup = validateGroupSize(groupSize);
@@ -196,12 +178,7 @@ const ImportStudents: FC = () => {
   return (
     <>
       <div className="header-container">
-        <h1>Group Up</h1>
-        {/* <div className="btn theme-button">
-          <Button onClick={changeTheme}>
-            <FireTwoTone />
-          </Button>
-        </div> */}
+        <h1>GROUP UP</h1>
       </div>
       <div className="page">
         <Modals
@@ -215,25 +192,25 @@ const ImportStudents: FC = () => {
           className="container upload"
           name="file"
           beforeUpload={fileHandler}
-          //onRemove={removeFile}
+          onChange={uploadChange}
           fileList={fileList}
           multiple={false}
         >
-          <Button type="default" className="btn constant-width">
+          <Button type="default" className="constant-width">
             <UploadOutlined /> Upload Group Data
           </Button>
         </Upload>
         <Button
           type="default"
           onClick={() => setInstructVisible(true)}
-          className="btn constant-width container button-instructions"
+          className="constant-width container button-instructions"
         >
           <ContainerOutlined /> Instructions
         </Button>
         <Button
           id="student-data-display"
           onClick={() => setStudentDataVisible(true)}
-          className="btn constant-width button-student-data container no-display"
+          className="constant-width button-student-data container no-display"
         >
           See Student Data
         </Button>
@@ -249,9 +226,9 @@ const ImportStudents: FC = () => {
           id="btn-generate-groups"
           type="primary"
           onClick={generateGroups}
-          className="btn-primary constant-width container"
+          className="constant-width container"
         >
-          <BugTwoTone /> Generate Groups
+          <ExperimentTwoTone twoToneColor="#1f1f1f" /> Generate Groups
         </Button>
         {groupSolutions && <ExportGroups groupSolutions={groupSolutions}></ExportGroups>}
         {groupSolutions && <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>}

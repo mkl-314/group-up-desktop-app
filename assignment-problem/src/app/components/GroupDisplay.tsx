@@ -1,32 +1,12 @@
-import { Button, Divider, Table } from "antd";
+import { Button, Table } from "antd";
 import * as React from "react";
-import { ExportGroups } from "./ExportGroups";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useEffect } from "react";
-
-export const groupColumns2 = [
-  {
-    title: "Group Number",
-    dataIndex: "groupNumber",
-    key: "groupNumber",
-  },
-  {
-    title: "Students",
-    dataIndex: "studentNames",
-    key: "studentNames",
-    render: (text: string[], row: any, index: any) => {
-      return <>{text && text.map((d: string, i: any) => <div>{d}</div>)}</>;
-    },
-  },
-];
+import { groupColumns } from "../types/Groups";
+import "./ImportGroups.scss";
 
 export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
   const [solDisplayNum, setSolDisplayNum] = useState(1);
-
-  useEffect(() => {
-    console.log(solDisplayNum);
-  });
 
   const getNextSolution = () => {
     if (groupSolutions && solDisplayNum < groupSolutions.length) {
@@ -57,7 +37,7 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
             id="leftButton"
             type="default"
             onClick={getPrevSolution}
-            className={`btn ${solDisplayNum <= 1 ? "hide" : ""}`}
+            className={`${solDisplayNum <= 1 ? "hide" : ""}`}
           >
             <LeftOutlined />
           </Button>
@@ -70,25 +50,23 @@ export const GroupDisplay = ({ groupSolutions: groupSolutions }: any) => {
             id="rightButton"
             type="default"
             onClick={getNextSolution}
-            className={`btn ${
-              groupSolutions && solDisplayNum >= groupSolutions.length ? "hide" : ""
-            }`}
+            className={`${groupSolutions && solDisplayNum >= groupSolutions.length ? "hide" : ""}`}
           >
             <RightOutlined />
           </Button>
         </div>
-        <div className="container">
+        <div className="group-container">
           {groupSolutions &&
             groupSolutions.map((d: any, i: number) => (
               <div
-                id={`solution${i + 1}`}
                 key={i}
+                id={`solution${i + 1}`}
                 className={`container ${i + 1 !== solDisplayNum ? "no-display" : ""}`}
               >
                 <Table
                   //title={() => "Group " + (i + 1)}
                   dataSource={d.groups}
-                  columns={groupColumns2}
+                  columns={groupColumns}
                   rowKey={(record) => record.groupNumber}
                   pagination={false}
                 />

@@ -1,4 +1,5 @@
-.btn {
+@import "../styles/variables.sass";
+.ant-btn {
   // background-color: $primary;
   border-color: #c2c2c2;
 
@@ -20,10 +21,10 @@
   }
 }
 
-.btn-primary {
+.ant-btn-primary {
   background-color: $primary;
   border-color: $primary;
-
+  color: #fff;
   &:active {
     background-color: $primary;
     border-color: $primary;
@@ -35,7 +36,7 @@
   &:focus {
     background-color: $primary-hover;
     border-color: $primary-hover;
-    // color: $primary;
+    color: #ffffff;
   }
 
   &::selection {
@@ -45,15 +46,20 @@
   }
 }
 
-.input {
+.ant-input {
   &:hover {
     border-color: $primary;
   }
   &:focus {
+    border-color: $primary;
     box-shadow: 0 0 0 2px $primary-hover;
   }
 }
 
 .constant-width {
   width: 11rem;
+}
+
+.ant-message-notice-content {
+  background-color: #5c5c5c;
 }

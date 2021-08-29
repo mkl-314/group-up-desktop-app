@@ -1,5 +1,5 @@
 import { message } from "antd";
-import "../components/antdModify.scss";
+import "../styles/antdModify.scss";
 
 message.config({
   maxCount: 1,

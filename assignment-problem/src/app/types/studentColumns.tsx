@@ -1,5 +1,3 @@
-import * as React from "react";
-
 export const generateStudentDataColumns = (headers: any) => {
   var choiceColumns: any[] = [];
   var excludeColumns: any[] = [];
@@ -33,8 +31,6 @@ export const generateStudentDataColumns = (headers: any) => {
   }
 
   studentDataColumns = [...studentColumns, ...choiceColumns, ...excludeColumns];
-  studentChoiceColumns = choiceColumns;
-  studentExcludeColumns = excludeColumns;
 };
 
 export var studentDataColumns: any;
@@ -53,7 +49,3 @@ export const studentColumns = [
     className: "name-column",
   },
 ];
-
-export var studentChoiceColumns: any[];
-
-export var studentExcludeColumns: any[];

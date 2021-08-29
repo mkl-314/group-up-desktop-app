@@ -1,5 +1,6 @@
 import * as React from "react";
-import "../components/ImportGroups.scss";
+import "../components/ComponentStyles.scss";
+
 export interface Group {
   groupNumber: number;
   studentNames: string[];

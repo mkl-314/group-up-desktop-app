@@ -1,6 +1,6 @@
 @import "../styles/variables.sass";
 @import "~antd/dist/antd.dark.css";
-@import "antdModify.scss";
+@import "../styles/antdModify.scss";
 
 .dark {
   @import "~antd/dist/antd.dark.css";
@@ -18,7 +18,6 @@ body {
   text-align: center;
   padding: 10px;
   h1 {
-    //font-family: "Staatliches";
     font: 3rem "Staatliches";
     color: #ffffff;
     margin: 0;
@@ -68,7 +67,6 @@ body {
 }
 
 .button-student-data {
-  //background-color: $primary;
   display: block;
 }
 

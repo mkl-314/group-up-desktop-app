@@ -1,6 +1,7 @@
 assignment-problem/node_modules/
 assignment-problem/package-lock.json
 assignment-problem/.idea/
+assignment-problem/dist/
 Core/Core/bin/
 Core/Core/obj/
 assignment-problem/dist/
@@ -12,3 +13,5 @@ Core/.vs/Core/DesignTimeBuild/.dtbcache.v2
 Core/.vs/Core/v16/.suo
 Core/Bin
 Core/Core.exe
+assignment-problem/dist/renderer.js.map
+assignment-problem/dist/renderer.js

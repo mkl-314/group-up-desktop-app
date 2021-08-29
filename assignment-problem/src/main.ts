@@ -1,35 +1,15 @@
 const url = require("url");
 const path = require("path");
-const contextMenu = require("electron-context-menu");
 import { app, BrowserWindow, shell } from "electron";
+require("@electron/remote/main").initialize();
 
 let window: BrowserWindow | null;
 
-// contextMenu({
-//   prepend: (defaultActions: any, parameters: any, browserWindow: any) => [
-//     {
-//       label: "Rainbow",
-//       // Only show it when right-clicking images
-//       visible: parameters.mediaType === "image",
-//     },
-//     {
-//       label: "Search Google for “{selection}”",
-//       // Only show it when right-clicking text
-//       visible: parameters.selectionText.trim().length > 0,
-//       click: () => {
-//         shell.openExternal(
-//           `https://google.com/search?q=${encodeURIComponent(parameters.selectionText)}`
-//         );
-//       },
-//     },
-//   ],
-// });
-
 const createWindow = () => {
   window = new BrowserWindow({
-    //fullscreen: true,
-    width: 800,
-    height: 600,
+    show: false,
+    //titleBarStyle: "hidden",
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -37,6 +17,7 @@ const createWindow = () => {
     },
   });
 
+  // window.setIcon();
   window.loadURL(
     url.format({
       pathname: path.join(__dirname, "index.html"),
@@ -48,6 +29,9 @@ const createWindow = () => {
   window.on("closed", () => {
     window = null;
   });
+
+  window.maximize();
+  window.show();
 };
 
 app.on("ready", createWindow);

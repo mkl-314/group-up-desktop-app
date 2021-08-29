@@ -38,6 +38,7 @@
     "@types/file-saver": "^2.0.3",
     "@types/react": "^17.0.17",
     "@types/react-dom": "^17.0.9",
+    "@types/styled-components": "^5.1.13",
     "autoprefixer": "^10.3.1",
     "babel-loader": "^8.2.2",
     "babel-polyfill": "^6.26.0",
@@ -64,8 +65,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.3",
+    "@electron/remote": "^1.2.1",
     "@fontsource/staatliches": "^4.5.0",
     "antd": "^4.16.11",
+    "custom-electron-titlebar": "^3.2.7",
     "electron-context-menu": "^3.1.1",
     "file-saver": "^2.0.5",
     "honeycomb-web-toolkit": "git+https://github.com/red-gate/honeycomb-web-toolkit.git",
@@ -74,6 +77,7 @@
     "react-dom": "^17.0.2",
     "react-excel-renderer": "^1.1.0",
     "react-promise-tracker": "^2.1.0",
+    "styled-components": "^5.3.1",
     "xlsx": "^0.17.1"
   }
 }

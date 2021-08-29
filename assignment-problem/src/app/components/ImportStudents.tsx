@@ -77,7 +77,6 @@ const ImportStudents: FC = () => {
 
   const uploadChange = (info: any) => {
     if (info.file.status === "removed") {
-      console.log("heelel");
       setFileList(null);
       setGroupSolutions(null);
       setGroupSize("");

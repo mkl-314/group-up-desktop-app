@@ -50,6 +50,7 @@
   color: #888;
 
   &:active {
+    border-color: transparent;
     color: #888;
   }
 
@@ -61,7 +62,7 @@
 
   &::selection {
     border-color: transparent;
-    color: $primary;
+    color: #888;
   }
 }
 

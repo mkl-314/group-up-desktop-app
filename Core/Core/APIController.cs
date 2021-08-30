@@ -59,7 +59,7 @@ namespace AssignmentProblem
 
         public void InsertStudents()
         {
-            connection.On<List<Student1>, IActionResult>("InsertStudents", studentData =>
+            connection.On<List<Student>, IActionResult>("InsertStudents", studentData =>
             {
                 try
                 {
@@ -75,7 +75,7 @@ namespace AssignmentProblem
 
         public void InsertStudentChoices()
         {
-            connection.On<List<StudentChoice1>, IActionResult>("InsertStudentChoices", studentData =>
+            connection.On<List<StudentChoice>, IActionResult>("InsertStudentChoices", studentData =>
             {
                 try
                 {
@@ -91,7 +91,7 @@ namespace AssignmentProblem
 
         public void InsertStudentExclusions()
         {
-            connection.On<List<StudentExclude1>, IActionResult>("InsertStudentExclusions", studentData =>
+            connection.On<List<StudentExclude>, IActionResult>("InsertStudentExclusions", studentData =>
             {
                 try
                 {

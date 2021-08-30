@@ -10,27 +10,26 @@ namespace AssignmentProblem
 {
     public class AssignmentService
     {
-        private List<Student1> students;
-        private List<StudentChoice1> studentChoices;
-        private List<StudentExclude1> studentExclusions;
+        private List<Student> students;
+        private List<StudentChoice> studentChoices;
+        private List<StudentExclude> studentExclusions;
         public long time;
 
-        private int numSolutions = 0;
         public AssignmentService()
         {
         }
 
-        public void InsertStudents(List<Student1> students)
+        public void InsertStudents(List<Student> students)
         {
             this.students = students;
         }
 
-        public void InsertStudentChoices(List<StudentChoice1> studentChoices)
+        public void InsertStudentChoices(List<StudentChoice> studentChoices)
         {
             this.studentChoices = studentChoices;
         }
 
-        public void InsertStudentExclusions(List<StudentExclude1> studentExclusions)
+        public void InsertStudentExclusions(List<StudentExclude> studentExclusions)
         {
             this.studentExclusions = studentExclusions;
         }
@@ -73,10 +72,10 @@ namespace AssignmentProblem
             // Students must be given at least one of their preferences
             for (int i = 0; i < num_students; i++)
             {
-                ICollection<StudentChoice1> preferences = studentChoices.FindAll(x => x.ChooserStudentId == students[i].id );
+                ICollection<StudentChoice> preferences = studentChoices.FindAll(x => x.ChooserStudentId == students[i].id );
                 int[] preferenceIndexes = new int[preferences.Count()];
                 int count = 0;
-                foreach (StudentChoice1 preference in preferences)
+                foreach (StudentChoice preference in preferences)
                 {
                     preferenceIndexes[count] = students.FindIndex(x => x.id == preference.ChosenStudentId);
                     count++;
@@ -102,10 +101,10 @@ namespace AssignmentProblem
             IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
             
             // Certain students cannot be in the same group
-            foreach (Student1 student in students)
+            foreach (Student student in students)
             {
-                ICollection<StudentExclude1> exclusions = studentExclusions; 
-                foreach (StudentExclude1 exclusion in exclusions)
+                ICollection<StudentExclude> exclusions = studentExclusions; 
+                foreach (StudentExclude exclusion in exclusions)
                 {
                     int firstIndex = students.FindIndex(x => x.id == exclusion.FirstStudentId);
                     int secondIndex = students.FindIndex(x => x.id == exclusion.SecondStudentId);
@@ -160,13 +159,7 @@ namespace AssignmentProblem
 
                 Console.Error.WriteLine();
                 sol++;
-                numSolutions++;
             }
-
-            //Console.WriteLine("\nSolutions: {0}", solver.Solutions());
-            //Console.WriteLine("WallTime: {0}ms", solver.WallTime());
-            //Console.WriteLine("Failures: {0}", solver.Failures());
-            //Console.WriteLine("Branches: {0} ", solver.Branches());
 
             Console.Error.Write(solver.WallTime());
             solver.EndSearch();

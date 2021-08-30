@@ -11,29 +11,8 @@ namespace AssignmentProblem
         private static APIController controller;
         public static void Main(string[] args)
         {
-            //CreateHostBuilder(args).Build().Run();
-
             controller = new APIController();
             controller.APICalls();
-
-            var connection = new ConnectionBuilder()
-                .WithLogging()
-                .Build();
-
-            connection.On<string, string>("greeting", name => "Hello " + name);
-            //connection.On<string, Group>("GetGroups", name =>
-            //{
-            //    return null;
-            //});
-            connection.Listen();
         }
-
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //        .ConfigureWebHostDefaults(webBuilder =>
-        //        {
-        //            webBuilder.UseStartup<Startup>();
-        //        });
-
     }
 }

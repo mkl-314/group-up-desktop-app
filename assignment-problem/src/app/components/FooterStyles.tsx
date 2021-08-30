@@ -1,7 +1,6 @@
 import styled from "styled-components";
 export const FooterWrapper = styled.div`
   height: 100%;
-  background-color: ${(props) => props.theme.sidebarBg};
   grid-row-start: footer;
   display: flex;
   justify-content: center;
@@ -9,11 +8,9 @@ export const FooterWrapper = styled.div`
   font-size: 14px;
   padding-top: 20px;
   padding-bottom: 20px;
+  box-shadow: -5px 2px 1px 5px rgba(0, 0, 0, 0.15);
   & > div {
     text-align: center;
-  }
-  @media screen and (min-width: 1024px) {
-    box-shadow: -5px 2px 1px 5px rgba(0, 0, 0, 0.15);
   }
 `;
 export const Credit = styled.div`
@@ -31,10 +28,3 @@ export const Spacer = styled.span`
     content: "•";
   }
 `;
-// export const SocialIcon = styled(OutboundLink).attrs(({ solid, name }) => ({
-//   className: solid ? "fas fa-" + name : "fab fa-" + name,
-// }))`
-//   text-decoration: none;
-//   color: inherit;
-//   margin: 0 7.5px;
-// `;

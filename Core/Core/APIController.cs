@@ -54,7 +54,6 @@ namespace AssignmentProblem
                     return new BadRequestObjectResult(ex.Message);
                 }
             });
-
         }
 
         public void InsertStudents()

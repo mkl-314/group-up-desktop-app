@@ -6,22 +6,19 @@ import { Button } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 
 export const Footer: FC = () => {
+  const toEmail = () => {
+    window.location.href = "mailto:mingkimlow@gmail.com?Subject=Group Up App";
+  };
   return (
     <>
       <FooterWrapper>
         <div>
-          <div>Created by:</div>
           <Credit>
             Ming Kim Low
             <Spacer />
-            Development
+            Developer
             <Spacer />
-            {/* <SocialIcon
-              eventLabel="Ming Kim GitHub"
-              to={"https://github.com/mkl-314"}
-              name="github"
-            /> */}
-            <Button>
+            <Button type="link" onClick={toEmail}>
               <MailOutlined></MailOutlined>
             </Button>
           </Credit>

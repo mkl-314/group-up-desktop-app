@@ -1,6 +1,6 @@
 const url = require("url");
 const path = require("path");
-import { app, BrowserWindow, shell } from "electron";
+import { app, BrowserWindow } from "electron";
 require("@electron/remote/main").initialize();
 
 let window: BrowserWindow | null;
@@ -8,7 +8,6 @@ let window: BrowserWindow | null;
 const createWindow = () => {
   window = new BrowserWindow({
     show: false,
-    //titleBarStyle: "hidden",
     frame: false,
     webPreferences: {
       nodeIntegration: true,
@@ -17,7 +16,6 @@ const createWindow = () => {
     },
   });
 
-  // window.setIcon();
   window.loadURL(
     url.format({
       pathname: path.join(__dirname, "index.html"),

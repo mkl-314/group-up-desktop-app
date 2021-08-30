@@ -1,6 +1,5 @@
 @import "../styles/variables.sass";
 .ant-btn {
-  // background-color: $primary;
   border-color: #c2c2c2;
 
   &:focus,
@@ -25,10 +24,10 @@
   background-color: $primary;
   border-color: $primary;
   color: #fff;
+
   &:active {
     background-color: $primary;
     border-color: $primary;
-    // color: $primary;
   }
 
   // Hover must be after active to take precendence. i.e. active is not important
@@ -42,6 +41,26 @@
   &::selection {
     background-color: $primary;
     border-color: $primary;
+    color: $primary;
+  }
+}
+
+.ant-btn-link {
+  border-color: transparent;
+  color: #888;
+
+  &:active {
+    color: #888;
+  }
+
+  &:hover,
+  &:focus {
+    border-color: transparent;
+    color: $primary;
+  }
+
+  &::selection {
+    border-color: transparent;
     color: $primary;
   }
 }
@@ -62,4 +81,5 @@
 
 .ant-message-notice-content {
   background-color: #5c5c5c;
+  margin-top: 110px;
 }

@@ -169,61 +169,63 @@ const ImportStudents: FC = () => {
 
   return (
     <>
-      <div className="header-container">
-        <h1>GROUP UP</h1>
-      </div>
-      <div className="page">
-        <Modals
-          instructVisible={instructVisible}
-          setInstructVisible={setInstructVisible}
-          studentDataVisible={studentDataVisible}
-          setStudentDataVisible={setStudentDataVisible}
-          studentFileData={studentFileData}
-        ></Modals>
-        <Upload
-          className="container upload"
-          name="file"
-          beforeUpload={fileHandler}
-          onChange={uploadChange}
-          fileList={fileList}
-          multiple={false}
-        >
-          <Button type="default" className="constant-width">
-            <UploadOutlined /> Upload Group Data
+      <div className="body-container">
+        <div className="header-container">
+          <h1>GROUP UP</h1>
+        </div>
+        <div className="page">
+          <Modals
+            instructVisible={instructVisible}
+            setInstructVisible={setInstructVisible}
+            studentDataVisible={studentDataVisible}
+            setStudentDataVisible={setStudentDataVisible}
+            studentFileData={studentFileData}
+          ></Modals>
+          <Upload
+            className="container upload"
+            name="file"
+            beforeUpload={fileHandler}
+            onChange={uploadChange}
+            fileList={fileList}
+            multiple={false}
+          >
+            <Button type="default" className="constant-width">
+              <UploadOutlined /> Upload Group Data
+            </Button>
+          </Upload>
+          <Button
+            type="default"
+            onClick={() => setInstructVisible(true)}
+            className="constant-width container button-instructions"
+          >
+            <ContainerOutlined /> Instructions
           </Button>
-        </Upload>
-        <Button
-          type="default"
-          onClick={() => setInstructVisible(true)}
-          className="constant-width container button-instructions"
-        >
-          <ContainerOutlined /> Instructions
-        </Button>
-        <Button
-          id="student-data-display"
-          onClick={() => setStudentDataVisible(true)}
-          className="constant-width button-student-data container no-display"
-        >
-          See Student Data
-        </Button>
-        <Input
-          id="input-group-size"
-          className="container constant-width input input-group-size no-display"
-          onChange={handleGroupSize}
-          maxLength={3}
-          placeholder="Input group size"
-          value={groupSize}
-        ></Input>
-        <Button
-          id="btn-generate-groups"
-          type="primary"
-          onClick={generateGroups}
-          className="constant-width container"
-        >
-          <ExperimentTwoTone twoToneColor="#1f1f1f" /> Generate Groups
-        </Button>
-        {groupSolutions && <ExportGroups groupSolutions={groupSolutions}></ExportGroups>}
-        {groupSolutions && <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>}
+          <Button
+            id="student-data-display"
+            onClick={() => setStudentDataVisible(true)}
+            className="constant-width button-student-data container no-display"
+          >
+            See Student Data
+          </Button>
+          <Input
+            id="input-group-size"
+            className="container constant-width input input-group-size no-display"
+            onChange={handleGroupSize}
+            maxLength={3}
+            placeholder="Input group size"
+            value={groupSize}
+          ></Input>
+          <Button
+            id="btn-generate-groups"
+            type="primary"
+            onClick={generateGroups}
+            className="constant-width container"
+          >
+            <ExperimentTwoTone twoToneColor="#000000" /> Generate Groups
+          </Button>
+          {groupSolutions && <ExportGroups groupSolutions={groupSolutions}></ExportGroups>}
+          {groupSolutions && <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>}
+        </div>
       </div>
     </>
   );

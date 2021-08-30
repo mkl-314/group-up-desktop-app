@@ -5,6 +5,7 @@ import "@fontsource/staatliches";
 import { Titlebar, Color } from "custom-electron-titlebar";
 import { shell } from "electron";
 import { Footer } from "./components/Footer";
+import { App } from "./components/App";
 // const contextMenu = require("electron-context-menu");
 
 new Titlebar({
@@ -30,5 +31,4 @@ new Titlebar({
 //     },
 //   ],
 // });
-ReactDOM.render(<ImportStudents />, document.getElementById("importGroups"));
-ReactDOM.render(<Footer />, document.getElementById("footer"));
+ReactDOM.render(<App />, document.getElementById("importGroups"));

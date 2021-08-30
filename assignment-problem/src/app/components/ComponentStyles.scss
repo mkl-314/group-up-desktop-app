@@ -13,6 +13,10 @@ body {
   background-color: $form-background;
 }
 
+.body-container {
+  min-height: calc(100vh - 80px - 30px);
+}
+
 .header-container {
   background-color: $secondary;
   text-align: center;

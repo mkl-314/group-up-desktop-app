@@ -3,7 +3,6 @@ using System.Linq;
 using Google.OrTools.ConstraintSolver;
 using System.Collections.Generic;
 using AssignmentProblem.Models;
-using Microsoft.EntityFrameworkCore;
 using Core;
 
 namespace AssignmentProblem
@@ -110,7 +109,6 @@ namespace AssignmentProblem
                     int secondIndex = students.FindIndex(x => x.id == exclusion.SecondStudentId);
                     solver.Add(student_groups[firstIndex] != student_groups[secondIndex]);
                 }
-
             }
 
             // Symmetry breaking
@@ -120,21 +118,19 @@ namespace AssignmentProblem
             }
 
             OptimizeVar opt = solver.MakeMaximize(sum_preferences, 1);
-            // Search
-            int[] solutionOptions = new int[] { Solver.CHOOSE_PATH, /*Solver.CHOOSE_FIRST_UNBOUND*/ };
 
             DecisionBuilder db = solver.MakePhase(student_groups,
                                                     Solver.CHOOSE_PATH,
                                                     Solver.ASSIGN_MIN_VALUE);
 
-            //solver.NewSearch(db, opt);
             // Time limit
             int THIRTY_S_IN_MS = 30000;
+
             solver.NewSearch(db, solver.MakeTimeLimit(THIRTY_S_IN_MS));
+
             int sol = 0;
             GroupSolution solution = new GroupSolution();
 
-            Console.Error.WriteLine("Solving:");
             while (solver.NextSolution() && sol <= 0)
             {
                 for (int i = 1; i <= num_groups; i++)
@@ -146,22 +142,17 @@ namespace AssignmentProblem
                         studentIds = new List<int>()
                     });
                 }
-                Console.Error.WriteLine(sum_preferences.Value());
-                Console.Error.Write("x " + sol + ": ");
+
                 for (int i = 0; i < num_students; i++)
                 {
-                    Console.Error.Write("{0} ", student_groups[i].Value());
-                    
                     Group group = solution.groups[(int)student_groups[i].Value()];
                     group.studentNames.Add(students[i].firstName + " " + students[i].lastName);
                     group.studentIds.Add(students[i].id);
                 }
 
-                Console.Error.WriteLine();
                 sol++;
             }
 
-            Console.Error.Write(solver.WallTime());
             solver.EndSearch();
 
             return solution;

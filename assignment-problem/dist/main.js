@@ -937,15 +937,13 @@ var window;
 var createWindow = function createWindow() {
   window = new electron__WEBPACK_IMPORTED_MODULE_0__.BrowserWindow({
     show: false,
-    //titleBarStyle: "hidden",
     frame: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true
     }
-  }); // window.setIcon();
-
+  });
   window.loadURL(url.format({
     pathname: path.join(__dirname, "index.html"),
     protocol: "file:",

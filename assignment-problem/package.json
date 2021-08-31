@@ -1,14 +1,42 @@
 {
-  "name": "assignment-problem-frontend",
+  "name": "group-up-desktop-app",
+  "productName": "Group Up",
   "version": "1.0.0",
-  "description": "Create new project React Typescript in command line:\r npx create-react-app my-app --template typescript",
+  "description": "An app to organise people into groups based on their preferences.",
   "main": "dist/main.js",
   "scripts": {
     "build:react": "webpack --mode development --config webpack.react.config.js",
     "build": "webpack --mode development",
     "start": "electron ./dist/main.js",
     "format": "prettier --config .prettierrc --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md}",
-    "package-win": "electron-packager . electron-demo --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron-demo\""
+    "package-win": "electron-packager . electron-demo --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Group Up\"",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder build"
+  },
+  "build": {
+    "appId": "com.electron.app",
+    "files": [
+      "node_modules/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraFiles": [
+      {
+        "from": "./backend/dist/app",
+        "to": "backend/dist/app/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "NSIS",
+      "icon": "icon.png"
+    },
+    "portable": {
+      "unicode": false,
+      "artifactName": "Group_Up.exe"
+    }
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -44,8 +72,8 @@
     "babel-polyfill": "^6.26.0",
     "css-loader": "^6.2.0",
     "electron": "^13.1.9",
+    "electron-builder": "^22.11.7",
     "electron-cgi": "^1.0.6",
-    "electron-packager": "^15.3.0",
     "eslint": "^7.32.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
@@ -70,6 +98,7 @@
     "antd": "^4.16.11",
     "custom-electron-titlebar": "^3.2.7",
     "electron-context-menu": "^3.1.1",
+    "electron-squirrel-startup": "^1.0.0",
     "file-saver": "^2.0.5",
     "honeycomb-web-toolkit": "git+https://github.com/red-gate/honeycomb-web-toolkit.git",
     "react": "^17.0.2",

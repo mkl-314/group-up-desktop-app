@@ -22,4 +22,5 @@ or package-builer
 
 Back end:
 Run command in project directory (makes one exe file only):   
-dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true
+dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true   
+OR use publish menu in Visual Studio

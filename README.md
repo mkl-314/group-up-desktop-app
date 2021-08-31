@@ -26,3 +26,8 @@ Back end:
 Run command in project directory (makes one exe file only):   
 dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true   
 OR use publish menu in Visual Studio
+
+
+
+Reduce .exe file size:
+https://stackoverflow.com/questions/47597283/electron-package-reduce-the-package-size

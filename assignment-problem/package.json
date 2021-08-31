@@ -10,20 +10,27 @@
     "start": "electron ./dist/main.js",
     "format": "prettier --config .prettierrc --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md}",
     "package-win": "electron-packager . electron-demo --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Group Up\"",
-    "pack": "electron-builder --dir",
+    "pack": "electron-builder build --dir",
     "dist": "electron-builder build"
   },
   "build": {
     "appId": "com.electron.app",
     "files": [
-      "node_modules/**/*",
-      "dist/**/*",
-      "package.json"
+      "dist/images",
+      "dist/main.js",
+      "dist/main.js.map",
+      "dist/renderer.js",
+      "dist/renderer.js.map",
+      "dist/index.html",
+      "dist/*.woff2",
+      "dist/*.woff",
+      "package.json",
+      "!node_modules"
     ],
     "extraFiles": [
       {
-        "from": "./backend/dist/app",
-        "to": "backend/dist/app/",
+        "from": "./dist/backend/",
+        "to": "dist/backend/",
         "filter": [
           "**/*"
         ]
@@ -98,11 +105,8 @@
     "antd": "^4.16.11",
     "custom-electron-titlebar": "^3.2.7",
     "electron-context-menu": "^3.1.1",
-    "electron-squirrel-startup": "^1.0.0",
     "file-saver": "^2.0.5",
-    "honeycomb-web-toolkit": "git+https://github.com/red-gate/honeycomb-web-toolkit.git",
     "react": "^17.0.2",
-    "react-css-theme-switcher": "^0.3.0",
     "react-dom": "^17.0.2",
     "react-excel-renderer": "^1.1.0",
     "react-promise-tracker": "^2.1.0",

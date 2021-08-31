@@ -19,7 +19,8 @@ Front end:
 packager-manager   
 or package-builer   
 https://www.electronjs.org/docs/tutorial/application-distribution
-https://medium.com/how-to-electron/a-complete-guide-to-packaging-your-electron-app-1bdc717d739f
+https://medium.com/how-to-electron/a-complete-guide-to-packaging-your-electron-app-1bdc717d739f   
+This is best for package-builder: https://medium.com/red-buffer/electron-builder-packaging-electron-nodejs-application-along-with-flask-app-for-windows-fc26f5a29870
 
 
 Back end:

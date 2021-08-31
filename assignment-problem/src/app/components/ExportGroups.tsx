@@ -22,7 +22,7 @@ export const ExportGroups = ({ groupSolutions: groupSolutions }: any) => {
     }
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
-    console.log("here");
+
     FileSaver.saveAs(data, "Group Up" + fileExtension);
   };
 
@@ -37,6 +37,10 @@ export const ExportGroups = ({ groupSolutions: groupSolutions }: any) => {
             "Student Name": student,
           });
         }
+        exportSolution.push({
+          "Group Number": "",
+          "Student Name": "",
+        });
       }
       exportSolutions.push(exportSolution);
     }

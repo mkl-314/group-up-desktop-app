@@ -104,7 +104,6 @@ const ImportStudents: FC = () => {
 
   const generateGroups = async () => {
     try {
-      console.log(groupSize);
       if (isNaN(+groupSize)) {
         handleWarningMessage("Group size must be a number!");
       } else if (+groupSize < 1) {

@@ -11,7 +11,7 @@ export interface GroupSolution {
 }
 
 export interface ExportGroup {
-  "Group Number": number;
+  "Group Number": number | string;
   "Student Name": string;
 }
 

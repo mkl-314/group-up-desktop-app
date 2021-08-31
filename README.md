@@ -15,9 +15,9 @@ https://stackoverflow.com/questions/61464902/reading-excel-file-in-angular-with-
 
 
 Deployment:   
-Front end:
-packager-manager   
-or package-builer   
+Front end:  
+Run command: npm run dist   
+Ensure backend executable is in folder dist/backend
 https://www.electronjs.org/docs/tutorial/application-distribution
 https://medium.com/how-to-electron/a-complete-guide-to-packaging-your-electron-app-1bdc717d739f   
 This is best for package-builder: https://medium.com/red-buffer/electron-builder-packaging-electron-nodejs-application-along-with-flask-app-for-windows-fc26f5a29870

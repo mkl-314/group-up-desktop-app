@@ -19,6 +19,7 @@ Front end:
 packager-manager   
 or package-builer   
 https://www.electronjs.org/docs/tutorial/application-distribution
+https://medium.com/how-to-electron/a-complete-guide-to-packaging-your-electron-app-1bdc717d739f
 
 
 Back end:

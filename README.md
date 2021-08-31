@@ -17,7 +17,8 @@ https://stackoverflow.com/questions/61464902/reading-excel-file-in-angular-with-
 Deployment:   
 Front end:
 packager-manager   
-or package-builer
+or package-builer   
+https://www.electronjs.org/docs/tutorial/application-distribution
 
 
 Back end:

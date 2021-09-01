@@ -104,11 +104,7 @@ const ImportStudents: FC = () => {
 
   const generateGroups = async () => {
     try {
-      if (isNaN(+groupSize)) {
-        handleWarningMessage("Group size must be a number!");
-      } else if (+groupSize < 1) {
-        handleWarningMessage("Group size must not be zero!");
-      } else {
+      if (validateGroupSize(groupSize)) {
         handleLoadingMessage("Generating Groups", "group");
         await InsertStudents(studentData);
         await InsertStudentChoices(studentChoices);
@@ -118,7 +114,7 @@ const ImportStudents: FC = () => {
           if (result !== null) {
             setGroupSolutions(result);
           } else {
-            handleErrorMessage("Could not generate groups", "group");
+            handleErrorMessage("Could not generate groups.", "group");
           }
         });
         handleSuccessMessage("Groups have been generated!", "group");
@@ -151,13 +147,13 @@ const ImportStudents: FC = () => {
   });
 
   const validateGroupSize = (groupSize: any) => {
-    if (isNaN(+groupSize)) {
-      handleWarningMessage("Please input a number.");
-    } else if (studentData && studentData.length <= +groupSize) {
+    if (!groupSize.match(/^[0-9]*$/)) {
+      handleWarningMessage("Please input a positive integer.");
+    } else if (studentData && studentData.length < +groupSize) {
       handleWarningMessage("Group size cannot be greater than the number of students.");
     } else if (studentData && +groupSize > studentData.length / 2) {
       handleWarningMessage("Group size will result in only one group!");
-    } else if (groupSize) {
+    } else if (groupSize && +groupSize !== 0) {
       return true;
     }
     return false;

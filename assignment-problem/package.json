@@ -16,7 +16,7 @@
   "build": {
     "appId": "com.electron.app",
     "files": [
-      "dist/images",
+      "dist/images/excel-format.jpg",
       "dist/main.js",
       "dist/main.js.map",
       "dist/renderer.js",

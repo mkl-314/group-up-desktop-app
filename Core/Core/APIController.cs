@@ -2,7 +2,6 @@ using AssignmentProblem.Models;
 using Core;
 using ElectronCgi.DotNet;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -19,41 +18,41 @@ namespace AssignmentProblem
             _assignmentService = new AssignmentService();
         }
 
-        public void APICalls()
+        public void ApiCalls()
         {
             connection = new ConnectionBuilder()
-                .WithLogging( "log.txt", LogLevel.Information)
+                .WithLogging()
                 .Build();
 
             GetGroups();
             InsertStudents();
             InsertStudentChoices();
             InsertStudentExclusions();
-            
+
             connection.Listen();
         }
         public void GetGroups()
         {
-            connection.On<GroupConfig,IActionResult>("GetGroups", groupConfig =>
-            {
-                try
-                {
+            connection.On<GroupConfig, IActionResult>("GetGroups", groupConfig =>
+             {
+                 try
+                 {
 
-                    List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig);
-                    if (solutions.Count > 0)
-                    {
-                        return new OkObjectResult(solutions);
-                    }
-                    else
-                    {
-                        return new BadRequestObjectResult("Request timed out. Potentially no solutions.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return new BadRequestObjectResult(ex.Message);
-                }
-            });
+                     List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig);
+                     if (solutions.Count > 0)
+                     {
+                         return new OkObjectResult(solutions);
+                     }
+                     else
+                     {
+                         return new BadRequestObjectResult("Request timed out. Potentially no solutions.");
+                     }
+                 }
+                 catch (Exception ex)
+                 {
+                     return new BadRequestObjectResult(ex.Message);
+                 }
+             });
         }
 
         public void InsertStudents()

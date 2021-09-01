@@ -1,14 +1,13 @@
-.gutter-row {
-  //background: #028ac8;
-
-  .col-excel {
-    background: "#0092ff" l;
-    padding: "8px 0";
-    border: black 1px solid;
-  }
-}
-
 .text-container {
   width: 100%;
   max-width: 720px;
+}
+
+figure {
+  padding-top: 1rem;
+
+  img {
+    display: block;
+    margin: 1rem auto;
+  }
 }

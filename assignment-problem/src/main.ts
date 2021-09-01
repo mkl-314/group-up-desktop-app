@@ -1,9 +1,10 @@
 const url = require("url");
 const path = require("path");
 import { app, BrowserWindow } from "electron";
-require("@electron/remote/main").initialize();
-
+const contextMenu = require("electron-context-menu");
 let window: BrowserWindow | null;
+
+contextMenu();
 
 const createWindow = () => {
   window = new BrowserWindow({

@@ -13,7 +13,7 @@ export const ExportGroups = ({ groupSolutions: groupSolutions }: any) => {
   const exportToXLSX = (groupSolutions: GroupSolution[]) => {
     const exportSolutions = convertSolutionsForExport(groupSolutions);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    console.log(exportSolutions);
+
     var numSol: number = 1;
     for (var solution of exportSolutions) {
       const ws: WorkSheet = XLSX.utils.json_to_sheet(solution);

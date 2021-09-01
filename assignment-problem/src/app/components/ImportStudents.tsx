@@ -26,7 +26,7 @@ import {
 } from "../utils/messages";
 import { useEffect } from "react";
 import { convertJsonToStudent, convertJsonToStudentData } from "../utils/dataConversion";
-import { isValidFile, uploadFileData } from "../utils/file";
+import { isValidFile } from "../utils/file";
 import { ExportGroups } from "./ExportGroups";
 import { GroupDisplay } from "./GroupDisplay";
 import { Modals } from "./Modals";
@@ -129,17 +129,14 @@ const ImportStudents: FC = () => {
   };
 
   useEffect(() => {
-    if (fileList) {
-      const inputGroupSize = document.getElementById("input-group-size");
-      inputGroupSize.classList.remove("no-display");
+    const inputGroupSize = document.getElementById("input-group-size");
+    const studentDataDisplayCheck = document.getElementById("student-data-display");
 
-      const studentDataDisplayCheck = document.getElementById("student-data-display");
+    if (fileList) {
+      inputGroupSize.classList.remove("no-display");
       studentDataDisplayCheck.classList.remove("no-display");
     } else {
-      const inputGroupSize = document.getElementById("input-group-size");
       inputGroupSize.classList.add("no-display");
-
-      const studentDataDisplayCheck = document.getElementById("student-data-display");
       studentDataDisplayCheck.classList.add("no-display");
     }
 
@@ -189,7 +186,7 @@ const ImportStudents: FC = () => {
             multiple={false}
           >
             <Button type="default" className="constant-width">
-              <UploadOutlined /> Upload Group Data
+              <UploadOutlined /> Upload Student Data
             </Button>
           </Upload>
           <Button
@@ -211,7 +208,7 @@ const ImportStudents: FC = () => {
             className="container constant-width input input-group-size no-display"
             onChange={handleGroupSize}
             maxLength={3}
-            placeholder="Input group size"
+            placeholder="Input group sizes"
             value={groupSize}
           ></Input>
           <Button

@@ -32,3 +32,7 @@ OR use publish menu in Visual Studio
 
 Reduce .exe file size:
 https://stackoverflow.com/questions/47597283/electron-package-reduce-the-package-size
+
+
+Has code on Secret Santa (aka KK):   
+https://csharp.hotexamples.com/examples/Google.OrTools.ConstraintSolver/Solver/-/php-solver-class-examples.html#0x62b4330065e31d9c4ff4d9f8492f9270f1079f6a9ed65a18f0017bce5fbd6d5b-16,,120,

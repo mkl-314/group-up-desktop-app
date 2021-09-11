@@ -153,8 +153,8 @@ const ImportStudents: FC = () => {
       handleWarningMessage("Group size cannot be greater than the number of students.");
     } else if (studentData && +groupSize > studentData.length / 2) {
       handleWarningMessage("Group size will result in only one group!");
-    } else if (+groupSize !== 0 && +groupSize !== 1) {
-      handleWarningMessage("Group size can't be" + groupSize);
+    } else if (+groupSize == 0 || +groupSize == 1) {
+      handleWarningMessage("Group size can't be " + groupSize);
     } else if (groupSize) {
       return true;
     }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using Google.OrTools.ConstraintSolver;
-using System.Collections.Generic;
-using AssignmentProblem.Models;
+﻿using AssignmentProblem.Models;
 using Core;
+using Google.OrTools.ConstraintSolver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AssignmentProblem
 {
@@ -42,9 +42,9 @@ namespace AssignmentProblem
         public List<GroupSolution> GetGroupSolutions(GroupConfig groupConfig)
         {
             List<GroupSolution> groupSolutions = new List<GroupSolution>();
-            for (int i=0; i<groupConfig.numSolutions; i++)
+            for (int i = 0; i < groupConfig.numSolutions; i++)
             {
-                if (i != 0) { RandomiseStudents();}
+                if (i != 0) { RandomiseStudents(); }
                 var solution = AssignGroups1(groupConfig.groupSize);
                 if (solution.groups.Count > 0)
                 {
@@ -66,12 +66,12 @@ namespace AssignmentProblem
             // group size must be as equal as possible
             IntVar[] gcc = solver.MakeIntVarArray(num_groups, groupSize + (remainder / num_groups), groupSize + 1 + (remainder / num_groups), "gcc");
             solver.Add(student_groups.Distribute(gcc));
-            
+
             IntVar[] num_preferences = new IntVar[num_students];
             // Students must be given at least one of their preferences
             for (int i = 0; i < num_students; i++)
             {
-                ICollection<StudentChoice> preferences = studentChoices.FindAll(x => x.ChooserStudentId == students[i].id );
+                ICollection<StudentChoice> preferences = studentChoices.FindAll(x => x.ChooserStudentId == students[i].id);
                 int[] preferenceIndexes = new int[preferences.Count()];
                 int count = 0;
                 foreach (StudentChoice preference in preferences)
@@ -98,11 +98,11 @@ namespace AssignmentProblem
             }
             //Soft Constraint. Students should have at least one preference.
             IntVar sum_preferences = solver.MakeSum(num_preferences).VarWithName("sum");
-            
+
             // Certain students cannot be in the same group
             foreach (Student student in students)
             {
-                ICollection<StudentExclude> exclusions = studentExclusions; 
+                ICollection<StudentExclude> exclusions = studentExclusions;
                 foreach (StudentExclude exclusion in exclusions)
                 {
                     int firstIndex = students.FindIndex(x => x.id == exclusion.FirstStudentId);

@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using ElectronCgi.DotNet;
-
 namespace AssignmentProblem
 {
     public class Program
@@ -12,7 +7,7 @@ namespace AssignmentProblem
         public static void Main(string[] args)
         {
             controller = new APIController();
-            controller.APICalls();
+            controller.ApiCalls();
         }
     }
 }

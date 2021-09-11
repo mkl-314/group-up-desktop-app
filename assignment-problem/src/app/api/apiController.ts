@@ -27,9 +27,7 @@ export const GetGroups = async (
       groupSize: groupSize,
       numSolutions: numSolutions,
     });
-    console.log(response);
     if (response.statusCode === 200) return response.value;
-    console.log(response.value);
     throw new Error(response.value);
   } catch (err) {
     console.log(err);
@@ -42,8 +40,6 @@ export const InsertStudents = async (studentData: StudentData[]): Promise<boolea
     const response = await connection.send("InsertStudents", studentData);
     if (response.statusCode === 200) return true;
   } catch (err) {
-    console.log(err);
-    console.log(err.Message);
     throw new Error(err);
   }
 };

@@ -26,7 +26,7 @@ import {
 } from "../utils/messages";
 import { useEffect } from "react";
 import { convertJsonToStudent, convertJsonToStudentData } from "../utils/dataConversion";
-import { isValidFile, uploadFileData } from "../utils/file";
+import { isValidFile } from "../utils/file";
 import { ExportGroups } from "./ExportGroups";
 import { GroupDisplay } from "./GroupDisplay";
 import { Modals } from "./Modals";
@@ -104,12 +104,7 @@ const ImportStudents: FC = () => {
 
   const generateGroups = async () => {
     try {
-      console.log(groupSize);
-      if (isNaN(+groupSize)) {
-        handleWarningMessage("Group size must be a number!");
-      } else if (+groupSize < 1) {
-        handleWarningMessage("Group size must not be zero!");
-      } else {
+      if (validateGroupSize(groupSize)) {
         handleLoadingMessage("Generating Groups", "group");
         await InsertStudents(studentData);
         await InsertStudentChoices(studentChoices);
@@ -119,7 +114,7 @@ const ImportStudents: FC = () => {
           if (result !== null) {
             setGroupSolutions(result);
           } else {
-            handleErrorMessage("Could not generate groups", "group");
+            handleErrorMessage("Could not generate groups.", "group");
           }
         });
         handleSuccessMessage("Groups have been generated!", "group");
@@ -130,17 +125,14 @@ const ImportStudents: FC = () => {
   };
 
   useEffect(() => {
-    if (fileList) {
-      const inputGroupSize = document.getElementById("input-group-size");
-      inputGroupSize.classList.remove("no-display");
+    const inputGroupSize = document.getElementById("input-group-size");
+    const studentDataDisplayCheck = document.getElementById("student-data-display");
 
-      const studentDataDisplayCheck = document.getElementById("student-data-display");
+    if (fileList) {
+      inputGroupSize.classList.remove("no-display");
       studentDataDisplayCheck.classList.remove("no-display");
     } else {
-      const inputGroupSize = document.getElementById("input-group-size");
       inputGroupSize.classList.add("no-display");
-
-      const studentDataDisplayCheck = document.getElementById("student-data-display");
       studentDataDisplayCheck.classList.add("no-display");
     }
 
@@ -155,12 +147,14 @@ const ImportStudents: FC = () => {
   });
 
   const validateGroupSize = (groupSize: any) => {
-    if (isNaN(+groupSize)) {
-      handleWarningMessage("Please input a number.");
-    } else if (studentData && studentData.length <= +groupSize) {
+    if (!groupSize.match(/^[0-9]*$/)) {
+      handleWarningMessage("Please input a positive integer.");
+    } else if (studentData && studentData.length < +groupSize) {
       handleWarningMessage("Group size cannot be greater than the number of students.");
     } else if (studentData && +groupSize > studentData.length / 2) {
       handleWarningMessage("Group size will result in only one group!");
+    } else if (+groupSize !== 0 && +groupSize !== 1) {
+      handleWarningMessage("Group size can't be" + groupSize);
     } else if (groupSize) {
       return true;
     }
@@ -190,7 +184,7 @@ const ImportStudents: FC = () => {
             multiple={false}
           >
             <Button type="default" className="constant-width">
-              <UploadOutlined /> Upload Group Data
+              <UploadOutlined /> Upload Student Data
             </Button>
           </Upload>
           <Button
@@ -212,7 +206,7 @@ const ImportStudents: FC = () => {
             className="container constant-width input input-group-size no-display"
             onChange={handleGroupSize}
             maxLength={3}
-            placeholder="Input group size"
+            placeholder="Input group sizes"
             value={groupSize}
           ></Input>
           <Button

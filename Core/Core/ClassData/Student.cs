@@ -4,7 +4,7 @@
     {
         public Student()
         {
- 
+
         }
 
         public int id { get; set; }

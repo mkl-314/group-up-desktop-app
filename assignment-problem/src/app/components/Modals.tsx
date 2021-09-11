@@ -20,20 +20,19 @@ export const Modals = ({
         onCancel={() => setInstructVisible(false)} // uses function for closable and mask closable
         width="fit-content"
       >
-        <h2>Excel File Data Format</h2>
+        <h2>Student Data File</h2>
         <div className="text-container">
           <p>
-            The uploaded excel file requires to be formatted in a certain way so that the program
-            can obtain the correct data. Each column must have a header to determine the purpose of
-            the column. There are four column types that need to be filled in, please see below for
-            details:
+            The uploaded excel file requires to be formatted so that the program can obtain the
+            correct data. Each column must have a header to determine the purpose of the column.
+            There are four column types that need to be filled in, please see below for details:
           </p>
           <ul>
             <li>
-              <b>First Name:</b> Input the person's first name
+              <b>First Name:</b> Input the person's first name.
             </li>
             <li>
-              <b>Last Name:</b> Input the person's last name
+              <b>Last Name:</b> Input the person's last name.
             </li>
             <li>
               <b>Choice:</b> Input the first name of the person's preference to be in a group. If

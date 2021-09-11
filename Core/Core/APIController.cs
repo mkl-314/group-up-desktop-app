@@ -21,7 +21,7 @@ namespace AssignmentProblem
         public void ApiCalls()
         {
             connection = new ConnectionBuilder()
-                .WithLogging()
+                .WithLogging("Log.txt")
                 .Build();
 
             GetGroups();

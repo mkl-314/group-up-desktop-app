@@ -52,15 +52,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mkl-314/assignment-problem-frontend.git"
+    "url": "git+https://github.com/mkl-314/group-up-desktop-app.git"
   },
   "keywords": [],
   "author": "Ming Kim Low",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mkl-314/assignment-problem-frontend/issues"
+    "url": "https://github.com/mkl-314/group-up-desktop-app/issues"
   },
-  "homepage": "https://github.com/mkl-314/assignment-problem-frontend#readme",
+  "homepage": "https://github.com/mkl-314/group-up-desktop-appreadme",
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",

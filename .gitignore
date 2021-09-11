@@ -2,6 +2,7 @@ assignment-problem/node_modules/
 assignment-problem/package-lock.json
 assignment-problem/.idea/
 assignment-problem/dist/
+assignment-problem/.vscode/
 Core/Core/bin/
 Core/Core/obj/
 Core/Core/.vs/

@@ -1,7 +1,7 @@
 {
   "name": "group-up-desktop-app",
   "productName": "Group Up",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An app to organise people into groups based on their preferences.",
   "main": "dist/main.js",
   "scripts": {

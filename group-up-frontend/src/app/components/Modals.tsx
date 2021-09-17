@@ -56,7 +56,7 @@ export const Modals = ({
         </div>
       </Modal>
       <Modal
-        title="StudentData"
+        title="Student Data"
         visible={studentDataVisible}
         footer={null}
         onCancel={() => setStudentDataVisible(false)}

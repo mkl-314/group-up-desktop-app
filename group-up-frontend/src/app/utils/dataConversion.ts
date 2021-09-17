@@ -124,7 +124,7 @@ export const convertJsonToStudentData = (
             // student is not recognised. Exclamation tells student columns to highlight red
             student[`choice${numChoices}`] = json[key] + "!";
             handleErrorMessage(
-              `Error in column ${key}, row ${i + 2}. ${json[key]} is not recognised as a student.`
+              `Students not recognised: click See Student Data button to see unrecognised students.`
             );
           }
           numChoices++;
@@ -136,7 +136,7 @@ export const convertJsonToStudentData = (
             // student is not recognised. Exclamation tells student columns to highlight red
             student[`exclude${numExclusions}`] = json[key] + "!";
             handleErrorMessage(
-              `Error in column ${key}, row ${i + 2}. ${json[key]} is not recognised as a student.`
+              `Students not recognised: click See Student Data button to see unrecognised students.`
             );
           }
           numExclusions++;

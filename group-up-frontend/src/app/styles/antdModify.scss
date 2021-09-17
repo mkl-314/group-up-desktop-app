@@ -25,14 +25,14 @@
   border-color: $primary;
   color: #fff;
 
-  &:active {
+  &:active,
+  &:focus {
     background-color: $primary;
     border-color: $primary;
   }
 
   // Hover must be after active to take precendence. i.e. active is not important
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: $primary-hover;
     border-color: $primary-hover;
     color: #ffffff;
@@ -49,13 +49,13 @@
   border-color: transparent;
   color: #888;
 
-  &:active {
+  &:active,
+  &:focus {
     border-color: transparent;
     color: #888;
   }
 
-  &:hover,
-  &:focus {
+  &:hover {
     border-color: transparent;
     color: $primary;
   }

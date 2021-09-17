@@ -1,11 +1,11 @@
-using AssignmentProblem.Models;
+using GroupUp.Models;
 using Core;
 using ElectronCgi.DotNet;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
-namespace AssignmentProblem
+namespace GroupUp
 {
     public class APIController
     {
@@ -37,8 +37,11 @@ namespace AssignmentProblem
              {
                  try
                  {
-
-                     List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig);
+                     List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig, true);
+                     if (solutions.Count == 0)
+                     {
+                         //solutions = _assignmentService.GetGroupSolutions(groupConfig, false);
+                     }
                      if (solutions.Count > 0)
                      {
                          return new OkObjectResult(solutions);

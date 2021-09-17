@@ -88,3 +88,11 @@ body {
 .nowrap {
   white-space: nowrap;
 }
+
+// Student Columns
+
+.notValid {
+  background: rgba(255, 0, 0, 0.3);
+  border: red 1px solid;
+  border-radius: 3px;
+}

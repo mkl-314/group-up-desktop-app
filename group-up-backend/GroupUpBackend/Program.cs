@@ -1,4 +1,4 @@
-namespace AssignmentProblem
+namespace GroupUp
 {
     public class Program
     {

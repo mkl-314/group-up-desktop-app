@@ -9,9 +9,7 @@ import { handleErrorMessage } from "./messages";
 export const convertJsonToStudent = (
   jsonData: JSON[],
   //fileData: StudentFileData[],
-  students: StudentData[],
-  choices: StudentChoiceData[],
-  exclusions: StudentExcludeData[]
+  students: StudentData[]
 ) => {
   jsonData.map((d, i) => {
     let json = JSON.parse(JSON.stringify(d));
@@ -34,7 +32,15 @@ export const convertJsonToStudent = (
       lastName: lastName.trim(),
     });
   });
+};
 
+export const convertJsonToPreferences = (
+  jsonData: JSON[],
+  //fileData: StudentFileData[],
+  students: StudentData[],
+  choices: StudentChoiceData[],
+  exclusions: StudentExcludeData[]
+) => {
   jsonData.map((d, i) => {
     let json = JSON.parse(JSON.stringify(d));
     for (const key in json) {
@@ -47,10 +53,6 @@ export const convertJsonToStudent = (
             chooserStudentId: i,
             chosenStudentId: studentId,
           });
-        } else {
-          handleErrorMessage(
-            `Error in column ${key}, row ${i + 2}. ${json[key]} is not recognised as a student.`
-          );
         }
       } else if (key1.match(/^exclude/i)) {
         const studentId = getStudentId(json[key], students);
@@ -59,10 +61,6 @@ export const convertJsonToStudent = (
             firstStudentId: i,
             secondStudentId: studentId,
           });
-        } else {
-          handleErrorMessage(
-            `In column: ${key}, row: ${i + 2}. ${json[key]} is not recognised as a student.`
-          );
         }
       }
     }
@@ -71,20 +69,35 @@ export const convertJsonToStudent = (
 
 function getStudentId(name: string, students: StudentData[]): number {
   let studentIndex = students.findIndex((student) => {
-    switch (name.toLowerCase().trim()) {
-      case student.firstName.toLowerCase():
-      case (student.firstName + " " + student.lastName[0]).toLowerCase():
-      case (student.firstName + " " + student.lastName).toLowerCase(): {
-        return true;
-      }
-      default:
-        return false;
-    }
+    return isNameStudent(name, student);
   });
+  // Check if name matches multiple students
+  const numMatchStudents = students.filter((student) => {
+    return isNameStudent(name, student);
+  }).length;
+  if (numMatchStudents > 1) {
+    return -1;
+  }
   return studentIndex;
 }
 
-export const convertJsonToStudentData = (jsonData: JSON[], fileData: StudentFileData[]) => {
+function isNameStudent(name: string, student: StudentData): boolean {
+  switch (name.toLowerCase().trim()) {
+    case student.firstName.toLowerCase():
+    case (student.firstName + " " + student.lastName[0]).toLowerCase():
+    case (student.firstName + " " + student.lastName).toLowerCase(): {
+      return true;
+    }
+    default:
+      return false;
+  }
+}
+
+export const convertJsonToStudentData = (
+  jsonData: JSON[],
+  fileData: StudentFileData[],
+  students: StudentData[]
+) => {
   try {
     jsonData.map((d, i) => {
       let json = JSON.parse(JSON.stringify(d));
@@ -104,10 +117,28 @@ export const convertJsonToStudentData = (jsonData: JSON[], fileData: StudentFile
         } else if (key1.match(/^lastname/i)) {
           student.lastName = json[key];
         } else if (key1.match(/^choice/i)) {
-          student[`choice${numChoices}`] = json[key];
+          const studentId = getStudentId(json[key], students);
+          if (studentId >= 0) {
+            student[`choice${numChoices}`] = json[key];
+          } else {
+            // student is not recognised. Exclamation tells student columns to highlight red
+            student[`choice${numChoices}`] = json[key] + "!";
+            handleErrorMessage(
+              `Error in column ${key}, row ${i + 2}. ${json[key]} is not recognised as a student.`
+            );
+          }
           numChoices++;
         } else if (key1.match(/^exclude/i)) {
-          student[`exclude${numExclusions}`] = json[key];
+          const studentId = getStudentId(json[key], students);
+          if (studentId >= 0) {
+            student[`exclude${numExclusions}`] = json[key];
+          } else {
+            // student is not recognised. Exclamation tells student columns to highlight red
+            student[`exclude${numExclusions}`] = json[key] + "!";
+            handleErrorMessage(
+              `Error in column ${key}, row ${i + 2}. ${json[key]} is not recognised as a student.`
+            );
+          }
           numExclusions++;
         }
       }

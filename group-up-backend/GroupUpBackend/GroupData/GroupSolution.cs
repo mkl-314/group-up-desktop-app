@@ -1,4 +1,4 @@
-﻿using AssignmentProblem;
+﻿using GroupUp;
 using System.Collections.Generic;
 
 namespace Core
@@ -6,9 +6,21 @@ namespace Core
     public class GroupSolution
     {
         public List<Group> groups { get; set; }
-        public GroupSolution()
+        public GroupSolution(int numGroups)
         {
             groups = new List<Group>();
+        }
+
+        public void initGroups(int numGroups)
+        {
+            groups.Clear();
+            for (int i = 1; i <= numGroups; i++)
+            {
+                groups.Add(new Group
+                {
+                    groupNumber = i,
+                });
+            }
         }
     }
 }

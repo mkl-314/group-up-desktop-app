@@ -25,7 +25,11 @@ import {
   handleSuccessMessage,
 } from "../utils/messages";
 import { useEffect } from "react";
-import { convertJsonToStudent, convertJsonToStudentData } from "../utils/dataConversion";
+import {
+  convertJsonToPreferences,
+  convertJsonToStudent,
+  convertJsonToStudentData,
+} from "../utils/dataConversion";
 import { isValidFile } from "../utils/file";
 import { ExportGroups } from "./ExportGroups";
 import { GroupDisplay } from "./GroupDisplay";
@@ -90,8 +94,9 @@ const ImportStudents: FC = () => {
       let choices: StudentChoiceData[] = [];
       let exclusions: StudentExcludeData[] = [];
 
-      convertJsonToStudentData(jsonData, studentFile);
-      convertJsonToStudent(jsonData, students, choices, exclusions);
+      convertJsonToStudent(jsonData, students);
+      convertJsonToPreferences(jsonData, students, choices, exclusions);
+      convertJsonToStudentData(jsonData, studentFile, students);
 
       setStudentData(students);
       setStudentChoices(choices);
@@ -206,7 +211,7 @@ const ImportStudents: FC = () => {
             className="container constant-width input input-group-size no-display"
             onChange={handleGroupSize}
             maxLength={3}
-            placeholder="Input group sizes"
+            placeholder="Input group size"
             value={groupSize}
           ></Input>
           <Button

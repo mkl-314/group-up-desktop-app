@@ -1,4 +1,4 @@
-﻿namespace AssignmentProblem.Models
+﻿namespace GroupUp.Models
 {
     public partial class StudentChoice
     {

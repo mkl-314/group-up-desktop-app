@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssignmentProblem
+namespace GroupUp
 {
     public class Group
     {
@@ -11,7 +11,8 @@ namespace AssignmentProblem
         public List<int> studentIds { get; set; }
         public Group()
         {
-
+            studentNames = new List<string>();
+            studentIds = new List<int>();
         }
     }
 }

@@ -1,3 +1,5 @@
+import * as React from "react";
+
 export const generateStudentDataColumns = (headers: any) => {
   var choiceColumns: any[] = [];
   var excludeColumns: any[] = [];
@@ -14,6 +16,22 @@ export const generateStudentDataColumns = (headers: any) => {
           title: `Choice ${numChoices}`,
           dataIndex: `choice${numChoices}`,
           key: `choice${numChoices}`,
+          render(text: string) {
+            const studentStyle: any =
+              text && text.match("!")
+                ? {
+                    background: "rgba(255, 0, 0, 0.3)",
+                    border: "red 1px solid",
+                    "border-radius": "3px",
+                  }
+                : {};
+            return {
+              props: {
+                style: studentStyle,
+              },
+              children: <div>{text && text.replace("!", "")}</div>,
+            };
+          },
         },
       ];
       numChoices++;
@@ -24,6 +42,22 @@ export const generateStudentDataColumns = (headers: any) => {
           title: `Exclude ${numExclusions}`,
           dataIndex: `exclude${numExclusions}`,
           key: `exclude${numExclusions}`,
+          render(text: string) {
+            const studentStyle: any =
+              text && text.match("!")
+                ? {
+                    background: "rgba(255, 0, 0, 0.3)",
+                    border: "red 1px solid",
+                    "border-radius": "3px",
+                  }
+                : {};
+            return {
+              props: {
+                style: studentStyle,
+              },
+              children: <div>{text && text.replace("!", "")}</div>,
+            };
+          },
         },
       ];
       numExclusions++;

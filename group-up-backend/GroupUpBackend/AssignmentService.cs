@@ -141,7 +141,9 @@ namespace GroupUp
                 Console.Error.WriteLine("value: " + sum_preferences.Value());
                 if (sum_preferences.Value() >= max_value)
                 {
-                    solution.groups.Add(new Group
+                    max_value = sum_preferences.Value();
+                    solution.initGroups(numGroups);
+                    for (int i = 0; i < numStudents; i++)
                     {
                         //Console.Error.WriteLine("num: " + num_preferences[i].Value());
                         //Console.Error.Write(studentGroups[i].Value());

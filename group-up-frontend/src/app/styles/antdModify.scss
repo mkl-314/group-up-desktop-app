@@ -1,0 +1,86 @@
+@import "../styles/variables.sass";
+.ant-btn {
+  border-color: #c2c2c2;
+
+  &:focus,
+  &:active {
+    border-color: #c2c2c2;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  // Hover must be after active to take precendence. i.e. active is not important
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+  }
+
+  &::selection {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+.ant-btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  color: #fff;
+
+  &:active,
+  &:focus {
+    background-color: $primary;
+    border-color: $primary;
+  }
+
+  // Hover must be after active to take precendence. i.e. active is not important
+  &:hover {
+    background-color: $primary-hover;
+    border-color: $primary-hover;
+    color: #ffffff;
+  }
+
+  &::selection {
+    background-color: $primary;
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+.ant-btn-link {
+  border-color: transparent;
+  color: #888;
+
+  &:active,
+  &:focus {
+    border-color: transparent;
+    color: #888;
+  }
+
+  &:hover {
+    border-color: transparent;
+    color: $primary;
+  }
+
+  &::selection {
+    border-color: transparent;
+    color: #888;
+  }
+}
+
+.ant-input {
+  &:hover {
+    border-color: $primary;
+  }
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 2px $primary-hover;
+  }
+}
+
+.constant-width {
+  width: 11rem;
+}
+
+.ant-message-notice-content {
+  background-color: #5c5c5c;
+  margin-top: 110px;
+}

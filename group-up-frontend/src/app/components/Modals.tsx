@@ -65,7 +65,7 @@ export const Modals = ({
         <Table
           dataSource={studentFileData}
           columns={studentDataColumns}
-          rowKey={(record) => record.firstName + record.lastName}
+          rowKey={(record: any) => record.firstName + record.lastName}
           pagination={false}
         />
       </Modal>

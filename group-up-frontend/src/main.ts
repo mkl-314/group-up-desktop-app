@@ -9,7 +9,7 @@ contextMenu();
 const createWindow = () => {
   window = new BrowserWindow({
     show: false,
-    frame: false,
+    frame: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

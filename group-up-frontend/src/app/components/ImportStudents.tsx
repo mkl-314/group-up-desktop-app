@@ -1,29 +1,19 @@
 import { FC, useState } from "react";
 import * as React from "react";
-import { Button, Upload, Input } from "antd";
-import { ContainerOutlined, ExperimentTwoTone, UploadOutlined } from "@ant-design/icons";
+import { Button, Upload } from "antd";
+import { ContainerOutlined, UploadOutlined } from "@ant-design/icons";
 import "./ComponentStyles.scss";
 import { read, utils } from "xlsx";
-import {
-  GetGroups,
-  InsertStudentChoices,
-  InsertStudentExclusions,
-  InsertStudents,
-} from "../api/apiController";
 import {
   StudentChoiceData,
   StudentData,
   StudentExcludeData,
   StudentFileData,
+  Data,
 } from "../types/Student";
 import { GroupSolution } from "../types/Groups";
 import { generateStudentDataColumns } from "../types/studentColumns";
-import {
-  handleWarningMessage,
-  handleErrorMessage,
-  handleLoadingMessage,
-  handleSuccessMessage,
-} from "../utils/messages";
+import { handleErrorMessage } from "../utils/messages";
 import { useEffect } from "react";
 import {
   convertJsonToPreferences,
@@ -34,23 +24,17 @@ import { isValidFile } from "../utils/file";
 import { ExportGroups } from "./ExportGroups";
 import { GroupDisplay } from "./GroupDisplay";
 import { Modals } from "./Modals";
+import { GenerateGroups } from "./GenerateGroups";
+import { AdvancedOptions } from "./AdvancedOptions";
 const resolve = require("path").resolve;
 
 const ImportStudents: FC = () => {
-  const [groupSize, setGroupSize] = useState("");
   const [studentFileData, setStudentFileData] = useState<StudentFileData[]>();
   const [fileList, setFileList] = useState<any[]>();
-  const [studentData, setStudentData] = useState<StudentData[]>();
-  const [studentChoices, setStudentChoices] = useState<StudentChoiceData[]>();
-  const [studentExcludes, setStudentExcludes] = useState<StudentExcludeData[]>();
   const [groupSolutions, setGroupSolutions] = useState<GroupSolution[]>();
+  const [data, setData] = useState<Data>();
   const [instructVisible, setInstructVisible] = useState(false);
   const [studentDataVisible, setStudentDataVisible] = useState(false);
-  const numSolution = 3;
-
-  const handleGroupSize = (e: any) => {
-    setGroupSize(e.target.value);
-  };
 
   const fileHandler = async (e: File) => {
     try {
@@ -66,13 +50,12 @@ const ImportStudents: FC = () => {
           var jsonData = utils.sheet_to_json<JSON>(worksheet);
           var headers: JSON = utils.sheet_to_json<JSON>(worksheet, { header: 1 }).shift();
           generateStudentDataColumns(headers);
-          handleStudentConversion(jsonData);
+          handleStudentConversion(jsonData, e);
         };
         reader.readAsArrayBuffer(e);
         // Reset values
         setFileList([e]);
         setGroupSolutions(null);
-        setGroupSize("");
       }
     } catch (err) {
       handleErrorMessage("Could not handle file: " + err.Message);
@@ -83,88 +66,46 @@ const ImportStudents: FC = () => {
     if (info.file.status === "removed") {
       setFileList(null);
       setGroupSolutions(null);
-      setGroupSize("");
     }
   };
 
-  const handleStudentConversion = async (jsonData: JSON[]) => {
+  const handleStudentConversion = async (jsonData: JSON[], fileList: any) => {
     try {
       const studentFile: StudentFileData[] = [];
       let students: StudentData[] = [];
       let choices: StudentChoiceData[] = [];
       let exclusions: StudentExcludeData[] = [];
-
+      let data: Data;
       convertJsonToStudent(jsonData, students);
       convertJsonToPreferences(jsonData, students, choices, exclusions);
       convertJsonToStudentData(jsonData, studentFile, students);
-
-      setStudentData(students);
-      setStudentChoices(choices);
-      setStudentExcludes(exclusions);
       setStudentFileData(studentFile);
+
+      data = {
+        fileList: fileList,
+        studentData: students,
+        studentChoices: choices,
+        studentExcludes: exclusions,
+      };
+      setData(data);
     } catch (err) {
       handleErrorMessage("Could not convert excel to table: " + err);
     }
   };
 
-  const generateGroups = async () => {
-    try {
-      if (validateGroupSize(groupSize)) {
-        handleLoadingMessage("Generating Groups", "group");
-        await InsertStudents(studentData);
-        await InsertStudentChoices(studentChoices);
-        await InsertStudentExclusions(studentExcludes);
-
-        await GetGroups(+groupSize, numSolution).then((result) => {
-          if (result !== null) {
-            setGroupSolutions(result);
-          } else {
-            handleErrorMessage("Could not generate groups.", "group");
-          }
-        });
-        handleSuccessMessage("Groups have been generated!", "group");
-      }
-    } catch (err) {
-      handleErrorMessage("Could not generate groups: " + err.message, "group");
-    }
+  const handleGroupSolutions = (result: GroupSolution[]) => {
+    setGroupSolutions(result);
   };
 
   useEffect(() => {
-    const inputGroupSize = document.getElementById("input-group-size");
     const studentDataDisplayCheck = document.getElementById("student-data-display");
 
     if (fileList) {
-      inputGroupSize.classList.remove("no-display");
       studentDataDisplayCheck.classList.remove("no-display");
     } else {
-      inputGroupSize.classList.add("no-display");
       studentDataDisplayCheck.classList.add("no-display");
     }
-
-    const isValidGroup = validateGroupSize(groupSize);
-    // Toggle display of generate groups button
-    const btnGenerateGroups = document.getElementById("btn-generate-groups");
-    if (fileList && isValidGroup) {
-      btnGenerateGroups.classList.remove("no-display");
-    } else {
-      btnGenerateGroups.classList.add("no-display");
-    }
   });
-
-  const validateGroupSize = (groupSize: any) => {
-    if (!groupSize.match(/^[0-9]*$/)) {
-      handleWarningMessage("Please input a positive integer.");
-    } else if (studentData && studentData.length < +groupSize) {
-      handleWarningMessage("Group size cannot be greater than the number of students.");
-    } else if (studentData && +groupSize > studentData.length / 2) {
-      handleWarningMessage("Group size will result in only one group!");
-    } else if ((groupSize && +groupSize == 0) || +groupSize == 1) {
-      handleWarningMessage("Group size can't be " + groupSize);
-    } else if (groupSize) {
-      return true;
-    }
-    return false;
-  };
 
   return (
     <>
@@ -206,24 +147,25 @@ const ImportStudents: FC = () => {
           >
             See Student Data
           </Button>
-          <Input
-            id="input-group-size"
-            className="container constant-width input input-group-size no-display"
-            onChange={handleGroupSize}
-            maxLength={3}
-            placeholder="Input group size"
-            value={groupSize}
-          ></Input>
-          <Button
-            id="btn-generate-groups"
-            type="primary"
-            onClick={generateGroups}
-            className="constant-width container"
-          >
-            <ExperimentTwoTone twoToneColor="#000000" /> Generate Groups
-          </Button>
-          {groupSolutions && <ExportGroups groupSolutions={groupSolutions}></ExportGroups>}
-          {groupSolutions && <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>}
+          {fileList && (
+            <>
+              <GenerateGroups
+                handleGroupSolutions={handleGroupSolutions}
+                data={data}
+                advancedOptions={false}
+              ></GenerateGroups>
+              <AdvancedOptions
+                handleGroupSolutions={handleGroupSolutions}
+                data={data}
+              ></AdvancedOptions>
+            </>
+          )}
+          {groupSolutions && (
+            <>
+              <ExportGroups groupSolutions={groupSolutions}></ExportGroups>
+              <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>
+            </>
+          )}
         </div>
       </div>
     </>

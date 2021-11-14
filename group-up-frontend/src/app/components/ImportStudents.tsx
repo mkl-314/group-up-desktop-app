@@ -76,9 +76,10 @@ const ImportStudents: FC = () => {
       let choices: StudentChoiceData[] = [];
       let exclusions: StudentExcludeData[] = [];
       let data: Data;
+      let dataError: boolean;
       convertJsonToStudent(jsonData, students);
       convertJsonToPreferences(jsonData, students, choices, exclusions);
-      convertJsonToStudentData(jsonData, studentFile, students);
+      dataError = convertJsonToStudentData(jsonData, studentFile, students);
       setStudentFileData(studentFile);
 
       data = {
@@ -88,6 +89,10 @@ const ImportStudents: FC = () => {
         studentExcludes: exclusions,
       };
       setData(data);
+
+      if (dataError) {
+        // Highlight See Student Data button as red
+      }
     } catch (err) {
       handleErrorMessage("Could not convert excel to table: " + err);
     }

@@ -11,6 +11,7 @@ import {
 } from "../utils/messages";
 import {
   GetGroups,
+  GetGroupsAdvanced,
   InsertStudentChoices,
   InsertStudentExclusions,
   InsertStudents,
@@ -20,8 +21,9 @@ const { Option } = Select;
 
 export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: any) => {
   const [groupSize, setGroupSize] = useState("");
-  const [minChoice, setMinChoice] = useState(true);
-  const [maxTime, setMaxTime] = useState();
+  const [numChoice, setNumChoice] = useState(1);
+  const [maxTime, setMaxTime] = useState(15);
+  const [disableGenerateBtn, setDisableGenerateBtn] = useState(true);
   const numSolution = 3;
 
   const handleGroupSize = (e: any) => {
@@ -29,7 +31,7 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
   };
 
   const handleMinChoice = (e: any) => {
-    setMinChoice(e.target.checked);
+    setNumChoice(e.target.checked ? 1 : 0);
   };
 
   const handleMaxTime = (e: any) => {
@@ -42,10 +44,9 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
         await InsertStudents(data.studentData);
         await InsertStudentChoices(data.studentChoices);
         await InsertStudentExclusions(data.studentExcludes);
-        await GetGroups(+groupSize, numSolution).then((result) => {
+        await GetGroupsAdvanced(+groupSize, numSolution, numChoice, maxTime).then((result) => {
           if (result !== null) {
             handleGroupSolutions(result);
-            console.log("it worked");
           } else {
             handleErrorMessage("Could not generate groups.", "group");
           }
@@ -76,38 +77,44 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
   useEffect(() => {
     if (data) {
       const isValidGroup = validateGroupSize(groupSize);
+      setDisableGenerateBtn(!isValidGroup);
       // Toggle display of generate groups button
-      const btnGenerateGroups = document.getElementById("btn-generate-groups-" + advancedOptions);
-      if (isValidGroup) {
-        btnGenerateGroups.classList.remove("no-display");
-      } else {
-        btnGenerateGroups.classList.add("no-display");
-      }
+      //   const btnGenerateGroups = document.getElementById("btn-generate-groups-" + advancedOptions);
+      //   if (isValidGroup) {
+      //     btnGenerateGroups.classList.remove("no-display");
+      //   } else {
+      //     btnGenerateGroups.classList.add("no-display");
+      //   }
     }
   });
 
   return (
     <>
-      <Input
-        id="input-group-size"
-        className="container constant-width input input-group-size"
-        onChange={handleGroupSize}
-        maxLength={3}
-        placeholder="Input group size"
-        value={groupSize}
-      ></Input>
+      <div className="container block" style={{ lineHeight: "3em" }}>
+        Input group size:
+        <Input
+          id="input-group-size"
+          className="constant-width input-group-size"
+          onChange={handleGroupSize}
+          maxLength={3}
+          placeholder="group size"
+          value={groupSize}
+        ></Input>
+      </div>
       {advancedOptions && (
         <>
-          <Checkbox onChange={handleMinChoice} defaultChecked={true}>
+          <Checkbox onChange={handleMinChoice} defaultChecked={true} className="container">
             Each person must have at least one choice in their group.
           </Checkbox>
-          <div>Maximum loading time (in seconds):</div>
-          <Select defaultValue={15} style={{ width: 100 }} onChange={handleMaxTime}>
-            <Option value={15}>15</Option>
-            <Option value={30}>30</Option>
-            <Option value={60}>60</Option>
-            <Option value={120}>120</Option>
-          </Select>
+          <div className="container block">
+            Maximum loading time (in seconds): <br />
+            <Select defaultValue={15} style={{ width: 100 }} onChange={handleMaxTime}>
+              <Option value={15}>15</Option>
+              <Option value={30}>30</Option>
+              <Option value={60}>60</Option>
+              <Option value={120}>120</Option>
+            </Select>
+          </div>
         </>
       )}
       <Button
@@ -115,8 +122,9 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
         type="primary"
         onClick={generateGroups}
         className="constant-width container"
+        disabled={disableGenerateBtn}
       >
-        <ExperimentTwoTone twoToneColor="#000000" /> Generate Groups
+        <ExperimentTwoTone twoToneColor="#ffffff" /> Generate Groups
       </Button>
     </>
   );

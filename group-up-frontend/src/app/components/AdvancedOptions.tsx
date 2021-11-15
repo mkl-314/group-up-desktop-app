@@ -17,10 +17,16 @@ export const AdvancedOptions = ({ handleGroupSolutions, data }: any) => {
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer}>
+      <Button type="link" onClick={showDrawer} className="constant-width container">
         Advanced Options
       </Button>
-      <Drawer title="Advanced Options" placement="right" onClose={onClose} visible={visible}>
+      <Drawer
+        title="Advanced Options"
+        placement="right"
+        onClose={onClose}
+        visible={visible}
+        width={400}
+      >
         <GenerateGroups
           handleGroupSolutions={handleGroupSolutions}
           data={data}

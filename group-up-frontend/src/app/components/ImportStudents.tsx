@@ -139,18 +139,18 @@ const ImportStudents: FC = () => {
             </Button>
           </Upload>
           <Button
+            id="student-data-display"
+            onClick={() => setStudentDataVisible(true)}
+            className="constant-width container align-top no-display"
+          >
+            See Student Data
+          </Button>
+          <Button
             type="default"
             onClick={() => setInstructVisible(true)}
             className="constant-width container button-instructions"
           >
             <ContainerOutlined /> Instructions
-          </Button>
-          <Button
-            id="student-data-display"
-            onClick={() => setStudentDataVisible(true)}
-            className="constant-width button-student-data container no-display"
-          >
-            See Student Data
           </Button>
           {fileList && (
             <>
@@ -158,6 +158,7 @@ const ImportStudents: FC = () => {
                 handleGroupSolutions={handleGroupSolutions}
                 data={data}
                 advancedOptions={false}
+                className="block"
               ></GenerateGroups>
               <AdvancedOptions
                 handleGroupSolutions={handleGroupSolutions}
@@ -167,7 +168,7 @@ const ImportStudents: FC = () => {
           )}
           {groupSolutions && (
             <>
-              <ExportGroups groupSolutions={groupSolutions}></ExportGroups>
+              <ExportGroups groupSolutions={groupSolutions} className="block"></ExportGroups>
               <GroupDisplay groupSolutions={groupSolutions}></GroupDisplay>
             </>
           )}

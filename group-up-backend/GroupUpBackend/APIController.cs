@@ -37,11 +37,8 @@ namespace GroupUp
              {
                  try
                  {
-                     List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig, true);
-                     if (solutions.Count == 0)
-                     {
-                         //solutions = _assignmentService.GetGroupSolutions(groupConfig, false);
-                     }
+                     List<GroupSolution> solutions = _assignmentService.GetGroupSolutions(groupConfig);
+
                      if (solutions.Count > 0)
                      {
                          return new OkObjectResult(solutions);

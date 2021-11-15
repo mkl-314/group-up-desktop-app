@@ -97,7 +97,7 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
           className="constant-width input-group-size"
           onChange={handleGroupSize}
           maxLength={3}
-          placeholder="group size"
+          placeholder="Group size"
           value={groupSize}
         ></Input>
       </div>

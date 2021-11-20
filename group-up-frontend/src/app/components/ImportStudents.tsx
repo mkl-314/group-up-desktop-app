@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import * as React from "react";
-import { Button, Upload } from "antd";
+import { Button, message, Upload } from "antd";
 import { ContainerOutlined, UploadOutlined } from "@ant-design/icons";
 import "./ComponentStyles.scss";
 import { read, utils } from "xlsx";
@@ -90,8 +90,12 @@ const ImportStudents: FC = () => {
       };
       setData(data);
 
+      const studentDataDisplayCheck = document.getElementById("student-data-display");
       if (dataError) {
-        // Highlight See Student Data button as red
+        // Highlight the See Student Data button to be clicked
+        studentDataDisplayCheck.classList.add("data-warning");
+      } else {
+        studentDataDisplayCheck.classList.remove("data-warning");
       }
     } catch (err) {
       handleErrorMessage("Could not convert excel to table: " + err);

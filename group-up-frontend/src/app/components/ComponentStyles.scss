@@ -14,7 +14,7 @@ body {
 }
 
 .body-container {
-  min-height: calc(100vh - 80px - 30px);
+  min-height: calc(100vh - 80px /*- 30px*/);
 }
 
 .header-container {
@@ -99,4 +99,17 @@ body {
 
 .block {
   display: block;
+}
+
+.data-warning {
+  animation: borderWidth 1s infinite;
+}
+
+@keyframes borderWidth {
+  0% {
+    box-shadow: 0 0 0 2px $primary;
+  }
+  100% {
+    box-shadow: 0 0 0 5px $primary;
+  }
 }

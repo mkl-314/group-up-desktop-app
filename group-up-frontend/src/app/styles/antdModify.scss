@@ -95,15 +95,6 @@
 .ant-checkbox-checked .ant-checkbox-inner {
   border-color: $primary;
   background-color: $primary;
-  // &:focus {
-  //   border-color: $primary;
-  //   background: $primary;
-  // }
-
-  // &::selection {
-  //   border-color: $primary;
-  //   background: $primary;
-  // }
 }
 
 .ant-select {
@@ -114,4 +105,23 @@
   &::selection {
     border-color: $primary;
   }
+}
+
+.ant-select-selector {
+  background-color: $primary;
+}
+
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: $primary;
+  border-right-width: 1px !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border-color: $primary;
+  box-shadow: 0 0 0 2px $primary-hover;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #de44f026;
 }

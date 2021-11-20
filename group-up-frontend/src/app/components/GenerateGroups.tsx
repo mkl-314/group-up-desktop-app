@@ -78,19 +78,12 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
     if (data) {
       const isValidGroup = validateGroupSize(groupSize);
       setDisableGenerateBtn(!isValidGroup);
-      // Toggle display of generate groups button
-      //   const btnGenerateGroups = document.getElementById("btn-generate-groups-" + advancedOptions);
-      //   if (isValidGroup) {
-      //     btnGenerateGroups.classList.remove("no-display");
-      //   } else {
-      //     btnGenerateGroups.classList.add("no-display");
-      //   }
     }
   });
 
   return (
     <>
-      <div className="container block" style={{ lineHeight: "3em" }}>
+      <div className="container block" style={{ lineHeight: "3em", fontSize: "16px" }}>
         Input group size:
         <Input
           id="input-group-size"
@@ -103,17 +96,25 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
       </div>
       {advancedOptions && (
         <>
-          <Checkbox onChange={handleMinChoice} defaultChecked={true} className="container">
-            Each person must have at least one choice in their group.
-          </Checkbox>
-          <div className="container block">
+          <div
+            className="container block"
+            style={{ paddingBottom: "20px", fontSize: "16px", marginBottom: "5px" }}
+          >
             Maximum loading time (in seconds): <br />
-            <Select defaultValue={15} style={{ width: 100 }} onChange={handleMaxTime}>
+            <Select
+              defaultValue={15}
+              style={{ width: 100 }}
+              onChange={handleMaxTime}
+              className="constant-width"
+            >
               <Option value={15}>15</Option>
               <Option value={30}>30</Option>
               <Option value={60}>60</Option>
               <Option value={120}>120</Option>
             </Select>
+            <Checkbox onChange={handleMinChoice} defaultChecked={true} className="container">
+              Each person must have at least one choice in their group.
+            </Checkbox>
           </div>
         </>
       )}

@@ -106,15 +106,10 @@ const ImportStudents: FC = () => {
     setGroupSolutions(result);
   };
 
-  useEffect(() => {
-    const studentDataDisplayCheck = document.getElementById("student-data-display");
-
-    if (fileList) {
-      studentDataDisplayCheck.classList.remove("no-display");
-    } else {
-      studentDataDisplayCheck.classList.add("no-display");
-    }
-  });
+  const btnStudentData_OnClick = () => {
+    setStudentDataVisible(true);
+    document.getElementById("student-data-display").classList.remove("data-warning");
+  };
 
   return (
     <>
@@ -142,13 +137,15 @@ const ImportStudents: FC = () => {
               <UploadOutlined /> Upload Student Data
             </Button>
           </Upload>
-          <Button
-            id="student-data-display"
-            onClick={() => setStudentDataVisible(true)}
-            className="constant-width container align-top no-display"
-          >
-            See Student Data
-          </Button>
+          {fileList && (
+            <Button
+              id="student-data-display"
+              onClick={btnStudentData_OnClick}
+              className="constant-width container align-top"
+            >
+              See Student Data
+            </Button>
+          )}
           <Button
             type="default"
             onClick={() => setInstructVisible(true)}

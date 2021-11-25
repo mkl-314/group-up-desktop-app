@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import * as React from "react";
-import { Drawer, Button, Input } from "antd";
+import { Drawer, Button } from "antd";
 import "./ComponentStyles.scss";
 import { GenerateGroups } from "./GenerateGroups";
 
@@ -26,6 +26,7 @@ export const AdvancedOptions = ({ handleGroupSolutions, data }: any) => {
         onClose={onClose}
         visible={visible}
         width={400}
+        style={{ paddingTop: "30px" }}
       >
         <GenerateGroups
           handleGroupSolutions={handleGroupSolutions}

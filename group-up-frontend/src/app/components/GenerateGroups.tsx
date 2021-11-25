@@ -98,12 +98,17 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
         <>
           <div
             className="container block"
-            style={{ paddingBottom: "20px", fontSize: "16px", marginBottom: "5px" }}
+            style={{
+              paddingBottom: "20px",
+              fontSize: "16px",
+              marginBottom: "5px",
+              paddingTop: "20px",
+            }}
           >
-            Maximum loading time (in seconds): <br />
+            Maximum loading time (in seconds):
             <Select
               defaultValue={15}
-              style={{ width: 100 }}
+              style={{ width: 100, marginTop: "10px" }}
               onChange={handleMaxTime}
               className="constant-width"
             >
@@ -112,7 +117,12 @@ export const GenerateGroups = ({ handleGroupSolutions, data, advancedOptions }: 
               <Option value={60}>60</Option>
               <Option value={120}>120</Option>
             </Select>
-            <Checkbox onChange={handleMinChoice} defaultChecked={true} className="container">
+            <Checkbox
+              onChange={handleMinChoice}
+              defaultChecked={true}
+              className="container"
+              style={{ fontSize: "16px", marginTop: "20px" }}
+            >
               Each person must have at least one choice in their group.
             </Checkbox>
           </div>

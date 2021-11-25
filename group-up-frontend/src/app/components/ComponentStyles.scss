@@ -62,15 +62,15 @@ body {
   float: right;
 }
 
+.align-top {
+  vertical-align: top;
+}
+
 .upload {
   display: inline-block;
 }
 
 .input-group-size {
-  display: block;
-}
-
-.button-student-data {
   display: block;
 }
 
@@ -95,4 +95,21 @@ body {
   background: rgba(255, 0, 0, 0.3);
   border: red 1px solid;
   border-radius: 3px;
+}
+
+.block {
+  display: block;
+}
+
+.data-warning {
+  animation: borderWidth 1s infinite;
+}
+
+@keyframes borderWidth {
+  0% {
+    box-shadow: 0 0 0 2px $primary;
+  }
+  100% {
+    box-shadow: 0 0 0 5px $primary;
+  }
 }

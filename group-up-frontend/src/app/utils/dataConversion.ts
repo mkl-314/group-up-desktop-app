@@ -99,6 +99,7 @@ export const convertJsonToStudentData = (
   students: StudentData[]
 ) => {
   try {
+    let dataError = false;
     jsonData.map((d, i) => {
       let json = JSON.parse(JSON.stringify(d));
 
@@ -126,6 +127,7 @@ export const convertJsonToStudentData = (
             handleErrorMessage(
               `Students not recognised: click See Student Data button to see unrecognised students.`
             );
+            dataError = true;
           }
           numChoices++;
         } else if (key1.match(/^exclude/i)) {
@@ -138,6 +140,7 @@ export const convertJsonToStudentData = (
             handleErrorMessage(
               `Students not recognised: click See Student Data button to see unrecognised students.`
             );
+            dataError = true;
           }
           numExclusions++;
         }
@@ -145,7 +148,9 @@ export const convertJsonToStudentData = (
 
       fileData.push(student);
     });
+    return dataError;
   } catch (err) {
     handleErrorMessage("Could not convert JSON to student data: " + err.message);
+    return false;
   }
 };

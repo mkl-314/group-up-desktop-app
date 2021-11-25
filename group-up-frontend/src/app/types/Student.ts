@@ -19,3 +19,10 @@ export interface StudentChoiceData {
   chooserStudentId: number;
   chosenStudentId: number;
 }
+
+export interface Data {
+  fileList: any[];
+  studentData: StudentData[];
+  studentChoices: StudentChoiceData[];
+  studentExcludes: StudentExcludeData[];
+}

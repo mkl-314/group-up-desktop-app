@@ -1,7 +1,7 @@
 {
   "name": "group-up-desktop-app",
   "productName": "Group Up",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "An app to organise people into groups based on their preferences.",
   "main": "dist/main.js",
   "scripts": {
@@ -9,7 +9,6 @@
     "build": "webpack --mode development",
     "start": "electron ./dist/main.js",
     "format": "prettier --config .prettierrc --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md}",
-    "package-win": "electron-packager . electron-demo --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Group Up\"",
     "pack": "electron-builder build --dir",
     "dist": "electron-builder build"
   },
@@ -79,7 +78,7 @@
     "babel-polyfill": "^6.26.0",
     "css-loader": "^6.2.0",
     "electron": "^13.1.9",
-    "electron-builder": "^22.11.7",
+    "electron-builder": "^22.14.5",
     "electron-cgi": "^1.0.6",
     "eslint": "^7.32.0",
     "file-loader": "^6.2.0",

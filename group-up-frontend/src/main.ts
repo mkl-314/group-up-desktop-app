@@ -4,12 +4,12 @@ import { app, BrowserWindow } from "electron";
 const contextMenu = require("electron-context-menu");
 let window: BrowserWindow | null;
 
-//contextMenu();
+contextMenu();
 
 const createWindow = () => {
   window = new BrowserWindow({
     show: false,
-    frame: true,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

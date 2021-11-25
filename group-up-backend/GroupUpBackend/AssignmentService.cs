@@ -13,7 +13,7 @@ namespace GroupUp
         private List<StudentChoice> studentChoices;
         private List<StudentExclude> studentExclusions;
         public long time;
-
+        private static int SEC_TO_MS = 1000;
         public AssignmentService()
         {
         }
@@ -39,7 +39,7 @@ namespace GroupUp
             return studentsOriginal.OrderBy(student => rnd.Next()).ToList();
         }
 
-        public List<GroupSolution> GetGroupSolutions(GroupConfig groupConfig, bool hardConstraints)
+        public List<GroupSolution> GetGroupSolutions(GroupConfig groupConfig)
         {
             List<GroupSolution> groupSolutions = new List<GroupSolution>();
             List<Student> studentsRandomised = this.studentsOriginal;
@@ -47,7 +47,7 @@ namespace GroupUp
                 for (int i = 0; i < groupConfig.numSolutions; i++)
                 {
                     if (i != 0) { studentsRandomised = RandomiseStudents(); }
-                    var solution = AssignGroups(studentsRandomised, groupConfig.groupSize, hardConstraints);
+                    var solution = AssignGroups(studentsRandomised, groupConfig);
                     if (solution.groups.Count > 0)
                     {
                         groupSolutions.Add(solution);
@@ -57,8 +57,10 @@ namespace GroupUp
         }
         
 
-        public GroupSolution AssignGroups(List<Student> students, int groupSize, bool hardConstraints)
+        public GroupSolution AssignGroups(List<Student> students, GroupConfig groupConfig)
         {
+            int groupSize = groupConfig.groupSize;
+
             Solver solver = new Solver("GroupAssignment");
 
             int numStudents = students.Count;
@@ -94,11 +96,9 @@ namespace GroupUp
                     // If there are not enough constraints, the process takes too long.
                     IntVar pref = (num_preference.Var() > 0).Var();
                     num_preferences[i] = (pref * (num_preference.Var() - 1 + 1000)).Var();
-                    if (hardConstraints)
-                    {
-                        // Hard Constraint. Must have at least one preference
-                        solver.Add(num_preference >= 1);
-                    }
+
+                    solver.Add(num_preference >= groupConfig.numChoice);
+
                 }
             }
             //Soft Constraint. Students should have at least one preference.
@@ -113,13 +113,12 @@ namespace GroupUp
                 solver.Add(studentGroups[firstIndex] != studentGroups[secondIndex]);
             }
 
-
             // Symmetry breaking
             for (int s = 0; s < numGroups; s++)
             {
                 solver.Add(studentGroups[s] <= s);
             }
-            Console.Error.WriteLine("# of constraints: " + solver.Constraints());
+
             OptimizeVar opt = solver.MakeMaximize(sum_preferences, 1);
 
             DecisionBuilder db = solver.MakePhase(studentGroups,
@@ -127,31 +126,24 @@ namespace GroupUp
                                                     Solver.ASSIGN_MIN_VALUE);
 
             // Time limit
-            int timeLimit = 15000;
+            int timeLimit = groupConfig.maxTime / groupConfig.numSolutions * SEC_TO_MS;
 
             solver.NewSearch(db, opt, solver.MakeTimeLimit(timeLimit));
-            int numPotentialSol = 5;
 
             int sol = 0;
-            long max_value = 0;
             GroupSolution solution = new GroupSolution(numGroups);
 
-            while (solver.NextSolution() && sol < numPotentialSol)
+            while (solver.NextSolution() && sol < (groupConfig.maxTime / 3))
             {
                 Console.Error.WriteLine("value: " + sum_preferences.Value());
-                if (sum_preferences.Value() >= max_value)
-                {
-                    max_value = sum_preferences.Value();
+
                     solution.initGroups(numGroups);
                     for (int i = 0; i < numStudents; i++)
                     {
-                        //Console.Error.WriteLine("num: " + num_preferences[i].Value());
-                        //Console.Error.Write(studentGroups[i].Value());
                         Group group = solution.groups[(int)studentGroups[i].Value()];
                         group.studentNames.Add(students[i].firstName + " " + students[i].lastName);
                         group.studentIds.Add(students[i].id);
                     }
-                }
                 
                 sol++;
             }

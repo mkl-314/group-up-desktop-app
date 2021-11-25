@@ -23,7 +23,7 @@ export const groupColumns = [
     width: "fit-content",
   },
   {
-    title: "Students",
+    title: "Names",
     dataIndex: "studentNames",
     key: "studentNames",
     width: "fit-content",

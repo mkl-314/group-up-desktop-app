@@ -13,9 +13,6 @@ export const handleErrorMessage = (e: string, key?: string) => {
     onClick: () => {
       message.destroy();
     },
-    style: {
-      marginTop: "-30px",
-    },
   });
 };
 
@@ -24,9 +21,6 @@ export const handleLoadingMessage = (content: string, key: string) => {
     content: content,
     key: key,
     duration: 0,
-    style: {
-      marginTop: "-30px",
-    },
   });
 };
 
@@ -35,9 +29,6 @@ export const handleSuccessMessage = (content: string, key: string) => {
     content: content,
     key: key,
     duration: 3,
-    style: {
-      marginTop: "-30px",
-    },
   });
 };
 
@@ -46,8 +37,5 @@ export const handleWarningMessage = (content: string, key?: string) => {
     content: content,
     duration: 5,
     key: "One Warning Only",
-    style: {
-      marginTop: "-30px",
-    },
   });
 };

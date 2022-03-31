@@ -7,4 +7,6 @@ Using constaint satisfaction prblem techniques and the Google OR-tools, the app 
 The frontend was bulit in React.ts using the electron framework.
 The backend was built in C#.
 
-![image](https://user-images.githubusercontent.com/63953830/161032234-8f90c278-3e7b-4ec5-a330-65eef02cc9ac.png)
+Names are hidden to preserve anonimity:
+
+![image](https://user-images.githubusercontent.com/63953830/161033001-24a54f34-baf9-4c8e-a3b6-c9c23cb512cf.png)
